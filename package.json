@@ -10,13 +10,17 @@
     "@types/node": "^16.18.31",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
+    "bootstrap": "^5.2.3",
     "firebase": "^9.22.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-firebase-hooks": "^5.1.1",
     "react-scripts": "5.0.1",
+    "react-spinners": "^0.13.8",
+    "react-toastify": "^9.1.3",
+    "types": "file:./types",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4",
-    "types": "file:./types"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,12 +1,18 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { connectAuthEmulator, getAuth } from "firebase/auth";
-import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
-import { connectFunctionsEmulator, getFunctions } from "firebase/functions";
+import {initializeApp, getApp} from "@firebase/app";
+import {Auth, connectAuthEmulator, getAuth} from "firebase/auth";
+import {
+  Firestore,
+  connectFirestoreEmulator,
+  getFirestore,
+} from "firebase/firestore";
+import {
+  Functions,
+  connectFunctionsEmulator,
+  getFunctions,
+} from "firebase/functions";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_KEY,
+  apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
   storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
@@ -14,23 +20,30 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
 };
 
-let app, auth, firestore, functions;
+const isEmulator = process.env.REACT_APP_FIREBASE_DEVELOPMENT === "true";
+/**
+ * Production
+ */
+let auth: Auth;
+let firestore: Firestore;
+let functions: Functions;
 
-const isDeployMode = process.env.REACT_APP_MODE == "deploy";
-
-if (isDeployMode) {
-  app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
-  firestore = getFirestore(app);
-  functions = getFunctions(app);
-} else {
-  app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
-  firestore = getFirestore(app);
-  functions = getFunctions(app);
+if (isEmulator) {
+  initializeApp(firebaseConfig);
+  auth = getAuth(getApp());
+  firestore = getFirestore(getApp());
+  functions = getFunctions(getApp());
   connectAuthEmulator(auth, "http://127.0.0.1:9099");
   connectFirestoreEmulator(firestore, "localhost", 8080);
   connectFunctionsEmulator(functions, "localhost", 5001);
+} else {
+  const app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  firestore = getFirestore(app);
+  functions = getFunctions(app);
 }
 
-export { auth, firestore, functions };
+/**
+ * Testing
+ */
+export {auth, firestore, functions};
