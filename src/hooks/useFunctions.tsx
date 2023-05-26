@@ -8,35 +8,50 @@ import {auth, functions} from "../firebase";
 import {PlayerProfile} from "types/PlayerProfile";
 
 const useFunctions = () => {
-  const [createUserWithEmailAndPassword, _, l0] =
+  /**
+   * USER AUTHENTICATION
+   */
+  const [createUserWithEmailAndPassword, _, l0, e0] =
     useCreateUserWithEmailAndPassword(auth);
+  const [signInWithEmailAndPassword, __, l1, e1] =
+    useSignInWithEmailAndPassword(auth);
+  const [signOut, l2, e2] = useSignOut(auth);
 
-  const [signInWithEmailAndPassword, l1] = useSignInWithEmailAndPassword(auth);
-
-  const [signOut, l2, error] = useSignOut(auth);
-
-  const [retrieveMyPlayerProfile, l3] = useHttpsCallable(
-    functions,
-    "retrieveMyPlayerProfile"
-  );
-  const [createAnonymousPlayer, l4] = useHttpsCallable<void, PlayerProfile>(
+  const [retrieveMyPlayerProfile, l3, e3] = useHttpsCallable<
+    void,
+    PlayerProfile
+  >(functions, "retrieveMyPlayerProfile");
+  const [createAnonymousPlayer, l4, e4] = useHttpsCallable<void, PlayerProfile>(
     functions,
     "createAnonymousPlayer"
   );
-  useHttpsCallable(functions, "deleteAnonymousPlayer");
-  useHttpsCallable(functions, "deleteAnonymousPlayer");
+  const [deleteAnonymousPlayer, l5, e5] = useHttpsCallable(
+    functions,
+    "deleteAnonymousPlayer"
+  );
 
-  useHttpsCallable(functions, "createGameRoom");
-  useHttpsCallable(functions, "joinGameRoom");
-  useHttpsCallable(functions, "leaveGameRoom");
+  const [createGameRoom, l6, e6] = useHttpsCallable(
+    functions,
+    "createGameRoom"
+  );
+  const [joinGameRoom, l7, e7] = useHttpsCallable(functions, "joinGameRoom");
+  const [leaveGameRoom, l8, e8] = useHttpsCallable(functions, "leaveGameRoom");
 
-  useHttpsCallable(functions, "toggleReady");
-  useHttpsCallable(functions, "startGame");
+  const [toggleReady, l9, e9] = useHttpsCallable(functions, "toggleReady");
+  const [startGame, l10, e10] = useHttpsCallable(functions, "startGame");
 
-  const isLoading = l0 || l1 || l2 || l3 || l4;
+  const isLoading =
+    l0 || l1 || l2 || l3 || l4 || l5 || l6 || l7 || l8 || l9 || l10;
+
+  const error = e0 || e1 || e2 || e3 || e4 || e5 || e6 || e7 || e8 || e9 || e10;
 
   return {
     isLoading,
+    error,
+
+    /**
+     * UserAuthAPI
+     */
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut,
@@ -46,6 +61,15 @@ const useFunctions = () => {
      */
     retrieveMyPlayerProfile,
     createAnonymousPlayer,
+    deleteAnonymousPlayer,
+
+    /**
+     * GameRoomAPI
+     */
+    joinGameRoom,
+    leaveGameRoom,
+    toggleReady,
+    startGame,
   };
 };
 
