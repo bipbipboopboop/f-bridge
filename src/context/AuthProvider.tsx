@@ -1,12 +1,13 @@
 import {createContext, ReactNode, useEffect} from "react";
 
 import {auth, functions} from "../firebase";
-import {User} from "firebase/auth";
+import {signInAnonymously, User} from "firebase/auth";
 import {PlayerProfile} from "types/PlayerProfile";
 
 import {useAuthState} from "react-firebase-hooks/auth";
 import {useHttpsCallable} from "react-firebase-hooks/functions";
-import Loading from "../components/Loading";
+import Loading from "../components/loading";
+import useFunctions from "../hooks/useFunctions";
 
 export const AuthContext = createContext<AuthContextValue>({
   user: null,
@@ -30,14 +31,26 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
     "retrieveMyPlayerProfile"
   );
 
+  const {createAnonymousPlayer} = useFunctions();
+
   const error = firebaseUserError || playerProfileError;
 
+  // Signs the user in anonymously if they don't log in and creates a player profile for them.
+  // Otherwise, they are already logged in and we can just retrieve their player profile.
   useEffect(() => {
-    if (firebaseUser) {
-      retreiveMyPlayerProfile();
-    }
+    (async () => {
+      if (!auth.currentUser && !isLoadingFirebaseUser) {
+        await signInAnonymously(auth);
+        await createAnonymousPlayer();
+      }
+
+      if (auth.currentUser) {
+        const playerProfile = (await retreiveMyPlayerProfile())!.data;
+        console.log({playerProfile});
+      }
+    })();
     return () => {};
-  }, [firebaseUser, retreiveMyPlayerProfile]);
+  }, [firebaseUser, isLoadingFirebaseUser, retreiveMyPlayerProfile]);
 
   const authContextValue: AuthContextValue = {
     user: firebaseUser as User | null,
