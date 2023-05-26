@@ -60,9 +60,7 @@ export const createAnonymousPlayer = functions.https.onCall(
       };
       const displayName = uniqueNamesGenerator(nameConfig);
 
-      // Create anonymous user
-      const userCredential = await admin.auth().createUser({displayName});
-      const userID = userCredential.uid;
+      const userID = context.auth!.uid;
 
       // Create player profile document with the anonymous ID
       const playerProfileRef = admin
@@ -81,7 +79,11 @@ export const createAnonymousPlayer = functions.https.onCall(
         roomID: "",
       });
 
-      return userID;
+      const playerProfile = (
+        await playerProfileRef.get()
+      ).data() as PlayerProfile;
+
+      return playerProfile;
     } catch (error) {
       console.error("Error creating anonymous player:", error);
       throw new functions.https.HttpsError(
@@ -107,3 +109,7 @@ export const deleteAnonymousPlayer = functions.auth
       console.error("Error deleting anonymous player:", error);
     }
   });
+
+export const createPermanentPlayer = functions.https.onCall(
+  async (data, context) => {}
+);

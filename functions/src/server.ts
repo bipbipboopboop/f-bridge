@@ -1,6 +1,10 @@
 import * as admin from "firebase-admin";
 admin.initializeApp();
 
-import {retrieveMyPlayerProfile} from "./PlayerAPI";
+import {
+  retrieveMyPlayerProfile,
+  createAnonymousPlayer,
+  deleteAnonymousPlayer,
+} from "./PlayerAPI";
 
-export {retrieveMyPlayerProfile};
+export {retrieveMyPlayerProfile, createAnonymousPlayer, deleteAnonymousPlayer};
