@@ -6,6 +6,7 @@ import {
 import {useHttpsCallable} from "react-firebase-hooks/functions";
 import {auth, functions} from "../firebase";
 import {PlayerProfile} from "types/PlayerProfile";
+import {User, UserInfo} from "firebase/auth";
 
 const useFunctions = () => {
   /**
@@ -25,6 +26,10 @@ const useFunctions = () => {
     functions,
     "createAnonymousPlayer"
   );
+  const [createPlayerProfile, l11, e11] = useHttpsCallable<
+    UserInfo,
+    PlayerProfile
+  >(functions, "createPlayerProfile");
   const [deleteAnonymousPlayer, l5, e5] = useHttpsCallable(
     functions,
     "deleteAnonymousPlayer"
@@ -41,9 +46,10 @@ const useFunctions = () => {
   const [startGame, l10, e10] = useHttpsCallable(functions, "startGame");
 
   const isLoading =
-    l0 || l1 || l2 || l3 || l4 || l5 || l6 || l7 || l8 || l9 || l10;
+    l0 || l1 || l2 || l3 || l4 || l5 || l6 || l7 || l8 || l9 || l10 || l11;
 
-  const error = e0 || e1 || e2 || e3 || e4 || e5 || e6 || e7 || e8 || e9 || e10;
+  const error =
+    e0 || e1 || e2 || e3 || e4 || e5 || e6 || e7 || e8 || e9 || e10 || e11;
 
   return {
     isLoading,
@@ -61,6 +67,7 @@ const useFunctions = () => {
      */
     retrieveMyPlayerProfile,
     createAnonymousPlayer,
+    createPlayerProfile,
     deleteAnonymousPlayer,
 
     /**
