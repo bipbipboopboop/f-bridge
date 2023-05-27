@@ -3,6 +3,8 @@ import {auth} from "../firebase";
 
 import {useSignInWithGoogle} from "react-firebase-hooks/auth";
 import {useAuth} from "../hooks/useAuth";
+import GreenButton from "./buttons/button.green";
+import OrangeButton from "./buttons/button.orange";
 
 const Navbar = () => {
   const {playerProfile, user} = useAuth();
@@ -16,13 +18,13 @@ const Navbar = () => {
       <div>
         <p>{playerProfile?.displayName}</p>
         {user?.isAnonymous && (
-          <button
+          <OrangeButton
             onClick={async () => {
               await signInWithGoogle();
             }}
           >
             Sign In
-          </button>
+          </OrangeButton>
         )}
         {!user?.isAnonymous && (
           <button
