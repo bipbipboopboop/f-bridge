@@ -1,7 +1,5 @@
-import {signInAnonymously} from "firebase/auth";
-import {useAuth} from "./hooks/useAuth";
+import "./App.css";
 import useFunctions from "./hooks/useFunctions";
-import {auth} from "./firebase";
 import Loading from "./components/loading";
 import Navbar from "./components/navbar";
 
@@ -11,7 +9,7 @@ function App() {
   if (isLoading) return <Loading />;
 
   return (
-    <div>
+    <div className="App">
       <Navbar />
       {/* <pre>{JSON.stringify(user)}</pre> */}
     </div>

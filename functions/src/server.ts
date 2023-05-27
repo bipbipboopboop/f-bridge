@@ -1,16 +1,26 @@
 import * as admin from "firebase-admin";
 admin.initializeApp();
 
+import {retrieveMyPlayerProfile, createPlayerProfile} from "./PlayerAPI";
+
 import {
-  retrieveMyPlayerProfile,
-  createAnonymousPlayer,
-  createPlayerProfile,
-  deleteAnonymousPlayer,
-} from "./PlayerAPI";
+  createGameRoom,
+  joinGameRoom,
+  leaveGameRoom,
+  startGame,
+  toggleReady,
+} from "./GameRoomAPI";
 
 export {
   retrieveMyPlayerProfile,
-  createAnonymousPlayer,
   createPlayerProfile,
-  deleteAnonymousPlayer,
+
+  /**
+   * GAME ROOM API
+   */
+  createGameRoom,
+  joinGameRoom,
+  leaveGameRoom,
+  startGame,
+  toggleReady,
 };
