@@ -11,6 +11,7 @@ import {
 
 import {PlayerProfile} from "types/PlayerProfile";
 import {DocumentReference} from "firebase-admin/firestore";
+import {UserInfo} from "firebase-admin/auth";
 
 const firestore = admin.firestore();
 
@@ -26,62 +27,72 @@ export const retrieveMyPlayerProfile = functions.https.onCall(
 
     const userId = context.auth.uid;
 
-    try {
-      const playerProfileRef = firestore
-        .collection("playerProfiles")
-        .doc(userId) as DocumentReference<PlayerProfile>;
-      const playerProfileDoc = await playerProfileRef.get();
-
-      if (!playerProfileDoc.exists) {
-        throw new functions.https.HttpsError(
-          "not-found",
-          "Player profile not found."
-        );
-      }
-      const playerProfileData = playerProfileDoc.data();
-      return playerProfileData;
-    } catch (error) {
-      console.error("Error retrieving player profile:", error);
+    const playerProfileRef = firestore
+      .collection("playerProfiles")
+      .doc(userId) as DocumentReference<PlayerProfile>;
+    const playerProfileDoc = await playerProfileRef.get();
+    if (!playerProfileDoc.exists) {
       throw new functions.https.HttpsError(
-        "internal",
-        "An error occurred while retrieving player profile."
+        "not-found",
+        "Player profile not found."
       );
     }
+
+    const playerProfileData = playerProfileDoc.data();
+    return playerProfileData;
   }
 );
 
-export const createAnonymousPlayer = functions.https.onCall(
-  async (_: void, context) => {
+export const createPlayerProfile = functions.https.onCall(
+  async (user: UserInfo, context) => {
     try {
+      // Check if the user is authenticated
+      if (!context.auth) {
+        throw new functions.https.HttpsError(
+          "unauthenticated",
+          "User is not authenticated."
+        );
+      }
+
+      // Check if the player profile already exists
+      const playerProfileRef = admin
+        .firestore()
+        .collection("playerProfiles")
+        .doc(user.uid) as DocumentReference<PlayerProfile>;
+      const playerProfileSnapshot = await playerProfileRef.get();
+      if (playerProfileSnapshot.exists) {
+        throw new functions.https.HttpsError(
+          "already-exists",
+          "Player profile already exists."
+        );
+      }
+
+      // Check if the authenticated user ID matches the provided user ID
+      if (context.auth.uid !== user.uid) {
+        throw new functions.https.HttpsError(
+          "permission-denied",
+          "User ID does not match authenticated user."
+        );
+      }
+
       const nameConfig: Config = {
         dictionaries: [adjectives, colors, animals],
         separator: "-",
         length: 2,
       };
-      const displayName = uniqueNamesGenerator(nameConfig);
+      const randomName = uniqueNamesGenerator(nameConfig);
 
-      const userID = context.auth!.uid;
-
-      // Create player profile document with the anonymous ID
-      const playerProfileRef = admin
-        .firestore()
-        .collection("playerProfiles")
-        .doc(userID) as DocumentReference<PlayerProfile>;
-
-      await playerProfileRef.set({
-        displayName,
-        email: "",
+      const playerProfile: PlayerProfile = {
+        id: user.uid,
+        displayName: user.displayName || randomName,
+        email: user.email,
         country: "International",
-
         numOfGamesPlayed: 0,
         numOfGamesWon: 0,
-        id: userID,
-        roomID: "",
-      });
-
-      const playerProfile = (
-        await playerProfileRef.get()
-      ).data() as PlayerProfile;
+        roomID: null,
+      };
+      // Create the player profile
+      await playerProfileRef.set(playerProfile);
 
       return playerProfile;
     } catch (error) {
@@ -109,7 +120,3 @@ export const deleteAnonymousPlayer = functions.auth
       console.error("Error deleting anonymous player:", error);
     }
   });
-
-export const createPermanentPlayer = functions.https.onCall(
-  async (data, context) => {}
-);

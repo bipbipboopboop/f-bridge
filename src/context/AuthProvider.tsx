@@ -1,17 +1,16 @@
-import {createContext, ReactNode, useEffect} from "react";
+import {createContext, ReactNode, useEffect, useState} from "react";
 
-import {auth, functions} from "../firebase";
+import {auth} from "../firebase";
 import {signInAnonymously, User} from "firebase/auth";
 import {PlayerProfile} from "types/PlayerProfile";
 
 import {useAuthState} from "react-firebase-hooks/auth";
-import {useHttpsCallable} from "react-firebase-hooks/functions";
 import Loading from "../components/loading";
 import useFunctions from "../hooks/useFunctions";
 
 export const AuthContext = createContext<AuthContextValue>({
   user: null,
-  isLoggedIn: false,
+  playerProfile: null,
   isLoggingIn: false,
 });
 
@@ -22,45 +21,56 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
   const [firebaseUser, isLoadingFirebaseUser, firebaseUserError] =
     useAuthState(auth);
 
-  const [
-    retreiveMyPlayerProfile,
-    isLoadingMyPlayerProfile,
-    playerProfileError,
-  ] = useHttpsCallable<void, PlayerProfile>(
-    functions,
-    "retrieveMyPlayerProfile"
+  const {createPlayerProfile, retrieveMyPlayerProfile, isLoading, error} =
+    useFunctions();
+
+  const [playerProfile, setPlayerProfile] = useState<PlayerProfile | null>(
+    null
   );
-
-  const {createAnonymousPlayer} = useFunctions();
-
-  const error = firebaseUserError || playerProfileError;
 
   // Signs the user in anonymously if they don't log in and creates a player profile for them.
   // Otherwise, they are already logged in and we can just retrieve their player profile.
   useEffect(() => {
     (async () => {
-      if (!auth.currentUser && !isLoadingFirebaseUser) {
+      console.log({firebaseUser, isLoadingFirebaseUser});
+      if (isLoadingFirebaseUser) return;
+
+      if (!firebaseUser) {
         await signInAnonymously(auth);
-        await createAnonymousPlayer();
       }
 
-      if (auth.currentUser) {
-        const playerProfile = (await retreiveMyPlayerProfile())!.data;
-        console.log({playerProfile});
+      if (firebaseUser) {
+        const playerProfile = (await retrieveMyPlayerProfile())?.data;
+
+        if (playerProfile) {
+          setPlayerProfile(playerProfile);
+          return;
+        }
+
+        const newUserInfo = {
+          displayName: firebaseUser.displayName,
+          email: firebaseUser.email,
+          phoneNumber: firebaseUser.phoneNumber,
+          photoURL: firebaseUser.photoURL,
+          uid: firebaseUser.uid,
+          providerId: firebaseUser.providerId,
+        };
+        const newPlayerProfile = (await createPlayerProfile(newUserInfo))!.data;
+        setPlayerProfile(newPlayerProfile);
       }
     })();
     return () => {};
-  }, [firebaseUser, isLoadingFirebaseUser, retreiveMyPlayerProfile]);
+  }, [firebaseUser, isLoadingFirebaseUser]);
 
   const authContextValue: AuthContextValue = {
-    user: firebaseUser as User | null,
-    isLoggedIn: true,
-    isLoggingIn: isLoadingFirebaseUser || isLoadingMyPlayerProfile,
+    user: firebaseUser || null,
+    playerProfile: playerProfile,
+    isLoggingIn: isLoadingFirebaseUser || isLoading,
   };
 
-  if (error) {
-    alert(error.message);
-  }
+  // if (error) {
+  //   alert(error.message);
+  // }
 
   if (authContextValue.isLoggingIn) return <Loading />;
 
@@ -77,7 +87,7 @@ interface AuthProviderProps {
 
 interface AuthContextValue {
   user: User | null;
-  isLoggedIn: boolean;
+  playerProfile: PlayerProfile | null;
   isLoggingIn: boolean;
 }
 

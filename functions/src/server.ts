@@ -4,7 +4,13 @@ admin.initializeApp();
 import {
   retrieveMyPlayerProfile,
   createAnonymousPlayer,
+  createPlayerProfile,
   deleteAnonymousPlayer,
 } from "./PlayerAPI";
 
-export {retrieveMyPlayerProfile, createAnonymousPlayer, deleteAnonymousPlayer};
+export {
+  retrieveMyPlayerProfile,
+  createAnonymousPlayer,
+  createPlayerProfile,
+  deleteAnonymousPlayer,
+};
