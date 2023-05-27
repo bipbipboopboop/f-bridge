@@ -104,19 +104,3 @@ export const createPlayerProfile = functions.https.onCall(
     }
   }
 );
-
-export const deleteAnonymousPlayer = functions.auth
-  .user()
-  .onDelete(async (user) => {
-    try {
-      // Delete player profile document using the user's UID
-      await admin
-        .firestore()
-        .collection("playerProfiles")
-        .doc(user.uid)
-        .delete();
-      console.log("Anonymous player deleted successfully.");
-    } catch (error) {
-      console.error("Error deleting anonymous player:", error);
-    }
-  });
