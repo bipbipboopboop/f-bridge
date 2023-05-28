@@ -1,13 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import {BrowserRouter} from "react-router-dom";
-import "./index.css";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
-import {AuthProvider} from "./context/AuthProvider";
 import {ToastContainer} from "react-toastify";
+
+import "./index.css";
+import "./style.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "./assets/fonts/font.ttf";
+
+import App from "./App";
+
+import reportWebVitals from "./reportWebVitals";
+import {AuthProvider} from "./context/AuthProvider";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
