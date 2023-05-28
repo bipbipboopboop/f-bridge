@@ -4,6 +4,7 @@ import {GameRoom} from "types/GameRoom";
 import PlayerPanel from "../components/gameroom/player_panel";
 import {LobbyPlayerProfile} from "types/PlayerProfile";
 import RoomSettings from "../components/gameroom/settings";
+import Chatbox from "../components/chat/chatbox";
 
 const Room = () => {
   const room: GameRoom = {
@@ -79,24 +80,10 @@ const Room = () => {
         <RoomSettings room={room} />
       </div>
       <div className="h-100 w-100 p-5" style={{border: "1px solid"}}>
-        <div style={{height: "90%"}}>
-          <PlayerPanel players={players} />
-        </div>
-        <div className="d-flex" style={{height: "10%"}}>
-          <OrangeButton>Start Game</OrangeButton>
-        </div>
+        <PlayerPanel players={players} />
       </div>
       <div className="h-100 w-100 p-5" style={{border: "1px solid"}}>
-        <h4>Chat</h4>
-        <div style={{height: "90%", border: "1px solid"}}></div>
-        <div className="d-flex" style={{height: "10%", border: "1px solid"}}>
-          <input
-            type="text"
-            className="h-100 w-75"
-            style={{fontSize: "0.5rem"}}
-          />
-          <GreenButton>Send</GreenButton>
-        </div>
+        <Chatbox />
       </div>
     </div>
   );
