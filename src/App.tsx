@@ -1,7 +1,9 @@
+import {Route, Routes} from "react-router-dom";
 import "./App.css";
 import useFunctions from "./hooks/useFunctions";
 import Loading from "./components/loading";
 import Navbar from "./components/navbar";
+import Lobby from "./pages/lobby";
 
 function App() {
   const {isLoading} = useFunctions();
@@ -11,7 +13,10 @@ function App() {
   return (
     <div className="App">
       <Navbar />
-      {/* <pre>{JSON.stringify(user)}</pre> */}
+      <Routes>
+        <Route path="/" element={<Lobby />} />
+        {/* <Route path="*" element={<NotFound />} /> */}
+      </Routes>
     </div>
   );
 }
