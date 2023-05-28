@@ -1,23 +1,24 @@
 .btn-secondary {
   width: 140px;
   height: 52px;
-  top: 16px;
+  /* top: 16px; */
   left: 16px;
   border-radius: 8px;
 
   text-align: center;
   color: white;
-  font-size: 1.125rem;
-  font-weight: 700;
+  /* font-size: 1.125rem; */
 
   background: #20da1c;
+
+  background-color: #1fab1c;
 
   border: none;
   box-shadow: 2px 2px 4px rgba(32, 32, 32, 0.15);
 }
 
 .btn-secondary:hover {
-  background: #1fab1c;
+  background-color: #157613;
 }
 
 .btn-secondary:disabled {

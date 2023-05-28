@@ -21,7 +21,52 @@ body {
   justify-content: flex-start;
   align-items: center;
   background-image: url("./assets/background.jpg");
+  color: white;
 }
 .firebase-emulator-warning {
   display: none;
+}
+
+.tab-list {
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+}
+
+.tab {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: space-evenly;
+  cursor: pointer;
+  height: 36px;
+  font-size: 1rem;
+
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 5px 5px 0 0;
+  /* color: white; */
+}
+
+.tab:hover {
+  background-color: #006cb1;
+}
+
+.tab-active {
+  background-color: #0567a6;
+}
+
+.player-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  font-size: 0.9rem;
+}
+
+.player-box {
+  border: 1px solid gray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 10px;
 }
