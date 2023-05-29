@@ -33,19 +33,16 @@
   padding: 0.5rem;
   vertical-align: middle;
 }
-.lobby-table tbody tr .lobby_table_data_players {
-  width: 100px;
-}
-.lobby-table tbody tr .lobby_table_data_players img {
+
+.lobby_table_data_players-occupied {
   height: 20px;
 }
-.lobby-table tbody tr .lobby_table_data_high_karma {
-  padding-right: 2px;
-}
-.lobby-table tbody tr .lobby_table_data_high_karma img {
-  float: right;
+
+.lobby_table_data_players-vacant {
   height: 20px;
+  opacity: 0.5;
 }
+
 .lobby-table tbody .lobby_table_row_unavailable {
   background-color: rgba(137, 161, 168, 0.25);
   color: rgba(255, 255, 255, 0.6);
