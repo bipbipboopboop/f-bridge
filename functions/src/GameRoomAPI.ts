@@ -1,14 +1,17 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
+import {DocumentReference, DocumentSnapshot} from "firebase-admin/firestore";
+
 import {produce} from "immer";
+
 import {BiddingPhase, GameRoom} from "types/GameRoom";
 import {
   GameRoomPlayer,
   LobbyPlayerProfile,
   PlayerProfile,
 } from "types/PlayerProfile";
-import {DocumentReference} from "firebase-admin/firestore";
-import {Card, Suit} from "types/Card";
+
+import {shuffleCards} from "./utils/shuffle_cards";
 
 /**
  * Create a new game room
@@ -385,6 +388,20 @@ export const toggleReady = functions.https.onCall(
   }
 );
 
+/**
+ * Start the game
+ * @param data
+ * @param context
+ * @returns
+ * @throws
+ * - unauthenticated: User is not authenticated.
+ * - failed-precondition: Player is not in a game.
+ * - already-exists: Game has already started.
+ * - not-found: Game room does not exist.
+ * - internal: Failed to start the game.
+ * - invalid-argument: Game room is not full.
+ * - permission-denied: Player is not the host.
+ */
 export const startGame = functions.https.onCall(async (data: void, context) => {
   // Get the player's profile
   const playerProfileRef = admin
@@ -471,45 +488,196 @@ export const startGame = functions.https.onCall(async (data: void, context) => {
 });
 
 /**
- * Shuffles a deck of cards.
- * @returns A shuffled deck of cards
+ * Invite a player to a game
+ * @param data
+ * @param context
+ * @returns
+ * @throws
+ * - unauthenticated: User is not authenticated.
+ * - not-found: Invitee does not exist.
+ * - failed-precondition: Invitee is already in a room.
+ * - internal: Failed to invite the player.
+ * - permission-denied: Player is not the host.
+ * - already-exists: Invitee is already in the room.
+ * - invalid-argument: Invitee is the host.
+ * - resource-exhausted: Room is full.
  */
-const shuffleCards = () => {
-  // Create a deck of cards
-  const deck: Card[] = [];
-  for (let suit = 0; suit < 4; suit++) {
-    for (let rank = 0; rank < 13; rank++) {
-      let suitString: Suit;
-
-      switch (suit) {
-        case 0:
-          suitString = "♣";
-          break;
-        case 1:
-          suitString = "♦";
-          break;
-        case 2:
-          suitString = "♥";
-          break;
-        default:
-          suitString = "♠";
-          break;
-      }
-
-      deck.push({
-        suit: suitString,
-        value: rank,
-      });
+export const invitePlayer = functions.https.onCall(
+  async (inviteeID: string, context) => {
+    // Check if the inviter is authenticated
+    if (!context.auth) {
+      throw new functions.https.HttpsError(
+        "unauthenticated",
+        "User is not authenticated."
+      );
     }
-  }
 
-  // Shuffle the deck
-  for (let i = 0; i < deck.length; i++) {
-    const j = Math.floor(Math.random() * (i + 1));
-    const temp = deck[i];
-    deck[i] = deck[j];
-    deck[j] = temp;
-  }
+    const inviterID = context.auth.uid;
+    // Check if invitee exists
+    const inviteeProfileSnapshot = (await admin
+      .firestore()
+      .collection("playerProfiles")
+      .doc(inviteeID)
+      .get()) as DocumentSnapshot<PlayerProfile>;
 
-  return deck;
-};
+    const inviteeProfile = inviteeProfileSnapshot.data();
+
+    if (!inviteeProfile) {
+      throw new functions.https.HttpsError(
+        "not-found",
+        "Invitee does not exist."
+      );
+    }
+
+    // TODO: Check if invitee is online
+
+    // Check if invitee is not in a room
+    if (inviteeProfile.roomID) {
+      throw new functions.https.HttpsError(
+        "failed-precondition",
+        "Invitee is already in a room."
+      );
+    }
+
+    // Get inviter's player profile
+    const inviterProfileSnapshot = (await admin
+      .firestore()
+      .collection("playerProfiles")
+      .doc(inviterID!)
+      .get()) as DocumentSnapshot<PlayerProfile>;
+
+    const inviterProfile = inviterProfileSnapshot.data();
+
+    if (!inviterProfile) {
+      throw new functions.https.HttpsError(
+        "not-found",
+        "Inviter does not exist."
+      );
+    }
+
+    // Check if inviter is in a room
+    if (!inviterProfile.roomID) {
+      throw new functions.https.HttpsError(
+        "failed-precondition",
+        "Inviter is not in a room."
+      );
+    }
+
+    // Get inviter's game room
+    const inviterGameRoomRef = admin
+      .firestore()
+      .collection("gameRooms")
+      .doc(inviterProfile.roomID);
+    const gameRoomSnapshot = await inviterGameRoomRef.get();
+    const gameRoom = gameRoomSnapshot.data() as GameRoom;
+
+    // Check if invitee is already invited
+    const isAlreadyInvited = gameRoom.invitedID.includes(inviteeID);
+    if (isAlreadyInvited) {
+      throw new functions.https.HttpsError(
+        "already-exists",
+        "Invitee is already invited."
+      );
+    }
+
+    // Check if the room is full
+    if (gameRoom.players.length >= 4) {
+      throw new functions.https.HttpsError(
+        "failed-precondition",
+        "The game room is already full."
+      );
+    }
+
+    // Add invitee to the invitedID array of the game room
+    const updatedGameRoom = {
+      ...gameRoom,
+      invitedID: [...gameRoom.invitedID, inviteeID],
+    };
+
+    // Update the game room to include the invitee in the invitedID array
+    inviterGameRoomRef.update(updatedGameRoom);
+
+    return {message: "Invite sent."};
+  }
+);
+
+/**
+ *
+ */
+export const kickPlayer = functions.https.onCall(
+  async (targetPlayerID: string, context) => {
+    if (!context.auth) {
+      throw new functions.https.HttpsError(
+        "unauthenticated",
+        "User is not authenticated."
+      );
+    }
+
+    const kickerID: string = context.auth.uid;
+
+    // Check if player is already in a game
+    const targetPlayerRef = admin
+      .firestore()
+      .collection("players")
+      .doc(targetPlayerID);
+
+    const targetPlayerSnapshot =
+      (await targetPlayerRef.get()) as DocumentSnapshot<PlayerProfile>;
+    const targetPlayer = targetPlayerSnapshot.data();
+
+    if (!targetPlayer) {
+      throw new functions.https.HttpsError(
+        "not-found",
+        "Player does not exist."
+      );
+    }
+
+    if (!targetPlayer.roomID) {
+      throw new functions.https.HttpsError(
+        "failed-precondition",
+        "Player is not in a room."
+      );
+    }
+
+    const gameRoomRef = admin
+      .firestore()
+      .collection("rooms")
+      .doc(targetPlayer.roomID);
+    const gameRoomSnapshot =
+      (await gameRoomRef.get()) as DocumentSnapshot<GameRoom>;
+
+    const gameRoom = gameRoomSnapshot.data();
+    if (!gameRoom) {
+      throw new functions.https.HttpsError(
+        "failed-precondition",
+        "Room does not exist."
+      );
+    }
+
+    if (gameRoom.status !== "Waiting") {
+      throw new functions.https.HttpsError(
+        "failed-precondition",
+        "The game has already started or ended."
+      );
+    }
+
+    // Check if the player is the host
+    if (gameRoom.hostID !== kickerID) {
+      throw new functions.https.HttpsError(
+        "permission-denied",
+        "You are not the host of the game."
+      );
+    }
+
+    // Check if the target player is in the room
+    if (targetPlayer.roomID !== targetPlayer.roomID) {
+      throw new functions.https.HttpsError(
+        "failed-precondition",
+        "Target player is not in the room."
+      );
+    }
+
+    // Kick the player from the room
+    await targetPlayerRef.update({roomID: null});
+  }
+);
