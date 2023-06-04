@@ -5,10 +5,10 @@ const RoomSettings = ({room}: {room: GameRoom}) => {
       <h4>Settings</h4>
       <div className="w-100">
         <div className="tab">{`Invite Only: ${room.settings.isInviteOnly}`}</div>
-        <div className="tab">Allow Reshuffle</div>
-        <div className="tab">Allow Spectator</div>
-        <div className="tab">Wait Time</div>
-        <div className="tab">Max Bid</div>
+        <div className="tab">{`Allow Reshuffle: ${room.settings.isInviteOnly}`}</div>
+        <div className="tab">{`Allow Spectator: ${room.settings.isSpectatorAllowed}`}</div>
+        <div className="tab">Wait Time: None</div>
+        <div className="tab">Max Bid: 4</div>
       </div>
     </>
   );
