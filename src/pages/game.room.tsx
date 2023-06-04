@@ -4,6 +4,8 @@ import {LobbyPlayerProfile} from "types/PlayerProfile";
 import RoomSettings from "../components/gameroom/settings";
 import Chatbox from "../components/chat/chatbox";
 
+import "./game.room.css";
+
 const Room = () => {
   const room: GameRoom = {
     biddingPhase: null,
@@ -77,21 +79,21 @@ const Room = () => {
   ];
 
   return (
-    <div className="w-100 h-100 d-flex justify-content-around">
+    <div className="w-100 h-100 d-flex mb-4 justify-content-center">
       <div
-        className="h-100 w-50 pt-5 px-3"
+        className="game-room-left"
         // style={{border: "1px solid"}}
       >
         <RoomSettings room={room} />
       </div>
       <div
-        className="h-100 w-100 pt-5 px-2"
+        className="game-room-middle"
         // style={{border: "1px solid"}}
       >
         <PlayerPanel players={players} />
       </div>
       <div
-        className="h-100 w-100 pt-5 px-3"
+        className="game-room-right"
         // style={{border: "1px solid"}}
       >
         <Chatbox />
