@@ -1,4 +1,3 @@
-import PlayerSVG from "../../assets/player_assets/player.svg";
 import {
   createColumnHelper,
   flexRender,
@@ -8,7 +7,7 @@ import {
 
 import {GameRoom} from "types/GameRoom";
 
-const RoomTable = () => {
+const ScoreTable = () => {
   const data: GameRoom[] = [
     {
       hostID: "Host 1",
@@ -49,6 +48,7 @@ const RoomTable = () => {
       ],
       biddingPhase: null,
       trickTakingPhase: null,
+      scores: [],
     },
     {
       hostID: "Host 2",
@@ -62,6 +62,7 @@ const RoomTable = () => {
       players: [],
       biddingPhase: null,
       trickTakingPhase: null,
+      scores: [],
     },
   ];
 
@@ -84,18 +85,7 @@ const RoomTable = () => {
       header: () => <span>Players</span>,
       cell: (info) => {
         const plyrList = info.cell.getValue();
-        return (
-          <div>
-            {[0, 1, 2, 3].map((index) => (
-              <img
-                className={`lobby_table_data_players-${
-                  plyrList[index] ? "occupied" : "vacant"
-                }`}
-                src={PlayerSVG}
-              />
-            ))}
-          </div>
-        );
+        return <div></div>;
       },
     }),
   ];
@@ -138,4 +128,4 @@ const RoomTable = () => {
   );
 };
 
-export default RoomTable;
+export default ScoreTable;

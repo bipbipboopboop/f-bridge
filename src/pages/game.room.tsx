@@ -6,7 +6,7 @@ import Chatbox from "../components/chat/chatbox";
 
 import "./game.room.css";
 
-const Room = () => {
+const GameRoomComponent = () => {
   const room: GameRoom = {
     biddingPhase: null,
     hostID: "host",
@@ -80,26 +80,17 @@ const Room = () => {
 
   return (
     <div className="w-100 h-100 d-flex mb-4 justify-content-center">
-      <div
-        className="game-room-left"
-        // style={{border: "1px solid"}}
-      >
+      <div className="game-room-left">
         <RoomSettings room={room} />
       </div>
-      <div
-        className="game-room-middle"
-        // style={{border: "1px solid"}}
-      >
+      <div className="game-room-middle">
         <PlayerPanel players={players} />
       </div>
-      <div
-        className="game-room-right"
-        // style={{border: "1px solid"}}
-      >
+      <div className="game-room-right">
         <Chatbox />
       </div>
     </div>
   );
 };
 
-export default Room;
+export default GameRoomComponent;

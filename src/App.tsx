@@ -4,8 +4,8 @@ import useFunctions from "./hooks/useFunctions";
 import Loading from "./components/loading";
 import Navbar from "./components/navbar";
 import Lobby from "./pages/lobby";
-import Room from "./pages/game.room";
-import GamePanel from "./pages/game.panel";
+import GameRoomComponent from "./pages/game.room";
+import GameComponent from "./pages/game";
 
 function App() {
   const {isLoading} = useFunctions();
@@ -17,8 +17,8 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/lobby" element={<Lobby />} />
-        <Route path="/game_room" element={<Room />} />
-        <Route path="/game_table" element={<GamePanel />} />
+        <Route path="/game_room" element={<GameRoomComponent />} />
+        <Route path="/game" element={<GameComponent />} />
       </Routes>
     </div>
   );
