@@ -28,9 +28,14 @@ const PlayerPanel: React.FC<PlayerPanelProps> = ({players}) => {
             <PlayerBox player={players[3]} />
           </div>
         </div>
-        <div>
+        <div className="d-flex justify-content-center">
           <OrangeButton>
-            <Link to="/game_table">Start Game</Link>
+            <Link
+              to="/game_table"
+              style={{textDecoration: "none", color: "white"}}
+            >
+              Start Game
+            </Link>
           </OrangeButton>
         </div>
       </div>
