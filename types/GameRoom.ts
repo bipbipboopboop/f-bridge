@@ -1,5 +1,6 @@
 // types/GameRoom.ts
 import {Suit} from "./Card";
+import {Bid} from "types/Bid";
 import {LobbyPlayerProfile, PlayerProfile} from "./PlayerProfile";
 
 export type GameRoom = {
@@ -26,10 +27,7 @@ export type BiddingPhase = {
   currentBidderIndex: 0 | 1 | 2 | 3;
   numBidsMade: number; // To determine bidIndex in bidHistory
 
-  highestBid: {
-    suit: Suit;
-    number: number;
-  } | null;
+  highestBid: Bid | null;
 
   bidHistory: {
     bidIndex: string; // To determine the order of the bids(i.e whether it's bid#1, bid#2)
