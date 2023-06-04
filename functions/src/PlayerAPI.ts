@@ -69,6 +69,7 @@ export const createPlayerProfile = functions.https.onCall(
         id: user.uid,
         displayName: user.displayName || randomName,
         email: user.email,
+        avatarID: null,
         country: "International",
         numOfGamesPlayed: 0,
         numOfGamesWon: 0,
