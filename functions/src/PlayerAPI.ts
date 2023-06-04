@@ -12,47 +12,30 @@ import {
 import {PlayerProfile} from "types/PlayerProfile";
 import {DocumentReference} from "firebase-admin/firestore";
 import {UserInfo} from "firebase-admin/auth";
-
-const firestore = admin.firestore();
+import {UnauthenticatedError} from "./error/error";
+import {retrievePlayerProfile} from "./utils/player_functions";
 
 export const retrieveMyPlayerProfile = functions.https.onCall(
   async (data: void, context) => {
-    // Check if the user is authenticated
-    if (!context.auth) {
+    if (!context.auth) throw UnauthenticatedError;
+    const userID = context.auth.uid;
+    const {playerProfile} = await retrievePlayerProfile(userID, true);
+
+    console.log({retrieveMyPlayerProfile_playerProfile: playerProfile, userID});
+    if (!playerProfile) {
       throw new functions.https.HttpsError(
-        "unauthenticated",
-        "The request must be made by an authenticated user."
+        "internal",
+        "Your profile data is not found."
       );
     }
-
-    const userId = context.auth.uid;
-
-    const playerProfileRef = firestore
-      .collection("playerProfiles")
-      .doc(userId) as DocumentReference<PlayerProfile>;
-    const playerProfileDoc = await playerProfileRef.get();
-    if (!playerProfileDoc.exists) {
-      throw new functions.https.HttpsError(
-        "not-found",
-        "Player profile not found."
-      );
-    }
-
-    const playerProfileData = playerProfileDoc.data();
-    return playerProfileData;
+    return playerProfile;
   }
 );
 
 export const createPlayerProfile = functions.https.onCall(
   async (user: UserInfo, context) => {
     try {
-      // Check if the user is authenticated
-      if (!context.auth) {
-        throw new functions.https.HttpsError(
-          "unauthenticated",
-          "User is not authenticated."
-        );
-      }
+      if (!context.auth) throw UnauthenticatedError;
 
       // Check if the player profile already exists
       const playerProfileRef = admin
@@ -96,11 +79,8 @@ export const createPlayerProfile = functions.https.onCall(
 
       return playerProfile;
     } catch (error) {
-      console.error("Error creating anonymous player:", error);
-      throw new functions.https.HttpsError(
-        "internal",
-        "Error creating anonymous player"
-      );
+      console.error("Error creating player:", error);
+      throw new functions.https.HttpsError("internal", "Error creating player");
     }
   }
 );
