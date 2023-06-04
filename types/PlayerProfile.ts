@@ -5,7 +5,7 @@ export interface PlayerProfile {
   email: string | null;
   displayName: string;
   country: string | "International";
-  // avatarID: null; // For future
+  avatarID: string | null; // For future
   // status: "Online" | "Offline" | "In Lobby" | "In Game";
 
   // Game data

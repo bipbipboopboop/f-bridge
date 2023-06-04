@@ -1,5 +1,3 @@
-import GreenButton from "../components/buttons/button.green";
-import OrangeButton from "../components/buttons/button.orange";
 import {GameRoom} from "types/GameRoom";
 import PlayerPanel from "../components/gameroom/player_panel";
 import {LobbyPlayerProfile} from "types/PlayerProfile";
@@ -29,6 +27,7 @@ const Room = () => {
       email: "player1@example.com",
       displayName: "Player 1",
       country: "International",
+      avatarID: "1",
       numOfGamesWon: 10,
       numOfGamesPlayed: 20,
       roomID: null,
@@ -41,6 +40,7 @@ const Room = () => {
       email: "player2@example.com",
       displayName: "Player 2",
       country: "International",
+      avatarID: "2",
       numOfGamesWon: 5,
       numOfGamesPlayed: 15,
       roomID: null,
@@ -53,6 +53,7 @@ const Room = () => {
       email: "player3@example.com",
       displayName: "Player 3",
       country: "International",
+      avatarID: "3",
       numOfGamesWon: 2,
       numOfGamesPlayed: 10,
       roomID: null,
@@ -65,6 +66,7 @@ const Room = () => {
       email: "player4@example.com",
       displayName: "Player 4",
       country: "International",
+      avatarID: "4",
       numOfGamesWon: 8,
       numOfGamesPlayed: 18,
       roomID: null,
@@ -76,13 +78,22 @@ const Room = () => {
 
   return (
     <div className="w-100 h-100 d-flex justify-content-around">
-      <div className="h-100 w-50 p-5" style={{border: "1px solid"}}>
+      <div
+        className="h-100 w-50 pt-5 px-3"
+        // style={{border: "1px solid"}}
+      >
         <RoomSettings room={room} />
       </div>
-      <div className="h-100 w-100 p-5" style={{border: "1px solid"}}>
+      <div
+        className="h-100 w-100 pt-5 px-2"
+        // style={{border: "1px solid"}}
+      >
         <PlayerPanel players={players} />
       </div>
-      <div className="h-100 w-100 p-5" style={{border: "1px solid"}}>
+      <div
+        className="h-100 w-100 pt-5 px-3"
+        // style={{border: "1px solid"}}
+      >
         <Chatbox />
       </div>
     </div>
