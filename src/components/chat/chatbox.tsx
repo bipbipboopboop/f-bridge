@@ -4,7 +4,7 @@ const Chatbox = () => {
   return (
     <>
       <h4>Chat</h4>
-      <div style={{height: "90%", border: "1px solid"}}></div>
+      <div style={{height: "80%", border: "1px solid"}}></div>
       <div className="d-flex" style={{height: "10%", border: "1px solid"}}>
         <input
           type="text"
