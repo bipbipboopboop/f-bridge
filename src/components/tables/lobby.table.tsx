@@ -23,6 +23,7 @@ const RoomTable = () => {
         {
           displayName: "Player 1",
           country: "International",
+          avatarID: "2",
           email: "hi@email.com",
           id: "1",
           isReady: true,
@@ -35,6 +36,7 @@ const RoomTable = () => {
         {
           displayName: "Player 1",
           country: "International",
+          avatarID: "1",
           email: "hi@email.com",
           id: "1",
           isReady: true,
