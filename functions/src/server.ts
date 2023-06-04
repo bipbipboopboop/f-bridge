@@ -12,6 +12,9 @@ import {
 } from "./GameRoomAPI";
 
 export {
+  /**
+   * PLAYER API
+   */
   retrieveMyPlayerProfile,
   createPlayerProfile,
 
