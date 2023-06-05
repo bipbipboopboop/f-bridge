@@ -5,7 +5,7 @@ import Loading from "./components/loading";
 import Navbar from "./components/navbar";
 import Lobby from "./pages/lobby";
 
-import GameRoom from "./pages/gameroom";
+import GameRoomComponent from "./pages/gameroom";
 import GameParty from "./pages/party";
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
       <Routes>
         <Route path="/lobby" element={<Lobby />} />
         <Route path="/party" element={<GameParty />} />
-        <Route path="/gameroom" element={<GameRoom />} />
+        <Route path="/gameroom" element={<GameRoomComponent />} />
       </Routes>
     </div>
   );
