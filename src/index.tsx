@@ -4,7 +4,6 @@ import {BrowserRouter} from "react-router-dom";
 import {ToastContainer} from "react-toastify";
 
 import "./index.css";
-import "./style.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "./assets/fonts/font.ttf";
 

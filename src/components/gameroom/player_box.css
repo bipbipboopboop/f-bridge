@@ -9,3 +9,7 @@
   width: 11rem;
   background-color: rgba(0, 0, 0, 0.05);
 }
+
+.player-box:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}

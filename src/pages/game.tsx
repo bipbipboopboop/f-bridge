@@ -1,4 +1,5 @@
 import Chatbox from "../components/chat/chatbox";
+import ScoreTable from "../components/tables/game.score.table";
 import RoomTable from "../components/tables/lobby.table";
 import "./game.css";
 
@@ -11,7 +12,7 @@ const GameComponent = () => {
           <Chatbox />
         </div>
         <div className="bottom">
-          <RoomTable />
+          <ScoreTable />
         </div>
       </div>
     </div>

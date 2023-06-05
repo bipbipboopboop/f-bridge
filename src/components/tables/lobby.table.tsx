@@ -1,4 +1,5 @@
 import PlayerSVG from "../../assets/player_assets/player.svg";
+import "./lobby.table.css";
 import {
   createColumnHelper,
   flexRender,
@@ -123,7 +124,7 @@ const RoomTable = () => {
           </tr>
         ))}
       </thead>
-      <tbody id="lobby_center_rooms_table_body">
+      <tbody>
         {table.getRowModel().rows.map((row) => (
           <tr key={row.id}>
             {row.getVisibleCells().map((cell) => (

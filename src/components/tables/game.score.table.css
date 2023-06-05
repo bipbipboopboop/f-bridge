@@ -1,0 +1,38 @@
+.score-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 4px;
+}
+
+.score-table thead tr {
+  font-size: 0.75rem;
+}
+
+.score-table tbody tr {
+  background-color: rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  height: 20px;
+  font-size: 0.55rem;
+}
+
+.score-table tbody tr:not(.score-table_row_unavailable):hover {
+  background-color: #006cb1;
+}
+
+.score-table tbody tr td {
+  padding: 0.5rem;
+  vertical-align: middle;
+}
+
+.score-table tbody .score-table_row_unavailable {
+  background-color: rgba(137, 161, 168, 0.25);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.score-table tbody .score-table_row_unavailable:hover {
+  background-color: rgba(127, 146, 158, 0.27);
+}
+
+.score-table tbody .score-table_row_unavailable .tooltip_container img {
+  opacity: 60%;
+}
