@@ -44,11 +44,7 @@ export type TrickTakingPhase = {
     }[];
   }[];
 
-  scores: {
-    playerID: string;
-    position: string;
-    numTricksWon: number;
-  }[];
+  scores: GameScore[];
 };
 
 // gamePlayers subcollection
@@ -58,3 +54,9 @@ export interface GamePlayer extends PlayerProfile {
   numTricksWon: number;
   position: number;
 }
+
+export type GameScore = {
+  playerID: string;
+  position: 0 | 1 | 2 | 3;
+  numTricksWon: number;
+};

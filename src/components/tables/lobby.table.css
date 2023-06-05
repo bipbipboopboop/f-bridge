@@ -1,0 +1,43 @@
+.lobby-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 4px;
+}
+
+.lobby-table tbody tr {
+  background-color: rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  height: 50px;
+  font-size: 0.75rem;
+}
+
+.lobby-table tbody tr:not(.lobby_table_row_unavailable):hover {
+  background-color: #006cb1;
+}
+
+.lobby-table tbody tr td {
+  padding: 0.5rem;
+  vertical-align: middle;
+}
+
+.lobby_table_data_players-occupied {
+  height: 20px;
+}
+
+.lobby_table_data_players-vacant {
+  height: 20px;
+  opacity: 0.5;
+}
+
+.lobby-table tbody .lobby_table_row_unavailable {
+  background-color: rgba(137, 161, 168, 0.25);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.lobby-table tbody .lobby_table_row_unavailable:hover {
+  background-color: rgba(127, 146, 158, 0.27);
+}
+
+.lobby-table tbody .lobby_table_row_unavailable .tooltip_container img {
+  opacity: 60%;
+}
