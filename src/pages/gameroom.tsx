@@ -1,10 +1,10 @@
 import Chatbox from "../components/chat/chatbox";
-import GamePanel from "../components/game/game.panel";
+import GamePanel from "../components/gameroom/game.panel";
 import ScoreTable from "../components/tables/game.score.table";
-import RoomTable from "../components/tables/lobby.table";
-import "./game.css";
 
-const GameComponent = () => {
+import "./gameroom.css";
+
+const GameRoom = () => {
   return (
     <div className="game-component">
       <div className="left">
@@ -26,4 +26,4 @@ const GameComponent = () => {
   );
 };
 
-export default GameComponent;
+export default GameRoom;
