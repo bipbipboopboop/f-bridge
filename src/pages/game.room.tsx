@@ -19,7 +19,7 @@ const Room = () => {
       isInviteOnly: false,
       isSpectatorAllowed: false,
     },
-    scores: [],
+
     status: "Waiting",
   };
 
