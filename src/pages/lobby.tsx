@@ -1,6 +1,6 @@
 import GreenButton from "../components/buttons/button.green";
 import OrangeButton from "../components/buttons/button.orange";
-import LobbyRooms from "../components/tabs/lobby.tab";
+import LobbyRooms from "../components/lobby/lobby.tab";
 
 const Lobby = () => {
   return (
