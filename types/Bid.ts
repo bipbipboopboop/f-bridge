@@ -1,4 +1,4 @@
-import {Suit} from "./Card";
+import {BidSuit, Suit} from "./Card";
 
 export class Bid {
   suit: Suit;
@@ -9,14 +9,17 @@ export class Bid {
     this.number = number;
   }
 
-  compareTo(otherBid: Bid): number {
+  compareTo(otherBid: Bid | null): number {
+    if (!otherBid) {
+      return 1;
+    }
     if (this.number > otherBid.number) {
       return 1;
     } else if (this.number < otherBid.number) {
       return -1;
     } else {
       // If the numbers are equal, compare the suits
-      const suitsOrder: Suit[] = ["♣", "♦", "♥", "♠", "NT"];
+      const suitsOrder: BidSuit[] = ["♣", "♦", "♥", "♠", "NT"];
       const thisSuitIndex = suitsOrder.indexOf(this.suit);
       const otherSuitIndex = suitsOrder.indexOf(otherBid.suit);
 
