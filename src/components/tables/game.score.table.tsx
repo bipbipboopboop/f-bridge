@@ -48,7 +48,6 @@ const ScoreTable = () => {
       ],
       biddingPhase: null,
       trickTakingPhase: null,
-      scores: [],
     },
     {
       hostID: "Host 2",
@@ -62,7 +61,6 @@ const ScoreTable = () => {
       players: [],
       biddingPhase: null,
       trickTakingPhase: null,
-      scores: [],
     },
   ];
 
