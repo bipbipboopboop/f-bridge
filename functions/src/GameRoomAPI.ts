@@ -69,7 +69,6 @@ export const createGameRoom = functions.https.onCall(
         ],
         biddingPhase: null,
         trickTakingPhase: null,
-        scores: [],
       };
 
       // Create a new game room

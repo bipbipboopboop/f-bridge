@@ -1,5 +1,5 @@
 // types/GameRoom.ts
-import {Suit} from "./Card";
+import {BidSuit, Card} from "./Card";
 import {Bid} from "types/Bid";
 import {LobbyPlayerProfile, PlayerProfile} from "./PlayerProfile";
 
@@ -17,10 +17,6 @@ export type GameRoom = {
 
   biddingPhase: BiddingPhase | null;
   trickTakingPhase: TrickTakingPhase | null;
-  scores: {
-    playerID: string;
-    score: number;
-  }[];
 };
 
 export type BiddingPhase = {
@@ -32,16 +28,14 @@ export type BiddingPhase = {
   bidHistory: {
     bidIndex: string; // To determine the order of the bids(i.e whether it's bid#1, bid#2)
     playerID: string;
-    bid: {
-      suit: Suit;
-      number: number;
-    };
+    bid: Bid;
   }[];
 };
 
 export type TrickTakingPhase = {
   currentPlayerIndex: number;
   leadPlayerIndex: number;
+  trumpSuit: BidSuit;
 
   currentTrick: {
     cards: {
@@ -64,21 +58,3 @@ export interface GamePlayer extends PlayerProfile {
   numTricksWon: number;
   position: number;
 }
-
-type Card = {
-  suit: Suit;
-  value: 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13;
-  stringValue:
-    | "2"
-    | "3"
-    | "4"
-    | "5"
-    | "6"
-    | "7"
-    | "8"
-    | "9"
-    | "10"
-    | "J"
-    | "Q"
-    | "K";
-};
