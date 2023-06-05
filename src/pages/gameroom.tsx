@@ -1,10 +1,50 @@
+import {GameRoom} from "types/GameRoom";
 import Chatbox from "../components/chat/chatbox";
 import GamePanel from "../components/gameroom/game.panel";
-import ScoreTable from "../components/tables/game.score.table";
 
 import "./gameroom.css";
+import GameStateInfo from "../components/gameroom/game_state_info/gamestate.info";
 
-const GameRoom = () => {
+const GameRoomComponent = () => {
+  const gameInfo: GameRoom = {
+    biddingPhase: null,
+    createdAt: new Date(),
+    hostID: "123",
+    invitedID: [],
+    players: [],
+    settings: {
+      isInviteOnly: false,
+      isSpectatorAllowed: false,
+    },
+    status: "Taking Trick",
+    trickTakingPhase: {
+      currentPlayerIndex: 0,
+      scores: [],
+      leadPlayerIndex: 0,
+      trumpSuit: "NT",
+      currentTrick: [],
+    },
+  };
+
+  // const gameInfo: GameRoom = {
+  //   biddingPhase: {
+  //     bidHistory: [],
+  //     currentBidderIndex: 0,
+  //     highestBid: null,
+  //     numBidsMade: 0,
+  //   },
+  //   createdAt: new Date(),
+  //   hostID: "123",
+  //   invitedID: [],
+  //   players: [],
+  //   settings: {
+  //     isInviteOnly: false,
+  //     isSpectatorAllowed: false,
+  //   },
+  //   status: "Taking Trick",
+  //   trickTakingPhase: null,
+  // };
+
   return (
     <div className="game-component">
       <div className="left">
@@ -15,15 +55,11 @@ const GameRoom = () => {
           <Chatbox />
         </div>
         <div className="bottom">
-          <ScoreTable />
-          <div className="d-flex flex-column align-items-center">
-            <div>Trump</div>
-            <div>NT</div>
-          </div>
+          <GameStateInfo gameroom={gameInfo} />
         </div>
       </div>
     </div>
   );
 };
 
-export default GameRoom;
+export default GameRoomComponent;
