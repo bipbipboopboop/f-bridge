@@ -1,4 +1,38 @@
-import {Card, Suit} from "types/Card";
+import {Card, CardStringValue, CardValue, Suit} from "types/Card";
+
+/**
+ * Utils for shuffling a deck of cards.
+ */
+type SuitLookup = {
+  [key: number]: Suit;
+};
+
+const suitLookup: SuitLookup = {
+  0: "♣",
+  1: "♦",
+  2: "♥",
+  3: "♠",
+};
+
+type StringValueLookup = {
+  [key: number]: CardStringValue;
+};
+
+const stringValueLookup: StringValueLookup = {
+  14: "A",
+  13: "K",
+  12: "Q",
+  11: "J",
+  10: "10",
+  9: "9",
+  8: "8",
+  7: "7",
+  6: "6",
+  5: "5",
+  4: "4",
+  3: "3",
+  2: "2",
+};
 
 /**
  * Shuffles a deck of cards.
@@ -8,27 +42,17 @@ export const shuffleCards = () => {
   // Create a deck of cards
   const deck: Card[] = [];
   for (let suit = 0; suit < 4; suit++) {
-    for (let rank = 0; rank < 13; rank++) {
+    for (let rank = 2; rank < 15; rank++) {
       let suitString: Suit;
+      let stringValue: CardStringValue;
 
-      switch (suit) {
-        case 0:
-          suitString = "♣";
-          break;
-        case 1:
-          suitString = "♦";
-          break;
-        case 2:
-          suitString = "♥";
-          break;
-        default:
-          suitString = "♠";
-          break;
-      }
+      suitString = suitLookup[suit];
+      stringValue = stringValueLookup[rank];
 
       deck.push({
         suit: suitString,
-        value: rank,
+        value: rank as CardValue,
+        stringValue: stringValue,
       });
     }
   }
