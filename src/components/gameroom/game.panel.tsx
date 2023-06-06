@@ -6,7 +6,7 @@ import PlayingArea from "./playing_area";
 const GamePanel = () => {
   return (
     <div className="h-100 w-100 d-flex flex-column">
-      <div className="d-flex justify-content-center h-100">
+      <div className="d-flex justify-content-center h-50">
         <PlayerBubble />
       </div>
       <div className="d-flex justify-content-between h-100">
@@ -14,7 +14,7 @@ const GamePanel = () => {
         <PlayingArea />
         <PlayerBubble />
       </div>
-      <div className="d-flex justify-content-between">
+      <div className="d-flex justify-content-between h-50 align-items-end">
         <PlayerBubble />
         <Hand />
         <GreenButton>Play</GreenButton>
