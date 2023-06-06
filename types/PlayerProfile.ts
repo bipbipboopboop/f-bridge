@@ -17,9 +17,21 @@ export interface PlayerProfile {
 export interface LobbyPlayerProfile extends PlayerProfile {
   position: number;
   isReady: boolean;
+  isHost: boolean;
+}
+
+export interface GameRoomPlayer {
+  id: string;
+  displayName: string;
+  avatarID: string | null;
+  position: number;
   numCardsOnHand: number;
 }
 
-export interface GameRoomPlayer extends LobbyPlayerProfile {
+// gamePlayers subcollection
+export interface gamePlayers extends LobbyPlayerProfile {
   cards: Card[];
+  team: "Defender" | "Declarer" | null;
+  numTricksWon: number;
+  position: number;
 }

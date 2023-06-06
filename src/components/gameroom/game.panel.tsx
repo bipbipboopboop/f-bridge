@@ -4,20 +4,73 @@ import PlayerBubble from "./player_bubble";
 import PlayingArea from "./playing_area";
 
 import "./game.panel.css";
+import {GameRoom} from "types/GameRoom";
+import {GameRoomPlayer} from "types/PlayerProfile";
 
 const GamePanel = () => {
+  const players: GameRoomPlayer[] = [
+    {
+      avatarID: "1",
+      displayName: "Player 1",
+      id: "0",
+      numCardsOnHand: 13,
+      position: 0,
+    },
+    {
+      avatarID: "2",
+      displayName: "Player 2",
+      id: "1",
+      numCardsOnHand: 13,
+      position: 1,
+    },
+    {
+      avatarID: "3",
+      displayName: "Player 3",
+      id: "2",
+      numCardsOnHand: 13,
+      position: 2,
+    },
+    {
+      avatarID: "4",
+      displayName: "Player 4",
+      id: "3",
+      numCardsOnHand: 13,
+      position: 3,
+    },
+  ];
+
+  const gameInfo: GameRoom = {
+    biddingPhase: null,
+    createdAt: new Date(),
+    hostID: "123",
+    invitedID: [],
+    players: [],
+    settings: {
+      isInviteOnly: false,
+      isSpectatorAllowed: false,
+    },
+    status: "Taking Trick",
+    trickTakingPhase: {
+      currentPlayerIndex: 0,
+      scores: [],
+      leadPlayerIndex: 0,
+      trumpSuit: "NT",
+      currentTrick: [],
+    },
+  };
+
   return (
     <div className="game-panel">
       <div className="top">
-        <PlayerBubble />
+        <PlayerBubble player={players[0]} currentPlayerIndex={0} />
       </div>
       <div className="middle">
-        <PlayerBubble />
+        <PlayerBubble player={players[1]} currentPlayerIndex={0} />
         <PlayingArea />
-        <PlayerBubble />
+        <PlayerBubble player={players[2]} currentPlayerIndex={0} />
       </div>
       <div className="bottom">
-        <PlayerBubble />
+        <PlayerBubble player={players[3]} currentPlayerIndex={0} />
         <Hand />
         <div className="d-flex flex-column justify-content-between  ">
           <GreenButton>Sort</GreenButton>
