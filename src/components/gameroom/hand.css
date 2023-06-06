@@ -1,11 +1,8 @@
 .hand {
   display: flex;
+  width: 59%;
 }
 
-.hand :nth-child(1) {
-  margin-left: 0;
-}
-
-.hand :nth-child(n) {
+/* .hand :nth-child(n + 1) {
   margin-left: -0.9rem;
-}
+} */

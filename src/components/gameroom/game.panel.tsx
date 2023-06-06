@@ -3,21 +3,26 @@ import Hand from "./hand";
 import PlayerBubble from "./player_bubble";
 import PlayingArea from "./playing_area";
 
+import "./game.panel.css";
+
 const GamePanel = () => {
   return (
-    <div className="h-100 w-100 d-flex flex-column">
-      <div className="d-flex justify-content-center h-50">
+    <div className="game-panel">
+      <div className="top">
         <PlayerBubble />
       </div>
-      <div className="d-flex justify-content-between h-100">
+      <div className="middle">
         <PlayerBubble />
         <PlayingArea />
         <PlayerBubble />
       </div>
-      <div className="d-flex justify-content-between h-50 align-items-end">
+      <div className="bottom">
         <PlayerBubble />
         <Hand />
-        <GreenButton>Play</GreenButton>
+        <div className="d-flex flex-column justify-content-between  ">
+          <GreenButton>Sort</GreenButton>
+          <GreenButton>Play</GreenButton>
+        </div>
       </div>
     </div>
   );
