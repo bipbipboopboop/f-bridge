@@ -10,7 +10,7 @@ const PlayingCard: React.FC<
 > = ({...props}) => {
   const {card} = props;
   return (
-    <div className="playing-card-in-hand" {...props}>
+    <div className="playing-card" {...props}>
       <div className="suit">{card.suit}</div>
       <div className="string-value">{card.stringValue}</div>
     </div>
