@@ -63,7 +63,7 @@ export const createGameRoom = functions.https.onCall(
           {
             ...playerProfileData,
             isReady: false,
-            numCardsOnHand: 0,
+            isHost: true,
             position: 0,
           },
         ],
@@ -180,7 +180,7 @@ export const joinGameRoom = functions.https.onCall(
       const playerData: LobbyPlayerProfile = {
         ...playerProfileData,
         isReady: false,
-        numCardsOnHand: 0,
+        isHost: false,
         position,
       };
 
@@ -475,6 +475,7 @@ export const startGame = functions.https.onCall(async (data: void, context) => {
     return {
       ...player,
       cards: hand,
+      numCardsOnHand: 13,
     };
   });
 

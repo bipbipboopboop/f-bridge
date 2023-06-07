@@ -1,11 +1,7 @@
 // types/GameRoom.ts
 import {BidSuit, Card} from "./Card";
 import {Bid} from "types/Bid";
-import {
-  GameRoomPlayer,
-  LobbyPlayerProfile,
-  PlayerProfile,
-} from "./PlayerProfile";
+import {GameRoomPlayer, LobbyPlayerProfile} from "./PlayerProfile";
 
 export type GameRoom = {
   hostID: string;

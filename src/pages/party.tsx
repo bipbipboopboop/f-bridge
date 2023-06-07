@@ -36,7 +36,7 @@ const GameParty = () => {
       roomID: null,
       position: 1,
       isReady: true,
-      numCardsOnHand: 5,
+      isHost: true,
     },
     {
       id: "2",
@@ -49,7 +49,7 @@ const GameParty = () => {
       roomID: null,
       position: 2,
       isReady: false,
-      numCardsOnHand: 3,
+      isHost: false,
     },
     {
       id: "3",
@@ -62,7 +62,7 @@ const GameParty = () => {
       roomID: null,
       position: 3,
       isReady: true,
-      numCardsOnHand: 4,
+      isHost: false,
     },
     {
       id: "4",
@@ -75,7 +75,7 @@ const GameParty = () => {
       roomID: null,
       position: 4,
       isReady: true,
-      numCardsOnHand: 2,
+      isHost: false,
     },
   ];
 
