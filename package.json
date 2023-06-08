@@ -22,7 +22,7 @@
     "react-tabs": "^6.0.1",
     "react-toastify": "^9.1.3",
     "types": "file:./types",
-    "player-assets": "file:./src/assets/player_assets",
+    "assets": "file:./src/assets",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
