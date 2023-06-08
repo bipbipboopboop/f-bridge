@@ -20,7 +20,9 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  background-image: url("./assets/background.jpg");
+  background-image: url("./assets/background-tilted.gif");
+  background-repeat: no-repeat;
+  background-size: cover;
   color: white;
 }
 .firebase-emulator-warning {
