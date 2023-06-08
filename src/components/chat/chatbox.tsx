@@ -1,4 +1,5 @@
 import GreenButton from "../buttons/button.green";
+import "./chat.css";
 
 const Chatbox = () => {
   return (
