@@ -1,3 +1,4 @@
+import {Link} from "react-router-dom";
 import GreenButton from "../components/buttons/button.green";
 import OrangeButton from "../components/buttons/button.orange";
 import LobbyRooms from "../components/lobby/lobby.tab";
@@ -25,7 +26,12 @@ const Lobby = () => {
               </GreenButton>
             </div>
             <div className="d-flex justify-content-center">
-              <OrangeButton>Start Game</OrangeButton>
+              <Link
+                style={{textDecoration: "none", color: "white"}}
+                to={"/gameroom"}
+              >
+                <OrangeButton>Start Game</OrangeButton>
+              </Link>
             </div>
           </div>
         </div>

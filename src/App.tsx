@@ -1,13 +1,17 @@
-import {Route, Routes} from "react-router-dom";
 import "./App.css";
+
+import {Route, Routes} from "react-router-dom";
+
 import useFunctions from "./hooks/useFunctions";
+
 import Loading from "./components/loading";
 import Navbar from "./components/navbar";
-import Lobby from "./pages/lobby";
 
+import Lobby from "./pages/lobby";
 import GameRoomComponent from "./pages/gameroom";
 import GameParty from "./pages/party";
 import Home from "./pages/home";
+import Leaderboard from "./pages/leaderboard";
 
 function App() {
   const {isLoading} = useFunctions();
@@ -19,6 +23,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/lobby" element={<Lobby />} />
         <Route path="/party" element={<GameParty />} />
         <Route path="/gameroom" element={<GameRoomComponent />} />

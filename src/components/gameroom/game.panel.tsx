@@ -62,15 +62,31 @@ const GamePanel = () => {
   return (
     <div className="game-panel">
       <div className="top">
-        <PlayerBubble player={players[0]} currentPlayerIndex={0} />
+        <PlayerBubble
+          player={players[0]}
+          currentPlayerIndex={0}
+          location="top"
+        />
       </div>
       <div className="middle">
-        <PlayerBubble player={players[1]} currentPlayerIndex={0} />
+        <PlayerBubble
+          player={players[1]}
+          currentPlayerIndex={0}
+          location="left"
+        />
         <PlayingArea />
-        <PlayerBubble player={players[2]} currentPlayerIndex={0} />
+        <PlayerBubble
+          player={players[2]}
+          currentPlayerIndex={0}
+          location="right"
+        />
       </div>
       <div className="bottom">
-        <PlayerBubble player={players[3]} currentPlayerIndex={0} />
+        <PlayerBubble
+          player={players[3]}
+          currentPlayerIndex={0}
+          location="bottom"
+        />
         <Hand />
         <div className="d-flex flex-column justify-content-between  ">
           <GreenButton>Sort</GreenButton>
