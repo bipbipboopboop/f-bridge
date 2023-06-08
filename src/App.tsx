@@ -7,6 +7,7 @@ import Lobby from "./pages/lobby";
 
 import GameRoomComponent from "./pages/gameroom";
 import GameParty from "./pages/party";
+import Home from "./pages/home";
 
 function App() {
   const {isLoading} = useFunctions();
@@ -17,6 +18,7 @@ function App() {
     <div className="App">
       <Navbar />
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route path="/lobby" element={<Lobby />} />
         <Route path="/party" element={<GameParty />} />
         <Route path="/gameroom" element={<GameRoomComponent />} />
