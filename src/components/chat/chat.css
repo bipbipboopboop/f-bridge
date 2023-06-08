@@ -1,8 +1,8 @@
 .chatbox {
+  display: flex;
+  flex-direction: column;
   height: 100%;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.1);
-  padding: 3rem 1rem 0 1rem;
 }
 
 .message-list {
@@ -10,6 +10,7 @@
   flex-direction: column;
   overflow-y: scroll;
   height: 80%;
+  width: 100%;
 }
 
 .message {
@@ -28,12 +29,12 @@
   font-size: 0.9rem;
 }
 
-.chatbox .bottom {
+.chatbox-bottom {
   display: flex;
   width: 100%;
-  height: 20%;
+  font-size: 0.6rem;
 }
 
-.textbox {
-  height: 10%;
+.chatbox-bottom .textbox {
+  width: 80%;
 }
