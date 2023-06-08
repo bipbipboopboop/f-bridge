@@ -6,7 +6,7 @@ import {useSignInWithGoogle} from "react-firebase-hooks/auth";
 import {useAuth} from "../hooks/useAuth";
 import GreenButton from "./buttons/button.green";
 
-import logo from "assets/logo.png";
+import spinning from "../assets/spinning.gif";
 
 const Navbar = () => {
   const {playerProfile, user} = useAuth();
@@ -27,8 +27,8 @@ const Navbar = () => {
       </button>
       <div className="collapse navbar-collapse" id="navbarNavDropdown">
         <Link className="navbar-brand" to="/">
-          {/* Floating Bridge */}
-          <img src={logo} style={{height: "4rem"}} />
+          <img src={spinning} style={{height: "2rem"}} />
+          Floating Bridge
         </Link>
         <ul className="navbar-nav">
           <li className="nav-item active">
