@@ -3,6 +3,7 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
+  font-size: 0.7rem;
 }
 
 .message-list {
@@ -18,15 +19,10 @@
   border-radius: 5px;
   padding: 1rem 0rem;
   word-break: break-word;
-  font-size: 0.6rem;
 }
 
 .message:hover {
   background-color: rgba(0, 0, 0, 0.1);
-}
-
-.message-sender {
-  font-size: 0.9rem;
 }
 
 .chatbox-bottom {
