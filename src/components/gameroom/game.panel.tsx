@@ -4,10 +4,10 @@ import PlayerBubble from "./player_bubble";
 import PlayingArea from "./playing_area";
 
 import "./game.panel.css";
-import {GameRoom} from "types/GameRoom";
+import {GameState} from "types/GameState";
 import {GameRoomPlayer} from "types/PlayerProfile";
 
-const GamePanel = () => {
+const GamePanel = (props: {gameroom: GameState}) => {
   const players: GameRoomPlayer[] = [
     {
       avatarID: "1",
@@ -47,7 +47,7 @@ const GamePanel = () => {
     },
   ];
 
-  const gameInfo: GameRoom = {
+  const gameInfo: GameState = {
     biddingPhase: null,
     createdAt: new Date(),
     hostID: "123",

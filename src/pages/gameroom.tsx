@@ -1,51 +1,12 @@
-import {GameRoom} from "types/GameRoom";
+import {GameState} from "types/GameState";
 import Chatbox from "../components/chat/chatbox";
 import GamePanel from "../components/gameroom/game.panel";
 
 import "./gameroom.css";
 import GameStateInfo from "../components/gameroom/game_state_info/gamestate.info";
-import {GameRoomPlayer} from "types/PlayerProfile";
 
 const GameRoomComponent = () => {
-  const players: GameRoomPlayer[] = [
-    {
-      avatarID: "1",
-      displayName: "Player 1",
-      id: "0",
-      numCardsOnHand: 13,
-      position: 0,
-      currentCardOnTable: null,
-      numTricksWon: 0,
-    },
-    {
-      avatarID: "2",
-      displayName: "Player 2",
-      id: "1",
-      numCardsOnHand: 13,
-      position: 1,
-      currentCardOnTable: null,
-      numTricksWon: 0,
-    },
-    {
-      avatarID: "3",
-      displayName: "Player 3",
-      id: "2",
-      numCardsOnHand: 13,
-      position: 2,
-      currentCardOnTable: null,
-      numTricksWon: 0,
-    },
-    {
-      avatarID: "4",
-      displayName: "Player 4",
-      id: "3",
-      numCardsOnHand: 13,
-      position: 3,
-      currentCardOnTable: null,
-      numTricksWon: 0,
-    },
-  ];
-  const gameInfo: GameRoom = {
+  const gameInfo: GameState = {
     hostID: "123",
     createdAt: new Date(),
     settings: {
@@ -58,7 +19,44 @@ const GameRoomComponent = () => {
     players: [],
 
     biddingPhase: {
-      gameroomPlayersList: players,
+      gameroomPlayersList: [
+        {
+          avatarID: "1",
+          displayName: "Player 1",
+          id: "0",
+          numCardsOnHand: 13,
+          position: 0,
+          currentCardOnTable: null,
+          numTricksWon: 0,
+        },
+        {
+          avatarID: "2",
+          displayName: "Player 2",
+          id: "1",
+          numCardsOnHand: 13,
+          position: 1,
+          currentCardOnTable: null,
+          numTricksWon: 0,
+        },
+        {
+          avatarID: "3",
+          displayName: "Player 3",
+          id: "2",
+          numCardsOnHand: 13,
+          position: 2,
+          currentCardOnTable: null,
+          numTricksWon: 0,
+        },
+        {
+          avatarID: "4",
+          displayName: "Player 4",
+          id: "3",
+          numCardsOnHand: 13,
+          position: 3,
+          currentCardOnTable: null,
+          numTricksWon: 0,
+        },
+      ],
 
       currentBidderIndex: 0,
       highestBid: null,
@@ -103,14 +101,51 @@ const GameRoomComponent = () => {
       currentPlayerIndex: 0,
       leadPlayerIndex: 0,
       trumpSuit: "NT",
-      gameroomPlayersList: players,
+      gameroomPlayersList: [
+        {
+          avatarID: "1",
+          displayName: "Player 1",
+          id: "0",
+          numCardsOnHand: 13,
+          position: 0,
+          currentCardOnTable: null,
+          numTricksWon: 0,
+        },
+        {
+          avatarID: "2",
+          displayName: "Player 2",
+          id: "1",
+          numCardsOnHand: 13,
+          position: 1,
+          currentCardOnTable: null,
+          numTricksWon: 0,
+        },
+        {
+          avatarID: "3",
+          displayName: "Player 3",
+          id: "2",
+          numCardsOnHand: 13,
+          position: 2,
+          currentCardOnTable: null,
+          numTricksWon: 0,
+        },
+        {
+          avatarID: "4",
+          displayName: "Player 4",
+          id: "3",
+          numCardsOnHand: 13,
+          position: 3,
+          currentCardOnTable: null,
+          numTricksWon: 0,
+        },
+      ],
     },
   };
 
   return (
     <div className="game-component">
       <div className="left">
-        <GamePanel />
+        <GamePanel gameroom={gameInfo} />
       </div>
       <div className="right">
         <div className="top">

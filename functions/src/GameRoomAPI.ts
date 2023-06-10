@@ -4,7 +4,7 @@ import {DocumentReference, DocumentSnapshot} from "firebase-admin/firestore";
 
 import {produce} from "immer";
 
-import {BiddingPhase, GameRoom} from "types/GameRoom";
+import {BiddingPhase, GameState} from "types/GameState";
 import {
   GamePlayer,
   LobbyPlayerProfile,
@@ -24,7 +24,7 @@ import {shuffleCards} from "./utils/shuffle_cards";
  * - internal: Failed to create a game room.
  */
 export const createGameRoom = functions.https.onCall(
-  async (data: GameRoom, context) => {
+  async (data: GameState, context) => {
     // Check if the user is authenticated
     if (!context.auth) {
       throw new functions.https.HttpsError(
@@ -50,7 +50,7 @@ export const createGameRoom = functions.https.onCall(
         );
       }
 
-      const gameRoomData: GameRoom = {
+      const gameRoomData: GameState = {
         hostID: context.auth.uid,
         createdAt: new Date(),
         settings: {
@@ -138,7 +138,7 @@ export const joinGameRoom = functions.https.onCall(
       // Get the game room
       const gameRoomRef = admin.firestore().collection("gameRooms").doc(roomID);
       const gameRoomSnapshot = await gameRoomRef.get();
-      const gameRoomData = gameRoomSnapshot.data() as GameRoom;
+      const gameRoomData = gameRoomSnapshot.data() as GameState;
 
       // Check if the game room exists
       if (!gameRoomSnapshot.exists) {
@@ -241,9 +241,9 @@ export const leaveGameRoom = functions.https.onCall(
     const gameRoomRef = admin
       .firestore()
       .collection("gameRooms")
-      .doc(roomID) as DocumentReference<GameRoom>;
+      .doc(roomID) as DocumentReference<GameState>;
     const gameRoomSnapshot = await gameRoomRef.get();
-    const gameRoomData = gameRoomSnapshot.data() as GameRoom;
+    const gameRoomData = gameRoomSnapshot.data() as GameState;
 
     // Check if the player is in this room
     if (playerProfileData.roomID !== roomID) {
@@ -328,7 +328,7 @@ export const toggleReady = functions.https.onCall(
       // Get the game room
       const gameRoomRef = admin.firestore().collection("gameRooms").doc(roomID);
       const gameRoomSnapshot = await gameRoomRef.get();
-      const gameRoomData = gameRoomSnapshot.data() as GameRoom;
+      const gameRoomData = gameRoomSnapshot.data() as GameState;
 
       // Check if the player is already in a game
       if (gameRoomData.status !== "Waiting") {
@@ -422,10 +422,10 @@ export const startGame = functions.https.onCall(async (data: void, context) => {
   const gameRoomRef = admin
     .firestore()
     .collection("gameRooms")
-    .doc(playerProfileData.roomID) as DocumentReference<GameRoom>;
+    .doc(playerProfileData.roomID) as DocumentReference<GameState>;
 
   const gameRoomSnapshot = await gameRoomRef.get();
-  const gameRoomData = gameRoomSnapshot.data() as GameRoom;
+  const gameRoomData = gameRoomSnapshot.data() as GameState;
 
   // Check if the player is the host
   if (gameRoomData.hostID !== context.auth!.uid) {
@@ -591,7 +591,7 @@ export const invitePlayer = functions.https.onCall(
       .collection("gameRooms")
       .doc(inviterProfile.roomID);
     const gameRoomSnapshot = await inviterGameRoomRef.get();
-    const gameRoom = gameRoomSnapshot.data() as GameRoom;
+    const gameRoom = gameRoomSnapshot.data() as GameState;
 
     // Check if invitee is already invited
     const isAlreadyInvited = gameRoom.invitedID.includes(inviteeID);
@@ -666,7 +666,7 @@ export const kickPlayer = functions.https.onCall(
       .collection("rooms")
       .doc(targetPlayer.roomID);
     const gameRoomSnapshot =
-      (await gameRoomRef.get()) as DocumentSnapshot<GameRoom>;
+      (await gameRoomRef.get()) as DocumentSnapshot<GameState>;
 
     const gameRoom = gameRoomSnapshot.data();
     if (!gameRoom) {

@@ -5,9 +5,9 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import {BidSnapshot, GameRoom} from "types/GameRoom";
+import {BidSnapshot, GameState} from "types/GameState";
 
-const BiddingInfo = (props: {gameroom: GameRoom}) => {
+const BiddingInfo = (props: {gameroom: GameState}) => {
   const gameroom = props.gameroom;
 
   const data = gameroom.biddingPhase!.bidHistory;

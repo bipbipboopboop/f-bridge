@@ -5,7 +5,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import {TrickTakingPhase} from "types/GameRoom";
+import {TrickTakingPhase} from "types/GameState";
 import {GameRoomPlayer} from "types/PlayerProfile";
 import "./game.score.table.css";
 const ScoreTable = () => {

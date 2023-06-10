@@ -1,5 +1,5 @@
-import {GameRoom} from "types/GameRoom";
-const RoomSettings = ({room}: {room: GameRoom}) => {
+import {GameState} from "types/GameState";
+const RoomSettings = ({room}: {room: GameState}) => {
   return (
     <>
       <h4>Settings</h4>
