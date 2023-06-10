@@ -1,7 +1,7 @@
-import {GameRoom} from "types/GameRoom";
+import {GameState} from "types/GameState";
 import ScoreTable from "../../tables/game.score.table";
 
-const TrickTakingInfo = (props: {gameroom: GameRoom}) => {
+const TrickTakingInfo = (props: {gameroom: GameState}) => {
   const gameroom = props.gameroom;
   const trickTakingPhase = gameroom.trickTakingPhase;
   return (

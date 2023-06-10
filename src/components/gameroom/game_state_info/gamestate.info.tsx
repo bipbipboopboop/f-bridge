@@ -1,8 +1,8 @@
-import {GameRoom} from "types/GameRoom";
+import {GameState} from "types/GameState";
 import BiddingInfo from "./bidding.info";
 import TrickTakingInfo from "./tricktaking.info";
 
-const GameStateInfo = (props: {gameroom: GameRoom}) => {
+const GameStateInfo = (props: {gameroom: GameState}) => {
   const gameStateLookup = {
     Waiting: () => <></>,
     Bidding: BiddingInfo,

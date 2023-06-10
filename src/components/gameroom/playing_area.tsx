@@ -1,5 +1,5 @@
 import {Card} from "types/Card";
-import {TrickTakingPhase} from "types/GameRoom";
+import {TrickTakingPhase} from "types/GameState";
 import PlayingCard from "../../assets/playing_card";
 
 type Props = {};

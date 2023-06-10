@@ -1,4 +1,4 @@
-import {GameRoom} from "types/GameRoom";
+import {GameState} from "types/GameState";
 import {LobbyPlayerProfile} from "types/PlayerProfile";
 
 import PlayerPanel from "../components/party/player_panel";
@@ -8,7 +8,7 @@ import Chatbox from "../components/chat/chatbox";
 import "./party.css";
 
 const GameParty = () => {
-  const room: GameRoom = {
+  const room: GameState = {
     biddingPhase: null,
     hostID: "host",
     createdAt: new Date(),

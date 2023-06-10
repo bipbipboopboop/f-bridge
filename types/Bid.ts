@@ -1,7 +1,7 @@
-import {BidSuit, Suit} from "./Card";
+import {BidSuit} from "./Card";
 
 export type Bid = {
-  suit: Suit;
+  suit: BidSuit;
   number: number;
 };
 

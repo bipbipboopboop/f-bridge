@@ -3,8 +3,9 @@ import * as admin from "firebase-admin";
 
 import {Bid} from "types/Bid";
 import {DocumentReference} from "firebase-admin/firestore";
-import {GameRoom} from "types/GameRoom";
+import {GameState} from "types/GameState";
 import {GameRoomPlayer} from "types/PlayerProfile";
+import {BidSuit} from "types/Card";
 
 export const placeBid = functions.https.onCall(async (bid: Bid, context) => {
   // 0. Check if the user is authenticated
@@ -19,7 +20,7 @@ export const placeBid = functions.https.onCall(async (bid: Bid, context) => {
   const gameRoomRef = admin
     .firestore()
     .collection("playerProfiles")
-    .doc(context.auth.uid) as DocumentReference<GameRoom>;
+    .doc(context.auth.uid) as DocumentReference<GameState>;
 
   const gameRoom = (await gameRoomRef.get()).data();
 
@@ -64,7 +65,7 @@ export const placeBid = functions.https.onCall(async (bid: Bid, context) => {
   const highestBid = gameRoom.biddingPhase!.highestBid;
 
   const isFirstBid = !highestBid;
-  const isValidBid = isFirstBid || bid.largerThan(highestBid);
+  const isValidBid = isFirstBid || bidComparator(bid, highestBid!) === 1;
 
   if (isValidBid) {
     throw new functions.https.HttpsError(
@@ -77,3 +78,13 @@ export const placeBid = functions.https.onCall(async (bid: Bid, context) => {
 
   return null; // TODO: Return any desired response
 });
+
+const bidComparator = (bid1: Bid, bid2: Bid) => {
+  const suitOrder: BidSuit[] = ["♣", "♦", "♥", "♠", "NT"];
+
+  if (bid1.suit === bid2.suit) {
+    return bid1.number - bid2.number;
+  }
+
+  return suitOrder.indexOf(bid1.suit) - suitOrder.indexOf(bid1.suit);
+};

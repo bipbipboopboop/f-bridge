@@ -7,10 +7,10 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import {GameRoom} from "types/GameRoom";
+import {GameState} from "types/GameState";
 
 const RoomTable = () => {
-  const data: GameRoom[] = [
+  const data: GameState[] = [
     {
       hostID: "Host 1",
       createdAt: new Date(),
@@ -66,7 +66,7 @@ const RoomTable = () => {
     },
   ];
 
-  const columnHelper = createColumnHelper<GameRoom>();
+  const columnHelper = createColumnHelper<GameState>();
 
   const columns = [
     columnHelper.accessor("biddingPhase", {
