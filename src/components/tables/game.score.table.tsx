@@ -5,37 +5,60 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import {GameScore} from "types/GameRoom";
+import {TrickTakingPhase} from "types/GameRoom";
+import {GameRoomPlayer} from "types/PlayerProfile";
 import "./game.score.table.css";
 const ScoreTable = () => {
-  const data: GameScore[] = [
-    {
-      playerID: "1",
-      numTricksWon: 0,
-      position: 0,
-    },
-    {
-      playerID: "2",
-      numTricksWon: 0,
-      position: 1,
-    },
-    {
-      playerID: "3",
-      numTricksWon: 0,
-      position: 2,
-    },
-    {
-      playerID: "4",
-      numTricksWon: 0,
-      position: 3,
-    },
-  ];
+  const trickTakingPhase: TrickTakingPhase = {
+    currentPlayerIndex: 0,
+    leadPlayerIndex: 0,
+    trumpSuit: "♠",
+    gameroomPlayersList: [
+      {
+        avatarID: "1",
+        displayName: "Player 1",
+        id: "1",
+        numCardsOnHand: 13,
+        position: 0,
+        currentCardOnTable: null,
+        numTricksWon: 0,
+      },
+      {
+        displayName: "Player 2",
+        id: "2",
+        avatarID: "2",
+        numCardsOnHand: 13,
+        position: 1,
+        currentCardOnTable: null,
+        numTricksWon: 0,
+      },
+      {
+        displayName: "Player 3",
+        id: "3",
+        avatarID: "3",
+        numCardsOnHand: 13,
+        position: 2,
+        currentCardOnTable: null,
+        numTricksWon: 0,
+      },
+      {
+        displayName: "Player 4",
+        id: "4",
+        avatarID: "4",
+        numCardsOnHand: 13,
+        position: 3,
+        currentCardOnTable: null,
+        numTricksWon: 0,
+      },
+    ],
+  };
 
-  const columnHelper = createColumnHelper<GameScore>();
+  const data = trickTakingPhase.gameroomPlayersList;
+  const columnHelper = createColumnHelper<GameRoomPlayer>();
 
   const columns = [
-    columnHelper.accessor("playerID", {
-      header: () => <span>Player ID</span>,
+    columnHelper.accessor("displayName", {
+      header: () => <span>Player</span>,
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("numTricksWon", {

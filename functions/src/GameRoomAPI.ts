@@ -6,7 +6,7 @@ import {produce} from "immer";
 
 import {BiddingPhase, GameRoom} from "types/GameRoom";
 import {
-  GameRoomPlayer,
+  GamePlayer,
   LobbyPlayerProfile,
   PlayerProfile,
 } from "types/PlayerProfile";
@@ -456,10 +456,17 @@ export const startGame = functions.https.onCall(async (data: void, context) => {
 
   // Initialize bidding phase
   const biddingPhase: BiddingPhase = {
-    bidHistory: [],
     currentBidderIndex: 0,
-    numBidsMade: 0,
     highestBid: null,
+    gameroomPlayersList: [], // TODO: Populate it later
+    bidHistory: [
+      {
+        p0: {bid: null, info: {displayName: "Player 1", id: "1"}},
+        p1: {bid: null, info: {displayName: "Player 2", id: "2"}},
+        p2: {bid: null, info: {displayName: "Player 3", id: "3"}},
+        p3: {bid: null, info: {displayName: "Player 4", id: "4"}},
+      },
+    ],
   };
 
   // Update the game room
@@ -470,12 +477,27 @@ export const startGame = functions.https.onCall(async (data: void, context) => {
 
   // Deal cards to players
   const deck = shuffleCards();
-  const players: GameRoomPlayer[] = gameRoomData.players.map((player) => {
+  const players: GamePlayer[] = gameRoomData.players.map((player) => {
     const hand = deck.splice(0, 13);
     return {
-      ...player,
-      cards: hand,
+      id: player.id,
+      email: player.email,
+      displayName: player.displayName,
+      country: player.country,
+      avatarID: player.avatarID,
+      numOfGamesWon: player.numOfGamesWon,
+      numOfGamesPlayed: player.numOfGamesPlayed,
+      roomID: player.roomID,
+
+      position: player.position,
+      isReady: player.isReady,
+      isHost: player.isHost,
+
       numCardsOnHand: 13,
+      numTricksWon: 0,
+      cards: hand,
+      currentCardOnTable: null,
+      team: null,
     };
   });
 

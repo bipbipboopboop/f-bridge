@@ -15,6 +15,8 @@ const GamePanel = () => {
       id: "0",
       numCardsOnHand: 13,
       position: 0,
+      currentCardOnTable: null,
+      numTricksWon: 0,
     },
     {
       avatarID: "2",
@@ -22,6 +24,8 @@ const GamePanel = () => {
       id: "1",
       numCardsOnHand: 13,
       position: 1,
+      currentCardOnTable: null,
+      numTricksWon: 0,
     },
     {
       avatarID: "3",
@@ -29,6 +33,8 @@ const GamePanel = () => {
       id: "2",
       numCardsOnHand: 13,
       position: 2,
+      currentCardOnTable: null,
+      numTricksWon: 0,
     },
     {
       avatarID: "4",
@@ -36,6 +42,8 @@ const GamePanel = () => {
       id: "3",
       numCardsOnHand: 13,
       position: 3,
+      currentCardOnTable: null,
+      numTricksWon: 0,
     },
   ];
 
@@ -52,10 +60,9 @@ const GamePanel = () => {
     status: "Taking Trick",
     trickTakingPhase: {
       currentPlayerIndex: 0,
-      scores: [],
       leadPlayerIndex: 0,
       trumpSuit: "NT",
-      currentTrick: [],
+      gameroomPlayersList: players,
     },
   };
 

@@ -26,10 +26,12 @@ export interface GameRoomPlayer {
   avatarID: string | null;
   position: number;
   numCardsOnHand: number;
+  numTricksWon: number;
+  currentCardOnTable: Card | null;
 }
 
 // gamePlayers subcollection
-export interface gamePlayers extends LobbyPlayerProfile {
+export interface GamePlayer extends LobbyPlayerProfile {
   cards: Card[];
   team: "Defender" | "Declarer" | null;
   numTricksWon: number;

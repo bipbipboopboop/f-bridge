@@ -4,46 +4,108 @@ import GamePanel from "../components/gameroom/game.panel";
 
 import "./gameroom.css";
 import GameStateInfo from "../components/gameroom/game_state_info/gamestate.info";
+import {GameRoomPlayer} from "types/PlayerProfile";
 
 const GameRoomComponent = () => {
+  const players: GameRoomPlayer[] = [
+    {
+      avatarID: "1",
+      displayName: "Player 1",
+      id: "0",
+      numCardsOnHand: 13,
+      position: 0,
+      currentCardOnTable: null,
+      numTricksWon: 0,
+    },
+    {
+      avatarID: "2",
+      displayName: "Player 2",
+      id: "1",
+      numCardsOnHand: 13,
+      position: 1,
+      currentCardOnTable: null,
+      numTricksWon: 0,
+    },
+    {
+      avatarID: "3",
+      displayName: "Player 3",
+      id: "2",
+      numCardsOnHand: 13,
+      position: 2,
+      currentCardOnTable: null,
+      numTricksWon: 0,
+    },
+    {
+      avatarID: "4",
+      displayName: "Player 4",
+      id: "3",
+      numCardsOnHand: 13,
+      position: 3,
+      currentCardOnTable: null,
+      numTricksWon: 0,
+    },
+  ];
   const gameInfo: GameRoom = {
-    biddingPhase: null,
-    createdAt: new Date(),
     hostID: "123",
-    invitedID: [],
-    players: [],
+    createdAt: new Date(),
     settings: {
       isInviteOnly: false,
       isSpectatorAllowed: false,
     },
-    status: "Taking Trick",
+    invitedID: [],
+
+    status: "Bidding",
+    players: [],
+
+    biddingPhase: {
+      gameroomPlayersList: players,
+
+      currentBidderIndex: 0,
+      highestBid: null,
+      bidHistory: [
+        {
+          p0: {bid: null, info: {displayName: "Player 1", id: "0"}},
+          p1: {
+            bid: {number: 1, suit: "♣"},
+            info: {displayName: "Player 2", id: "1"},
+          },
+          p2: {bid: null, info: {displayName: "Player 3", id: "2"}},
+          p3: {bid: null, info: {displayName: "Player 4", id: "3"}},
+        },
+        {
+          p0: {bid: null, info: {displayName: "Player 1", id: "0"}},
+          p1: {bid: null, info: {displayName: "Player 2", id: "1"}},
+          p2: {bid: null, info: {displayName: "Player 3", id: "2"}},
+          p3: {bid: null, info: {displayName: "Player 4", id: "3"}},
+        },
+        {
+          p0: {bid: null, info: {displayName: "Player 1", id: "0"}},
+          p1: {bid: null, info: {displayName: "Player 2", id: "1"}},
+          p2: {bid: null, info: {displayName: "Player 3", id: "2"}},
+          p3: {bid: null, info: {displayName: "Player 4", id: "3"}},
+        },
+        {
+          p0: {bid: null, info: {displayName: "Player 1", id: "0"}},
+          p1: {bid: null, info: {displayName: "Player 2", id: "1"}},
+          p2: {bid: null, info: {displayName: "Player 3", id: "2"}},
+          p3: {bid: null, info: {displayName: "Player 4", id: "3"}},
+        },
+        {
+          p0: {bid: null, info: {displayName: "Player 1", id: "0"}},
+          p1: {bid: null, info: {displayName: "Player 2", id: "1"}},
+          p2: {bid: null, info: {displayName: "Player 3", id: "2"}},
+          p3: {bid: null, info: {displayName: "Player 4", id: "3"}},
+        },
+      ],
+    },
+
     trickTakingPhase: {
       currentPlayerIndex: 0,
-      scores: [],
       leadPlayerIndex: 0,
       trumpSuit: "NT",
-      currentTrick: [],
+      gameroomPlayersList: players,
     },
   };
-
-  // const gameInfo: GameRoom = {
-  //   biddingPhase: {
-  //     bidHistory: [],
-  //     currentBidderIndex: 0,
-  //     highestBid: null,
-  //     numBidsMade: 0,
-  //   },
-  //   createdAt: new Date(),
-  //   hostID: "123",
-  //   invitedID: [],
-  //   players: [],
-  //   settings: {
-  //     isInviteOnly: false,
-  //     isSpectatorAllowed: false,
-  //   },
-  //   status: "Taking Trick",
-  //   trickTakingPhase: null,
-  // };
 
   return (
     <div className="game-component">
