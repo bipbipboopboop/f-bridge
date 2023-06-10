@@ -11,7 +11,7 @@ const GameStateInfo = (props: {gameState: GameState}) => {
   const gameroom = props.gameState;
   const GameStateInfoComponent = gameStateLookup[gameroom.status];
 
-  return <GameStateInfoComponent gameroom={gameroom} />;
+  return <GameStateInfoComponent gameState={gameroom} />;
 };
 
 export default GameStateInfo;

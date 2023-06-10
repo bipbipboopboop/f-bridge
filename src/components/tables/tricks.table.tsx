@@ -7,7 +7,7 @@ import {
 
 import {TrickTakingPhase} from "types/GameState";
 import {GameRoomPlayer} from "types/PlayerProfile";
-import "./game.score.table.css";
+import "./tricks.table.css";
 const ScoreTable = () => {
   const trickTakingPhase: TrickTakingPhase = {
     currentPlayerIndex: 0,

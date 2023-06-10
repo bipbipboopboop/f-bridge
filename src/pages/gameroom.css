@@ -21,8 +21,8 @@
 .game-component .right .top {
   background-color: rgba(0, 0, 0, 0.1);
   padding: 1rem;
-  margin: 0 1rem 1rem 0;
-  height: 70%;
+  margin: 0 1rem 0rem 0;
+  height: 100%;
   border-radius: 5px;
 }
 

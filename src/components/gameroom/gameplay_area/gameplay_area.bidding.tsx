@@ -1,91 +1,44 @@
-import {
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-
-import {BidSnapshot, BiddingPhase} from "types/GameState";
+import {BiddingPhase} from "types/GameState";
+import BiddingTable from "../../tables/bidding.table";
+import GreenButton from "../../buttons/button.green";
 
 const BiddingGameplayArea = (props: {biddingPhase: BiddingPhase}) => {
   const {biddingPhase} = props;
+  const {currentBidderIndex, gameroomPlayersList} = biddingPhase;
 
-  const bidHistory = biddingPhase.bidHistory;
-  const columnHelper = createColumnHelper<BidSnapshot>();
+  const currentBidder = gameroomPlayersList.filter(
+    (plyr) => plyr.position === currentBidderIndex
+  )[0];
 
-  const columns = [
-    columnHelper.accessor("p0", {
-      header: () => (
-        <span>{biddingPhase.gameroomPlayersList.at(0)!.displayName}</span>
-      ),
-      cell: (info) => {
-        const bid = info.getValue().bid;
-        return bid ? `${bid.number + bid.suit}` : "Pass";
-      },
-    }),
-    columnHelper.accessor("p1", {
-      header: () => (
-        <span>{biddingPhase.gameroomPlayersList.at(1)!.displayName}</span>
-      ),
-      cell: (info) => {
-        const bid = info.getValue().bid;
-        return bid ? `${bid.number + bid.suit}` : "Pass";
-      },
-    }),
-    columnHelper.accessor("p2", {
-      header: () => (
-        <span>{biddingPhase.gameroomPlayersList.at(2)!.displayName}</span>
-      ),
-      cell: (info) => {
-        const bid = info.getValue().bid;
-        return bid ? `${bid.number + bid.suit}` : "Pass";
-      },
-    }),
-    columnHelper.accessor("p3", {
-      header: () => (
-        <span>{biddingPhase.gameroomPlayersList.at(3)!.displayName}</span>
-      ),
-      cell: (info) => {
-        const bid = info.getValue().bid;
-        return bid ? `${bid.number + bid.suit}` : "Pass";
-      },
-    }),
-  ];
-  const table = useReactTable({
-    data: bidHistory,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
+  // TODO: Get from AuthContext
+  const myID = "0";
+  const isMyTurnToBid = currentBidder.id === myID;
+
   return (
-    <table className="score-table">
-      <thead>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <th key={header.id}>
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody>
-        {table.getRowModel().rows.map((row) => (
-          <tr key={row.id}>
-            {row.getVisibleCells().map((cell) => (
-              <td key={cell.id}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div className="w-50 h-75 d-flex flex-column justify-content-center align-items-center">
+      {/* <pre>{JSON.stringify(currentBidder)}</pre> */}
+      {!isMyTurnToBid && <p>{`${currentBidder.displayName} is bidding ...`}</p>}
+      {isMyTurnToBid && <p>Your turn to bid</p>}
+      <BiddingTable biddingPhase={biddingPhase} />
+      <div>
+        <GreenButton>Pass</GreenButton>
+        <div className="d-flex">
+          <button>1</button>
+          <button>2</button>
+          <button>3</button>
+          <button>4</button>
+          <button>5</button>
+          <button>6</button>
+        </div>
+        <div className="d-flex">
+          <button>♣</button>
+          <button>♦</button>
+          <button>♥</button>
+          <button>♦</button>
+          <button>NT</button>
+        </div>
+      </div>
+    </div>
   );
 };
 
