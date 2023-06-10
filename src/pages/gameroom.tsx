@@ -219,9 +219,9 @@ const GameRoomComponent = () => {
         <div className="top">
           <Chatbox />
         </div>
-        <div className="bottom">
+        {/* <div className="bottom">
           <GameStateInfo gameState={gameState} />
-        </div>
+        </div> */}
       </div>
     </div>
   );
