@@ -1,6 +1,8 @@
+import {memo} from "react";
 import PlayingCard from "../../assets/playing_card";
 import "./hand.css";
 const Hand = () => {
+  // Get Hand from cloud function
   return (
     <div className="hand">
       {/* <PlayingCard card={{suit: "♠", value: 10, stringValue: "10"}} /> */}
@@ -15,4 +17,4 @@ const Hand = () => {
   );
 };
 
-export default Hand;
+export default memo(Hand); // Prevent unnecessary re-renders since the props never change

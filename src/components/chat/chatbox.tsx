@@ -2,6 +2,7 @@ import {Message} from "types/Chat";
 import GreenButton from "../buttons/button.green";
 import "./chat.css";
 import ChatMessage from "./chat.message";
+import {memo} from "react";
 
 const Chatbox = () => {
   const messageList: Message[] = [
@@ -40,4 +41,4 @@ const Chatbox = () => {
   );
 };
 
-export default Chatbox;
+export default memo(Chatbox);

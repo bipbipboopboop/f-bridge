@@ -1,11 +1,17 @@
+// Common Component
 import GreenButton from "../buttons/button.green";
-import Hand from "./hand";
+
+// Components
 import PlayerBubble from "./player_bubble";
 import PlayingArea from "./playing_area";
+import Hand from "./hand";
 
-import "./game.panel.css";
+// Types
 import {GameState} from "types/GameState";
 import {GameRoomPlayer} from "types/PlayerProfile";
+
+// Styles
+import "./game.panel.css";
 
 const GamePanel = (props: {gameState: GameState}) => {
   const {gameState} = props;
@@ -49,6 +55,8 @@ const GamePanel = (props: {gameState: GameState}) => {
           location="bottom"
         />
         <Hand />
+
+        {/* TODO: Change based on status */}
         <div className="d-flex flex-column justify-content-between  ">
           <GreenButton>Sort</GreenButton>
           <GreenButton>Play</GreenButton>
