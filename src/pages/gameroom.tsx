@@ -17,7 +17,7 @@ const GameRoomComponent = () => {
     },
     invitedID: [],
 
-    status: "Taking Trick",
+    status: "Bidding",
     players: [
       {
         avatarID: "0",
@@ -152,49 +152,50 @@ const GameRoomComponent = () => {
       ],
     },
 
-    trickTakingPhase: {
-      currentPlayerIndex: 0,
-      leadPlayerIndex: 0,
-      trumpSuit: "♠",
-      gameroomPlayersList: [
-        {
-          avatarID: "1",
-          displayName: "Player 1",
-          id: "1",
-          numCardsOnHand: 13,
-          position: 0,
-          currentCardOnTable: {stringValue: "A", suit: "♠", value: 14},
-          numTricksWon: 0,
-        },
-        {
-          displayName: "Player 2",
-          id: "2",
-          avatarID: "2",
-          numCardsOnHand: 13,
-          position: 1,
-          currentCardOnTable: {stringValue: "K", suit: "♠", value: 13},
-          numTricksWon: 0,
-        },
-        {
-          displayName: "Player 3",
-          id: "3",
-          avatarID: "3",
-          numCardsOnHand: 13,
-          position: 2,
-          currentCardOnTable: {stringValue: "Q", suit: "♠", value: 12},
-          numTricksWon: 0,
-        },
-        {
-          displayName: "Player 4",
-          id: "4",
-          avatarID: "4",
-          numCardsOnHand: 13,
-          position: 3,
-          currentCardOnTable: {stringValue: "J", suit: "♠", value: 11},
-          numTricksWon: 0,
-        },
-      ],
-    },
+    // trickTakingPhase: {
+    //   currentPlayerIndex: 0,
+    //   leadPlayerIndex: 0,
+    //   trumpSuit: "♠",
+    //   gameroomPlayersList: [
+    //     {
+    //       avatarID: "1",
+    //       displayName: "Player 1",
+    //       id: "1",
+    //       numCardsOnHand: 13,
+    //       position: 0,
+    //       currentCardOnTable: {stringValue: "A", suit: "♠", value: 14},
+    //       numTricksWon: 0,
+    //     },
+    //     {
+    //       displayName: "Player 2",
+    //       id: "2",
+    //       avatarID: "2",
+    //       numCardsOnHand: 13,
+    //       position: 1,
+    //       currentCardOnTable: {stringValue: "K", suit: "♠", value: 13},
+    //       numTricksWon: 0,
+    //     },
+    //     {
+    //       displayName: "Player 3",
+    //       id: "3",
+    //       avatarID: "3",
+    //       numCardsOnHand: 13,
+    //       position: 2,
+    //       currentCardOnTable: {stringValue: "Q", suit: "♠", value: 12},
+    //       numTricksWon: 0,
+    //     },
+    //     {
+    //       displayName: "Player 4",
+    //       id: "4",
+    //       avatarID: "4",
+    //       numCardsOnHand: 13,
+    //       position: 3,
+    //       currentCardOnTable: {stringValue: "J", suit: "♠", value: 11},
+    //       numTricksWon: 0,
+    //     },
+    //   ],
+    // },
+    trickTakingPhase: null,
   };
 
   // TODO: Obtain playerID from AuthContext

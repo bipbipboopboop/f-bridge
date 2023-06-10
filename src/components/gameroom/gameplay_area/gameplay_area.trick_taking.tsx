@@ -1,12 +1,10 @@
-import {GameState, TrickTakingPhase} from "types/GameState";
-import PlayingAreaCard from "./playing_area.card";
+import {TrickTakingPhase} from "types/GameState";
+import PlayingAreaCard from "./gameplay_area.trick_taking_card";
 
-const PlayingArea = (props: {gameState: GameState}) => {
-  const {gameState} = props;
-
-  const trickTakingPhase: TrickTakingPhase | null = gameState.trickTakingPhase;
-
-  if (!trickTakingPhase) return <></>;
+const TrickTakingGameplayArea = (props: {
+  trickTakingPhase: TrickTakingPhase;
+}) => {
+  const {trickTakingPhase} = props;
 
   // TODO: Obtain from trickTakingPhase and AuthContext
   const myPosition = 1;
@@ -73,4 +71,4 @@ const PlayingArea = (props: {gameState: GameState}) => {
   );
 };
 
-export default PlayingArea;
+export default TrickTakingGameplayArea;
