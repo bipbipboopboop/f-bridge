@@ -3,7 +3,7 @@ import GreenButton from "../buttons/button.green";
 
 // Components
 import PlayerBubble from "./player_bubble";
-import PlayingArea from "./playing_area";
+import PlayingArea from "./playing_area/playing_area";
 import Hand from "./hand";
 
 // Types
@@ -40,6 +40,7 @@ const GamePanel = (props: {gameState: GameState}) => {
           location="left"
         />
 
+        {/* TODO: Change based on status */}
         <PlayingArea gameState={gameState} />
 
         <PlayerBubble
