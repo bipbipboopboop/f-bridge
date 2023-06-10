@@ -3,7 +3,6 @@ import GreenButton from "../buttons/button.green";
 
 // Components
 import PlayerBubble from "./player_bubble";
-import PlayingArea from "./playing_area/playing_area";
 import Hand from "./hand";
 
 // Types
@@ -12,6 +11,7 @@ import {GameRoomPlayer} from "types/PlayerProfile";
 
 // Styles
 import "./game.panel.css";
+import MainGameplayArea from "./gameplay_area/gameplay_area.main";
 
 const GamePanel = (props: {gameState: GameState}) => {
   const {gameState} = props;
@@ -40,8 +40,7 @@ const GamePanel = (props: {gameState: GameState}) => {
           location="left"
         />
 
-        {/* TODO: Change based on status */}
-        <PlayingArea gameState={gameState} />
+        <MainGameplayArea gameState={gameState} />
 
         <PlayerBubble
           player={players[2]}
