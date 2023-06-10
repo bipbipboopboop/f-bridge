@@ -1,53 +1,13 @@
 import {Card} from "types/Card";
-import {TrickTakingPhase} from "types/GameState";
+import {GameState, TrickTakingPhase} from "types/GameState";
 import PlayingCard from "../../assets/playing_card";
 
-type Props = {};
+const PlayingArea = (props: {gameState: GameState}) => {
+  const {gameState} = props;
 
-const PlayingArea = (props: Props) => {
-  const trickTakingPhase: TrickTakingPhase = {
-    currentPlayerIndex: 0,
-    leadPlayerIndex: 0,
-    trumpSuit: "♠",
-    gameroomPlayersList: [
-      {
-        avatarID: "1",
-        displayName: "Player 1",
-        id: "1",
-        numCardsOnHand: 13,
-        position: 0,
-        currentCardOnTable: {stringValue: "A", suit: "♠", value: 14},
-        numTricksWon: 0,
-      },
-      {
-        displayName: "Player 2",
-        id: "2",
-        avatarID: "2",
-        numCardsOnHand: 13,
-        position: 1,
-        currentCardOnTable: {stringValue: "K", suit: "♠", value: 13},
-        numTricksWon: 0,
-      },
-      {
-        displayName: "Player 3",
-        id: "3",
-        avatarID: "3",
-        numCardsOnHand: 13,
-        position: 2,
-        currentCardOnTable: {stringValue: "Q", suit: "♠", value: 12},
-        numTricksWon: 0,
-      },
-      {
-        displayName: "Player 4",
-        id: "4",
-        avatarID: "4",
-        numCardsOnHand: 13,
-        position: 3,
-        currentCardOnTable: {stringValue: "J", suit: "♠", value: 11},
-        numTricksWon: 0,
-      },
-    ],
-  };
+  const trickTakingPhase: TrickTakingPhase | null = gameState.trickTakingPhase;
+
+  if (!trickTakingPhase) return <></>;
 
   const myPosition = 1;
   const positionLookup = {

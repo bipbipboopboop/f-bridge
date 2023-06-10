@@ -28,8 +28,8 @@ const Chatbox = () => {
     <div className="chatbox">
       <h4>Chat</h4>
       <div className="message-list">
-        {messageList.map((message) => (
-          <ChatMessage message={message} />
+        {messageList.map((message, index) => (
+          <ChatMessage message={message} key={index} />
         ))}
       </div>
       <div className="chatbox-bottom">
