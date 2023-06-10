@@ -1,6 +1,5 @@
-import {Card} from "types/Card";
 import {GameState, TrickTakingPhase} from "types/GameState";
-import PlayingCard from "../../assets/playing_card";
+import PlayingAreaCard from "./playing_area.card";
 
 const PlayingArea = (props: {gameState: GameState}) => {
   const {gameState} = props;
@@ -9,6 +8,7 @@ const PlayingArea = (props: {gameState: GameState}) => {
 
   if (!trickTakingPhase) return <></>;
 
+  // TODO: Obtain from trickTakingPhase and AuthContext
   const myPosition = 1;
   const positionLookup = {
     top: (myPosition + 2) % 4,
@@ -43,29 +43,29 @@ const PlayingArea = (props: {gameState: GameState}) => {
       {/* <pre>{JSON.stringify(zIndexLookup)}</pre> */}
       <div className="d-flex justify-content-center">
         <PlayingAreaCard
-          card={cardLookup["top"]}
           location="top"
+          card={cardLookup["top"]}
           zIndex={zIndexLookup["top"]}
         />
       </div>
 
       <div className="d-flex justify-content-around">
         <PlayingAreaCard
-          card={cardLookup["left"]}
           location="left"
+          card={cardLookup["left"]}
           zIndex={zIndexLookup["left"]}
         />
         <PlayingAreaCard
-          card={cardLookup["right"]}
           location="right"
+          card={cardLookup["right"]}
           zIndex={zIndexLookup["right"]}
         />
       </div>
 
       <div className="d-flex justify-content-center">
         <PlayingAreaCard
-          card={cardLookup["bottom"]}
           location="bottom"
+          card={cardLookup["bottom"]}
           zIndex={zIndexLookup["bottom"]}
         />
       </div>
@@ -74,51 +74,3 @@ const PlayingArea = (props: {gameState: GameState}) => {
 };
 
 export default PlayingArea;
-
-const PlayingAreaCard = (props: {
-  card: Card | null;
-  location: "top" | "bottom" | "left" | "right";
-  zIndex: number;
-}) => {
-  const {card, location, zIndex} = props;
-
-  const rotationLookup = {
-    top: "0deg",
-    bottom: "0deg",
-    left: "90deg",
-    right: "270deg",
-  };
-
-  const topOffset = {
-    top: "3rem",
-    bottom: "-3rem",
-    left: "0rem",
-    right: "0rem",
-  };
-  if (card)
-    return (
-      <PlayingCard
-        card={card}
-        style={{
-          zIndex,
-          rotate: rotationLookup[location],
-          position: "relative",
-          top: topOffset[location],
-        }}
-      />
-    );
-  return (
-    <div
-      className="d-flex justify-content-center align-items-center"
-      style={{
-        height: "7rem",
-        width: "5rem",
-        rotate: rotationLookup[location],
-        position: "relative",
-        top: topOffset[location],
-      }}
-    >
-      {rotationLookup[location]}
-    </div>
-  );
-};
