@@ -7,64 +7,16 @@ import "./game.panel.css";
 import {GameState} from "types/GameState";
 import {GameRoomPlayer} from "types/PlayerProfile";
 
-const GamePanel = (props: {gameroom: GameState}) => {
-  const players: GameRoomPlayer[] = [
-    {
-      avatarID: "1",
-      displayName: "Player 1",
-      id: "0",
-      numCardsOnHand: 13,
-      position: 0,
-      currentCardOnTable: null,
-      numTricksWon: 0,
-    },
-    {
-      avatarID: "2",
-      displayName: "Player 2",
-      id: "1",
-      numCardsOnHand: 13,
-      position: 1,
-      currentCardOnTable: null,
-      numTricksWon: 0,
-    },
-    {
-      avatarID: "3",
-      displayName: "Player 3",
-      id: "2",
-      numCardsOnHand: 13,
-      position: 2,
-      currentCardOnTable: null,
-      numTricksWon: 0,
-    },
-    {
-      avatarID: "4",
-      displayName: "Player 4",
-      id: "3",
-      numCardsOnHand: 13,
-      position: 3,
-      currentCardOnTable: null,
-      numTricksWon: 0,
-    },
-  ];
+const GamePanel = (props: {gameState: GameState}) => {
+  const {gameState} = props;
 
-  const gameInfo: GameState = {
-    biddingPhase: null,
-    createdAt: new Date(),
-    hostID: "123",
-    invitedID: [],
-    players: [],
-    settings: {
-      isInviteOnly: false,
-      isSpectatorAllowed: false,
-    },
-    status: "Taking Trick",
-    trickTakingPhase: {
-      currentPlayerIndex: 0,
-      leadPlayerIndex: 0,
-      trumpSuit: "NT",
-      gameroomPlayersList: players,
-    },
+  const gamePlayersListLookup = {
+    Bidding: gameState?.biddingPhase?.gameroomPlayersList || [],
+    "Taking Trick": gameState?.trickTakingPhase?.gameroomPlayersList || [],
+    Waiting: [],
   };
+
+  const players: GameRoomPlayer[] = gamePlayersListLookup[gameState.status];
 
   return (
     <div className="game-panel">
@@ -82,7 +34,7 @@ const GamePanel = (props: {gameroom: GameState}) => {
           location="left"
         />
 
-        <PlayingArea />
+        <PlayingArea gameState={gameState} />
 
         <PlayerBubble
           player={players[2]}
