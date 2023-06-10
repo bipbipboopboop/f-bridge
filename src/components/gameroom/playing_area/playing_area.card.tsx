@@ -43,9 +43,7 @@ const PlayingAreaCard = (props: {
         position: "relative",
         top: topOffset[location],
       }}
-    >
-      {rotationLookup[location]}
-    </div>
+    ></div>
   );
 };
 
