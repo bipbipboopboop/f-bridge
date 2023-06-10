@@ -81,7 +81,9 @@ const GamePanel = () => {
           currentPlayerIndex={0}
           location="left"
         />
+
         <PlayingArea />
+
         <PlayerBubble
           player={players[2]}
           currentPlayerIndex={0}
