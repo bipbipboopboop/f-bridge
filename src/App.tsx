@@ -12,6 +12,7 @@ import GameRoomComponent from "./pages/gameroom";
 import GameParty from "./pages/party";
 import Home from "./pages/home";
 import Leaderboard from "./pages/leaderboard";
+import Test from "./pages/Test";
 
 function App() {
   const {isLoading} = useFunctions();
@@ -27,6 +28,8 @@ function App() {
         <Route path="/lobby" element={<Lobby />} />
         <Route path="/party" element={<GameParty />} />
         <Route path="/gameroom" element={<GameRoomComponent />} />
+        <Route path="/test" element={<Test />} />
+        <Route path="*" element={<div>404</div>} />
       </Routes>
     </div>
   );
