@@ -7,6 +7,7 @@ import GameStateInfo from "../components/gameroom/game_state_info/gamestate.info
 import {toast} from "react-toastify";
 
 const GameRoomComponent = () => {
+  // TODO: Get from cloud function
   const gameState: GameState = {
     hostID: "0",
     createdAt: new Date(),
