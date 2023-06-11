@@ -5,6 +5,7 @@ import PlayerBox from "./player_box";
 import {Link} from "react-router-dom";
 
 import "./player_panel.css";
+import GreenButton from "../buttons/button.green";
 
 interface PlayerPanelProps {
   players: LobbyPlayerProfile[];
@@ -29,14 +30,10 @@ const PlayerPanel: React.FC<PlayerPanelProps> = ({players}) => {
           </div>
         </div>
         <div className="d-flex justify-content-center">
-          <OrangeButton>
-            <Link
-              to="/gameroom"
-              style={{textDecoration: "none", color: "white"}}
-            >
-              Start Game
-            </Link>
+          <OrangeButton onClick={() => alert("start game")}>
+            Start Game
           </OrangeButton>
+          <GreenButton>Leave Room</GreenButton>
         </div>
       </div>
     </>

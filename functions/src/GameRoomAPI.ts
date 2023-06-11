@@ -24,7 +24,7 @@ import {shuffleCards} from "./utils/shuffle_cards";
  * - internal: Failed to create a game room.
  */
 export const createGameRoom = functions.https.onCall(
-  async (data: GameState, context) => {
+  async (data: void, context) => {
     // Check if the user is authenticated
     if (!context.auth) {
       throw new functions.https.HttpsError(
@@ -33,64 +33,57 @@ export const createGameRoom = functions.https.onCall(
       );
     }
 
-    try {
-      // Get the player's profile
-      const playerProfileRef = admin
-        .firestore()
-        .collection("playerProfiles")
-        .doc(context.auth.uid) as DocumentReference<PlayerProfile>;
-      const playerProfileSnapshot = await playerProfileRef.get();
-      const playerProfileData = playerProfileSnapshot!.data() as PlayerProfile;
+    // Get the player's profile
+    const playerProfileRef = admin
+      .firestore()
+      .collection("playerProfiles")
+      .doc(context.auth.uid) as DocumentReference<PlayerProfile>;
+    const playerProfileSnapshot = await playerProfileRef.get();
+    const playerProfileData = playerProfileSnapshot!.data() as PlayerProfile;
 
-      // Check if the player is already in a room
-      if (playerProfileData.roomID) {
-        throw new functions.https.HttpsError(
-          "already-exists",
-          "Player is already in a room."
-        );
-      }
-
-      const gameRoomData: GameState = {
-        hostID: context.auth.uid,
-        createdAt: new Date(),
-        settings: {
-          isInviteOnly: data.settings.isInviteOnly || false,
-          isSpectatorAllowed: data.settings.isSpectatorAllowed || false,
-        },
-        invitedID: [],
-        status: "Waiting",
-        players: [
-          {
-            ...playerProfileData,
-            isReady: false,
-            isHost: true,
-            position: 0,
-          },
-        ],
-        biddingPhase: null,
-        trickTakingPhase: null,
-      };
-
-      // Create a new game room
-      const gameRoomRef = await admin
-        .firestore()
-        .collection("gameRooms")
-        .add(gameRoomData);
-      const gameRoomId = gameRoomRef.id;
-
-      // Update player's currentGameRoomID and currentRoomID
-      await playerProfileRef.update({
-        roomID: gameRoomId,
-      });
-
-      return gameRoomData;
-    } catch (error) {
+    // Check if the player is already in a room
+    if (playerProfileData.roomID) {
+      console.log("hi");
       throw new functions.https.HttpsError(
-        "internal",
-        "Failed to create a game room.",
-        error
+        "already-exists",
+        "You can't create a room when you're already in one :/"
       );
     }
+
+    const gameRoomData: GameState = {
+      hostID: context.auth.uid,
+      createdAt: new Date(),
+      settings: {
+        isInviteOnly: false,
+        isSpectatorAllowed: false,
+      },
+      invitedID: [],
+      status: "Waiting",
+      players: [
+        {
+          ...playerProfileData,
+          isReady: false,
+          isHost: true,
+          position: 0,
+        },
+      ],
+      biddingPhase: null,
+      trickTakingPhase: null,
+    };
+
+    // Create a new game room
+    const gameRoomRef = await admin
+      .firestore()
+      .collection("gameRooms")
+      .add(gameRoomData);
+    const gameRoomId = gameRoomRef.id;
+
+    // Update player's currentGameRoomID and currentRoomID
+    await playerProfileRef.update({
+      roomID: gameRoomId,
+    });
+
+    return gameRoomData;
   }
 );
 
@@ -118,89 +111,81 @@ export const joinGameRoom = functions.https.onCall(
       );
     }
 
-    try {
-      // Get the player's profile
-      const playerProfileRef = admin
-        .firestore()
-        .collection("playerProfiles")
-        .doc(context.auth.uid) as DocumentReference<PlayerProfile>;
-      const playerProfileSnapshot = await playerProfileRef.get();
-      const playerProfileData = playerProfileSnapshot.data() as PlayerProfile;
+    // Get the player's profile
+    const playerProfileRef = admin
+      .firestore()
+      .collection("playerProfiles")
+      .doc(context.auth.uid) as DocumentReference<PlayerProfile>;
+    const playerProfileSnapshot = await playerProfileRef.get();
+    const playerProfileData = playerProfileSnapshot.data() as PlayerProfile;
 
-      // Check if the player is already in a room
-      if (playerProfileData.roomID) {
-        throw new functions.https.HttpsError(
-          "already-exists",
-          "Player is already in a room."
-        );
-      }
-
-      // Get the game room
-      const gameRoomRef = admin.firestore().collection("gameRooms").doc(roomID);
-      const gameRoomSnapshot = await gameRoomRef.get();
-      const gameRoomData = gameRoomSnapshot.data() as GameState;
-
-      // Check if the game room exists
-      if (!gameRoomSnapshot.exists) {
-        throw new functions.https.HttpsError(
-          "not-found",
-          "Game room does not exist."
-        );
-      }
-
-      // Check if the game has started
-      if (gameRoomData.status !== "Waiting") {
-        throw new functions.https.HttpsError(
-          "failed-precondition",
-          "Cannot join this room because the game has either already started or ended."
-        );
-      }
-
-      // Check if the room is full
-      if (gameRoomData.players.length >= 4) {
-        throw new functions.https.HttpsError(
-          "failed-precondition",
-          "The game room is already full."
-        );
-      }
-
-      // Check if the game is invite only and player not invited
-      if (
-        gameRoomData.settings.isInviteOnly &&
-        !gameRoomData.invitedID.includes(context.auth.uid)
-      ) {
-        throw new functions.https.HttpsError(
-          "permission-denied",
-          "You are not invited to this game room."
-        );
-      }
-
-      // Add the player to the game room
-      const position = gameRoomData.players.length;
-      const playerData: LobbyPlayerProfile = {
-        ...playerProfileData,
-        isReady: false,
-        isHost: false,
-        position,
-      };
-
-      await Promise.all([
-        gameRoomRef.update({
-          players: admin.firestore.FieldValue.arrayUnion(playerData),
-        }),
-        playerProfileRef.update({
-          roomID,
-        }),
-      ]);
-
-      return;
-    } catch (error) {
+    // Check if the player is already in a room
+    if (playerProfileData.roomID) {
       throw new functions.https.HttpsError(
-        "internal",
-        "Failed to join the game room.",
-        error
+        "already-exists",
+        "Player is already in a room."
       );
     }
+
+    // Get the game room
+    const gameRoomRef = admin.firestore().collection("gameRooms").doc(roomID);
+    const gameRoomSnapshot = await gameRoomRef.get();
+    const gameRoomData = gameRoomSnapshot.data() as GameState;
+
+    // Check if the game room exists
+    if (!gameRoomSnapshot.exists) {
+      throw new functions.https.HttpsError(
+        "not-found",
+        "Game room does not exist."
+      );
+    }
+
+    // Check if the game has started
+    if (gameRoomData.status !== "Waiting") {
+      throw new functions.https.HttpsError(
+        "failed-precondition",
+        "Cannot join this room because the game has either already started or ended."
+      );
+    }
+
+    // Check if the room is full
+    if (gameRoomData.players.length >= 4) {
+      throw new functions.https.HttpsError(
+        "failed-precondition",
+        "The game room is already full."
+      );
+    }
+
+    // Check if the game is invite only and player not invited
+    if (
+      gameRoomData.settings.isInviteOnly &&
+      !gameRoomData.invitedID.includes(context.auth.uid)
+    ) {
+      throw new functions.https.HttpsError(
+        "permission-denied",
+        "You are not invited to this game room."
+      );
+    }
+
+    // Add the player to the game room
+    const position = gameRoomData.players.length;
+    const playerData: LobbyPlayerProfile = {
+      ...playerProfileData,
+      isReady: false,
+      isHost: false,
+      position,
+    };
+
+    await Promise.all([
+      gameRoomRef.update({
+        players: admin.firestore.FieldValue.arrayUnion(playerData),
+      }),
+      playerProfileRef.update({
+        roomID,
+      }),
+    ]);
+
+    return;
   }
 );
 

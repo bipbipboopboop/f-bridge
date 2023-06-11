@@ -5,11 +5,19 @@ import LobbyRooms from "../components/lobby/lobby-rooms";
 import LobbyPlayerCard from "../components/lobby/lobby-player-card";
 
 import {useAuth} from "../hooks/useAuth";
+import useFunctions from "../hooks/useFunctions";
+import {toast} from "react-toastify";
 
 const Lobby = () => {
   const {playerProfile} = useAuth();
+  const {createGameRoom, error, isLoading} = useFunctions();
 
   if (!playerProfile) return <></>;
+  if (isLoading) return <p>Loading...</p>;
+
+  if (error) {
+    toast.error(error.message);
+  }
 
   return (
     <div className="w-100 h-100 d-flex">
@@ -27,12 +35,13 @@ const Lobby = () => {
         </div>
         <div className="d-flex flex-column p-3" style={{gap: "20px"}}>
           <div className="d-flex justify-content-center">
-            <Link
-              style={{textDecoration: "none", color: "white"}}
-              to={"/gameroom"}
+            <OrangeButton
+              onClick={() => {
+                createGameRoom();
+              }}
             >
-              <OrangeButton>Create Room</OrangeButton>
-            </Link>
+              Create Room
+            </OrangeButton>
           </div>
         </div>
       </div>
