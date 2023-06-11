@@ -89,6 +89,7 @@ const RoomTable = () => {
           <div>
             {[0, 1, 2, 3].map((index) => (
               <img
+                key={index}
                 className={`lobby_table_data_players-${
                   plyrList[index] ? "occupied" : "vacant"
                 }`}
