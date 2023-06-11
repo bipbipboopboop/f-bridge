@@ -1,4 +1,4 @@
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import GreenButton from "../components/buttons/button.green";
 import OrangeButton from "../components/buttons/button.orange";
 import LobbyRooms from "../components/lobby/lobby-rooms";
@@ -11,6 +11,7 @@ import {toast} from "react-toastify";
 const Lobby = () => {
   const {playerProfile} = useAuth();
   const {createGameRoom, error, isLoading} = useFunctions();
+  const navigate = useNavigate();
 
   if (!playerProfile) return <></>;
   if (isLoading) return <p>Loading...</p>;
@@ -36,8 +37,12 @@ const Lobby = () => {
         <div className="d-flex flex-column p-3" style={{gap: "20px"}}>
           <div className="d-flex justify-content-center">
             <OrangeButton
-              onClick={() => {
-                createGameRoom();
+              onClick={async () => {
+                const gameRoom = await createGameRoom();
+                if (gameRoom) {
+                  toast.success("Room created!");
+                  navigate(`/party/${gameRoom.data.hostID}`);
+                }
               }}
             >
               Create Room
