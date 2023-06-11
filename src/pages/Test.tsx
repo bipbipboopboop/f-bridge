@@ -1,9 +1,14 @@
-import {BiddingPhase} from "types/GameState";
+import {memo, useState} from "react";
 import BiddingTable from "../components/tables/bidding.table";
 import GreenButton from "../components/buttons/button.green";
-import {Bid} from "types/Bid";
+
+import {BidNumber, Bid} from "types/Bid";
 import {BidSuit} from "types/Card";
-import {memo, useState} from "react";
+
+import {BiddingPhase} from "types/GameState";
+import {GameRoomPlayer} from "types/PlayerProfile";
+
+// import {getPossibleBids} from "utils/bids-utils";
 
 // Testing for BidOptions
 const biddingPhase: BiddingPhase = {
@@ -87,24 +92,26 @@ const biddingPhase: BiddingPhase = {
 const Test = () => {
   const {currentBidderIndex, gameroomPlayersList, highestBid} = biddingPhase;
 
-  const currentBidder = gameroomPlayersList.filter(
+  const currentBidder = gameroomPlayersList.find(
     (plyr) => plyr.position === currentBidderIndex
-  )[0];
+  ) as GameRoomPlayer;
 
   // TODO: Get from AuthContext
   const myID = "0";
-  const isMyTurnToBid = currentBidder.id === myID;
 
-  const [selectedBidValue, setSelectedBidValue] = useState<
-    "1" | "2" | "3" | "4" | "5" | "6" | null
-  >(null);
+  const isMyTurnToBid = currentBidder.id === myID;
+  const [selectedBidValue, setSelectedBidValue] = useState<BidNumber | null>(
+    null
+  );
 
   const possibleBids = getPossibleBids(highestBid);
-  console.log({possibleBids});
+
   return (
     <div className="w-75 h-75 d-flex flex-column justify-content-center align-items-center">
-      {!isMyTurnToBid && <p>{`${currentBidder.displayName} is bidding ...`}</p>}
-      {isMyTurnToBid && <p>Your turn to bid</p>}
+      <BiddingMessage
+        currentBidder={currentBidder}
+        isMyTurnToBid={isMyTurnToBid}
+      />
 
       <BiddingTable biddingPhase={biddingPhase} />
       <div>
@@ -112,14 +119,12 @@ const Test = () => {
         <GreenButton>Bid</GreenButton>
         <GreenButton>Clear</GreenButton>
         <div className="d-flex">
-          {(
-            Object.keys(possibleBids) as ("1" | "2" | "3" | "4" | "5" | "6")[]
-          ).map((bidNumber) => (
+          {[1, 2, 3, 4, 5, 6].map((bidNumber) => (
             <button
               key={bidNumber}
-              disabled={possibleBids[bidNumber].length === 0}
+              disabled={possibleBids[bidNumber as 1].length === 0}
               onClick={() => {
-                setSelectedBidValue(bidNumber);
+                setSelectedBidValue(bidNumber as 1);
               }}
             >
               {bidNumber}
@@ -144,54 +149,68 @@ const Test = () => {
 
 export default memo(Test);
 
+const BiddingMessage = (props: {
+  isMyTurnToBid: boolean;
+  currentBidder: GameRoomPlayer;
+}) => {
+  const {currentBidder, isMyTurnToBid} = props;
+  return (
+    <div>
+      {!isMyTurnToBid && <p>{`${currentBidder.displayName} is bidding ...`}</p>}
+      {isMyTurnToBid && <p>Your turn to bid</p>}
+    </div>
+  );
+};
+
+const bidSuitList: BidSuit[] = ["♣", "♦", "♥", "♠", "NT"];
+
+const allPossibleBids: string[] = [
+  "1♣",
+  "1♦",
+  "1♥",
+  "1♠",
+  "1NT",
+  "2♣",
+  "2♦",
+  "2♥",
+  "2♠",
+  "2NT",
+  "3♣",
+  "3♦",
+  "3♥",
+  "3♠",
+  "3NT",
+  "4♣",
+  "4♦",
+  "4♥",
+  "4♠",
+  "4NT",
+  "5♣",
+  "5♦",
+  "5♥",
+  "5♠",
+  "5NT",
+  "6♣",
+  "6♦",
+  "6♥",
+  "6♠",
+  "6NT",
+];
 const getPossibleBids = (highestBid: Bid | null) => {
-  const suits: BidSuit[] = ["♣", "♦", "♥", "♠", "NT"];
-  const allPossibleBids: string[] = [
-    "1♣",
-    "1♦",
-    "1♥",
-    "1♠",
-    "1NT",
-    "2♣",
-    "2♦",
-    "2♥",
-    "2♠",
-    "2NT",
-    "3♣",
-    "3♦",
-    "3♥",
-    "3♠",
-    "3NT",
-    "4♣",
-    "4♦",
-    "4♥",
-    "4♠",
-    "4NT",
-    "5♣",
-    "5♦",
-    "5♥",
-    "5♠",
-    "5NT",
-    "6♣",
-    "6♦",
-    "6♥",
-    "6♠",
-    "6NT",
-  ];
-  const possibleBids: Record<"1" | "2" | "3" | "4" | "5" | "6", BidSuit[]> = {
-    "1": [],
-    "2": [],
-    "3": [],
-    "4": [],
-    "5": [],
-    "6": [],
+  const possibleBids: Record<BidNumber, BidSuit[]> = {
+    1: [],
+    2: [],
+    3: [],
+    4: [],
+    5: [],
+    6: [],
   };
 
   if (!highestBid) {
     // If there is no highest bid, all bids from 1 to 7 in each suit are possible
-    for (let number = 1; number <= 6; number++) {
-      suits.forEach((suit) => {
-        possibleBids[number as 1 | 2 | 3 | 4 | 5 | 6].push(suit);
+    for (let number = 1 as BidNumber; number <= 6; number++) {
+      bidSuitList.forEach((suit) => {
+        possibleBids[number].push(suit);
       });
     }
     return possibleBids;
@@ -203,9 +222,9 @@ const getPossibleBids = (highestBid: Bid | null) => {
 
   const possibleBidsStrings = allPossibleBids.slice(bidIndex + 1);
   possibleBidsStrings.forEach((bidString) => {
-    const number = parseInt(bidString[0]) as 1 | 2 | 3 | 4 | 5 | 6;
+    const bidNum = parseInt(bidString[0]) as BidNumber;
     const suit = bidString.slice(1) as BidSuit;
-    possibleBids[number].push(suit);
+    possibleBids[bidNum].push(suit);
   });
 
   return possibleBids;
