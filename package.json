@@ -1,5 +1,5 @@
 {
-  "name": "s-bridge",
+  "name": "floating-bridge",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -23,6 +23,7 @@
     "react-toastify": "^9.1.3",
     "types": "file:./types",
     "assets": "file:./src/assets",
+    "utils": "file:./utils",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
