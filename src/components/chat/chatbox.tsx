@@ -25,6 +25,7 @@ const Chatbox = () => {
       uid: "2",
     },
   ];
+  console.log("Chat loaded");
   return (
     <div className="chatbox">
       <h4>Chat</h4>
