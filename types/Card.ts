@@ -1,5 +1,4 @@
 export type Suit = "♣" | "♦" | "♥" | "♠";
-export type BidSuit = Suit | "NT";
 
 export type CardStringValue =
   | "A"
