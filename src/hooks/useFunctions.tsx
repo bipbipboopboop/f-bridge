@@ -7,6 +7,7 @@ import {useHttpsCallable} from "react-firebase-hooks/functions";
 import {auth, functions} from "../firebase";
 import {PlayerProfile} from "types/PlayerProfile";
 import {User, UserInfo} from "firebase/auth";
+import {GameState} from "types/GameState";
 
 const useFunctions = () => {
   /**
@@ -35,7 +36,10 @@ const useFunctions = () => {
     "deleteAnonymousPlayer"
   );
 
-  const [createGameRoom, l6, e6] = useHttpsCallable(
+  /**
+   * GAME ROOM API
+   */
+  const [createGameRoom, l6, e6] = useHttpsCallable<void, GameState>(
     functions,
     "createGameRoom"
   );
@@ -74,6 +78,7 @@ const useFunctions = () => {
      * GameRoomAPI
      */
     joinGameRoom,
+    createGameRoom,
     leaveGameRoom,
     toggleReady,
     startGame,
