@@ -1,10 +1,11 @@
 import {Link} from "react-router-dom";
 import GreenButton from "../components/buttons/button.green";
 import OrangeButton from "../components/buttons/button.orange";
-import LobbyRooms from "../components/lobby/lobby.tab";
-import dino from "assets/player_assets/dino_sprite_1.gif";
+import LobbyRooms from "../components/lobby/lobby-rooms";
+import LobbyPlayerCard from "../components/lobby/lobby-player-card";
+
 import {useAuth} from "../hooks/useAuth";
-import {PlayerProfile} from "types/PlayerProfile";
+
 const Lobby = () => {
   const {playerProfile} = useAuth();
 
@@ -40,20 +41,3 @@ const Lobby = () => {
 };
 
 export default Lobby;
-
-const LobbyPlayerCard = (props: {playerProfile: PlayerProfile}) => {
-  const {playerProfile} = props;
-  return (
-    <div className="lobby-player-card">
-      <div className="mx-2">
-        <img src={dino} />
-      </div>
-      <div className="player-info">
-        <div>
-          {playerProfile.displayName} ({playerProfile.country})
-        </div>
-        <div>Games Played:{playerProfile.numOfGamesPlayed}</div>
-      </div>
-    </div>
-  );
-};

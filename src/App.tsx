@@ -1,5 +1,4 @@
 import "./App.css";
-import "./styles.css";
 import {Route, Routes} from "react-router-dom";
 
 import useFunctions from "./hooks/useFunctions";

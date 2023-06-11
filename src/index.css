@@ -28,30 +28,3 @@ body {
 .firebase-emulator-warning {
   display: none;
 }
-
-.tab-list {
-  display: flex;
-  flex-direction: row;
-  padding: 0;
-}
-
-.tab {
-  display: flex;
-  flex-grow: 1;
-  align-items: center;
-  justify-content: space-evenly;
-  cursor: pointer;
-  height: 36px;
-  font-size: 1rem;
-
-  background-color: rgba(0, 0, 0, 0.05);
-  border-radius: 5px 5px 0 0;
-}
-
-.tab:hover {
-  background-color: #006cb1;
-}
-
-.tab-active {
-  background-color: #0567a6;
-}
