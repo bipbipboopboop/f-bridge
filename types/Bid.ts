@@ -5,6 +5,8 @@ export type Bid = {
   number: number;
 };
 
+export type BidNumber = 1 | 2 | 3 | 4 | 5 | 6;
+
 // export class Bid {
 //   suit: Suit;
 //   number: number;
