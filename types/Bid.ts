@@ -1,11 +1,10 @@
-import {BidSuit} from "./Card";
-
 export type Bid = {
   suit: BidSuit;
   number: number;
 };
 
 export type BidNumber = 1 | 2 | 3 | 4 | 5 | 6;
+export type BidSuit = "♣" | "♦" | "♥" | "♠" | "NT";
 
 // export class Bid {
 //   suit: Suit;

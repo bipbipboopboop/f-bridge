@@ -1,6 +1,5 @@
 // types/GameState.ts
-import {BidSuit} from "./Card";
-import {Bid} from "types/Bid";
+import {Bid, BidSuit} from "types/Bid";
 import {GameRoomPlayer, LobbyPlayerProfile} from "./PlayerProfile";
 
 export type GameState = {
