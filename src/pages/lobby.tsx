@@ -44,45 +44,15 @@ export default Lobby;
 const LobbyPlayerCard = (props: {playerProfile: PlayerProfile}) => {
   const {playerProfile} = props;
   return (
-    <div
-      className="d-flex p-3"
-      style={{
-        border: "6px solid grey",
-        borderRadius: "20px",
-        backgroundColor: "#5090E0",
-      }}
-    >
+    <div className="lobby-player-card">
       <div className="mx-2">
-        <img
-          style={{
-            height: "15rem",
-            border: "2px solid lightblue",
-            borderRadius: "20px",
-            backgroundColor: "#68A0E0",
-            boxShadow: "0px 0px 10px 5px rgba(0,0,0,0.1)",
-          }}
-          src={dino}
-        />
+        <img src={dino} />
       </div>
-      <div>
-        <div
-          className="p-2 mb-2"
-          style={{
-            backgroundColor: "#80B0E8",
-            borderRadius: "10px",
-          }}
-        >
+      <div className="player-info">
+        <div>
           {playerProfile.displayName} ({playerProfile.country})
         </div>
-        <div
-          className="p-2"
-          style={{
-            backgroundColor: "#80B0E8",
-            borderRadius: "10px",
-          }}
-        >
-          Games Played:{playerProfile.numOfGamesPlayed}
-        </div>
+        <div>Games Played:{playerProfile.numOfGamesPlayed}</div>
       </div>
     </div>
   );
