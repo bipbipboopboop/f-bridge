@@ -19,14 +19,11 @@ const RoomTable = (props: {gameRoomList: GameState[]}) => {
       header: () => <span>Room ID</span>,
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("hostID", {
+    columnHelper.accessor("players", {
       header: () => <span>Host</span>,
-      cell: (info) => info.getValue(),
+      cell: (info) => info.getValue().find((plyr) => plyr.isHost)?.displayName,
     }),
-    columnHelper.accessor("settings.isInviteOnly", {
-      header: () => <span>Type</span>,
-      cell: (info) => info.getValue(),
-    }),
+
     columnHelper.accessor("players", {
       header: () => <span>Players</span>,
       cell: (info) => {

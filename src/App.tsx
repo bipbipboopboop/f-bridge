@@ -25,7 +25,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/lobby" element={<Lobby />} />
-        <Route path="/party" element={<GameParty />} />
+        <Route path="/party/:roomID" element={<GameParty />} />
         <Route path="/gameroom" element={<GameRoomComponent />} />
         <Route path="/test" element={<Test />} />
         <Route path="*" element={<div>404</div>} />
