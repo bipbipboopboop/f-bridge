@@ -5,7 +5,7 @@ import {Bid} from "types/Bid";
 import {DocumentReference} from "firebase-admin/firestore";
 import {GameState} from "types/GameState";
 import {GameRoomPlayer} from "types/PlayerProfile";
-import {BidSuit} from "types/Card";
+import {BidSuit} from "types/Bid";
 
 export const placeBid = functions.https.onCall(async (bid: Bid, context) => {
   // 0. Check if the user is authenticated

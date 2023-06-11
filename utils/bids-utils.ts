@@ -1,7 +1,6 @@
-import {Bid, BidNumber} from "types/bid";
-import {BidSuit} from "types/card";
+import {Bid, BidNumber, BidSuit} from "types/Bid";
 
-const getPossibleBids = (highestBid: Bid | null) => {
+export const getPossibleBids = (highestBid: Bid | null) => {
   const allPossibleBids: string[] = [
     "1♣",
     "1♦",
@@ -67,5 +66,3 @@ const getPossibleBids = (highestBid: Bid | null) => {
 
   return possibleBids;
 };
-
-export {getPossibleBids};
