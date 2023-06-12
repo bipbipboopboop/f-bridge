@@ -1,4 +1,4 @@
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import GreenButton from "../components/buttons/button.green";
 import OrangeButton from "../components/buttons/button.orange";
 import LobbyRooms from "../components/lobby/lobby-rooms";

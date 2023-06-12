@@ -7,7 +7,7 @@ const LobbyPlayerCard = (props: {playerProfile: PlayerProfile}) => {
   return (
     <div className="lobby-player-card">
       <div className="mx-2">
-        <img src={dino} />
+        <img src={dino} alt={":/"} />
       </div>
       <div className="player-info">
         <div>

@@ -12,14 +12,10 @@ const PlayerBubble = (props: Props) => {
   const {player, currentPlayerIndex, location} = props;
   const isPlayerTurn = currentPlayerIndex === player.position;
   return (
-    <div
-      className={`player-bubble-${location} ${
-        isPlayerTurn ? "selected" : "waiting"
-      }`}
-    >
+    <div className={`player-bubble-${location} ${isPlayerTurn ? "selected" : "waiting"}`}>
       <div className="d-flex justify-content-center">{player.displayName}</div>
       <div className="d-flex align-items-center">
-        <img src={dino_sprite_1} />
+        <img src={dino_sprite_1} alt={":/"} />
         <PlayerNumCardHint numCardsOnHand={player.numCardsOnHand} />
       </div>
     </div>

@@ -30,6 +30,7 @@ const RoomTable = (props: {gameRoomList: GameState[]}) => {
                 key={index}
                 className={`lobby_table_data_players-${plyrList[index] ? "occupied" : "vacant"}`}
                 src={PlayerSVG}
+                alt={PlayerSVG}
               />
             ))}
           </div>

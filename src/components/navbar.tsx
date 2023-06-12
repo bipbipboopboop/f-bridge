@@ -47,7 +47,6 @@ const Navbar = () => {
         <li className="nav-item dropdown">
           <a
             className="nav-link dropdown-toggle"
-            href="#"
             id="navbarDropdownMenuLink"
             data-toggle="dropdown"
             aria-haspopup="true"
@@ -55,19 +54,10 @@ const Navbar = () => {
           >
             {playerProfile?.displayName}
           </a>
-          <div
-            className="dropdown-menu"
-            aria-labelledby="navbarDropdownMenuLink"
-          >
-            <a className="dropdown-item" href="#">
-              Edit Profile
-            </a>
-            <a className="dropdown-item" href="#">
-              Settings
-            </a>
-            <a className="dropdown-item" href="#">
-              {user?.isAnonymous ? "Login" : "Logout"}
-            </a>
+          <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a className="dropdown-item">Edit Profile</a>
+            <a className="dropdown-item">Settings</a>
+            <a className="dropdown-item">{user?.isAnonymous ? "Login" : "Logout"}</a>
           </div>
         </li>
       </ul>

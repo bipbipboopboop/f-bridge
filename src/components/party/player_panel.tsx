@@ -2,7 +2,6 @@ import React from "react";
 import {LobbyPlayerProfile} from "types/PlayerProfile";
 import OrangeButton from "../buttons/button.orange";
 import PlayerBox from "./player_box";
-import {Link} from "react-router-dom";
 
 import "./player_panel.css";
 import GreenButton from "../buttons/button.green";
@@ -30,9 +29,7 @@ const PlayerPanel: React.FC<PlayerPanelProps> = ({players}) => {
           </div>
         </div>
         <div className="d-flex justify-content-center">
-          <OrangeButton onClick={() => alert("start game")}>
-            Start Game
-          </OrangeButton>
+          <OrangeButton onClick={() => alert("start game")}>Start Game</OrangeButton>
           <GreenButton>Leave Room</GreenButton>
         </div>
       </div>

@@ -7,6 +7,7 @@ import {PlayerProfile} from "types/PlayerProfile";
 import {useAuthState} from "react-firebase-hooks/auth";
 import Loading from "../components/loading";
 import useFunctions from "../hooks/useFunctions";
+import {toast} from "react-toastify";
 
 export const AuthContext = createContext<AuthContextValue>({
   user: null,
@@ -18,15 +19,11 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
   /**
    * HOOKS
    */
-  const [firebaseUser, isLoadingFirebaseUser, firebaseUserError] =
-    useAuthState(auth);
+  const [firebaseUser, isLoadingFirebaseUser, firebaseUserError] = useAuthState(auth);
 
-  const {createPlayerProfile, retrieveMyPlayerProfile, isLoading, error} =
-    useFunctions();
+  const {createPlayerProfile, retrieveMyPlayerProfile, isLoading, error} = useFunctions();
 
-  const [playerProfile, setPlayerProfile] = useState<PlayerProfile | null>(
-    null
-  );
+  const [playerProfile, setPlayerProfile] = useState<PlayerProfile | null>(null);
 
   // Signs the user in anonymously if they don't log in and creates a player profile for them.
   // Otherwise, they are already logged in and we can just retrieve their player profile.
@@ -68,17 +65,17 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
     isLoggingIn: isLoadingFirebaseUser || isLoading,
   };
 
-  // if (error) {
-  //   alert(error.message);
-  // }
+  if (firebaseUserError) {
+    toast.error(firebaseUserError.message);
+  }
+
+  if (error) {
+    toast.error(error.message);
+  }
 
   if (authContextValue.isLoggingIn) return <Loading />;
 
-  return (
-    <AuthContext.Provider value={authContextValue}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={authContextValue}>{children}</AuthContext.Provider>;
 };
 
 interface AuthProviderProps {
