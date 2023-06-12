@@ -7,6 +7,7 @@ import LobbyPlayerCard from "../components/lobby/lobby-player-card";
 import {useAuth} from "../hooks/useAuth";
 import useFunctions from "../hooks/useFunctions";
 import {toast} from "react-toastify";
+import Loading from "../components/loading";
 
 const Lobby = () => {
   const {playerProfile} = useAuth();
@@ -14,7 +15,7 @@ const Lobby = () => {
   const navigate = useNavigate();
 
   if (!playerProfile) return <></>;
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <Loading />;
 
   if (error) {
     toast.error(error.message);

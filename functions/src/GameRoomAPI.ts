@@ -105,7 +105,7 @@ export const joinGameRoom = functions.https.onCall(async (roomID: string, contex
 
   // Check if the player is already in a room
   if (playerProfileData.roomID) {
-    throw new functions.https.HttpsError("already-exists", "Player is already in a room.");
+    throw new functions.https.HttpsError("already-exists", "You're already in a room! Leave it first to join");
   }
 
   // Get the game room
@@ -115,7 +115,7 @@ export const joinGameRoom = functions.https.onCall(async (roomID: string, contex
 
   // Check if the game room exists
   if (!gameRoomSnapshot.exists) {
-    throw new functions.https.HttpsError("not-found", "Game room does not exist.");
+    throw new functions.https.HttpsError("not-found", "This game no longer exists :(");
   }
 
   // Check if the game has started
