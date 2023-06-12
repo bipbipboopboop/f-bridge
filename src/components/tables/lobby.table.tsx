@@ -58,8 +58,8 @@ const RoomTable = (props: {gameRoomList: GameState[]}) => {
       <thead>
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <th key={header.id}>
+            {headerGroup.headers.map((header, index) => (
+              <th key={index}>
                 {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
               </th>
             ))}
