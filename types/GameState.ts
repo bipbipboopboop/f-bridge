@@ -3,6 +3,7 @@ import {Bid, BidSuit} from "types/Bid";
 import {GameRoomPlayer, LobbyPlayerProfile} from "./PlayerProfile";
 
 export type GameState = {
+  roomID: string;
   hostID: string;
   createdAt: Date;
   settings: GameRoomSettings;

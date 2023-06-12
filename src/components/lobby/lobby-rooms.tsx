@@ -4,91 +4,26 @@ import RoomTable from "../tables/lobby.table";
 import {GameState} from "types/GameState";
 
 import {useCollectionData} from "react-firebase-hooks/firestore";
-import {
-  CollectionReference,
-  collection,
-  orderBy,
-  query,
-} from "firebase/firestore";
+import {CollectionReference, collection, orderBy, query} from "firebase/firestore";
 import {firestore} from "../../firebase";
+import {toast} from "react-toastify";
+import Loading from "../loading";
 
 const LobbyRooms = () => {
-  // TOOD: Get from useHttpsCallable
-  // const gameRoomList: GameState[] = [
-  //   {
-  //     hostID: "Host 1",
-  //     createdAt: new Date(),
-  //     settings: {
-  //       isInviteOnly: false,
-  //       isSpectatorAllowed: false,
-  //     },
-  //     invitedID: [],
-  //     status: "Waiting",
-  //     players: [
-  //       {
-  //         displayName: "Player 1",
-  //         country: "International",
-  //         avatarID: "2",
-  //         email: "hi@email.com",
-  //         id: "1",
-  //         isReady: true,
-  //         isHost: false,
-  //         numOfGamesPlayed: 0,
-  //         numOfGamesWon: 0,
-  //         position: 0,
-  //         roomID: "1",
-  //       },
-  //       {
-  //         displayName: "Player 1",
-  //         country: "International",
-  //         avatarID: "1",
-  //         email: "hi@email.com",
-  //         id: "1",
-  //         isReady: true,
-  //         isHost: false,
-  //         numOfGamesPlayed: 0,
-  //         numOfGamesWon: 0,
-  //         position: 0,
-  //         roomID: "1",
-  //       },
-  //     ],
-  //     biddingPhase: null,
-  //     trickTakingPhase: null,
-  //   },
-  //   {
-  //     hostID: "Host 2",
-  //     createdAt: new Date(),
-  //     settings: {
-  //       isInviteOnly: false,
-  //       isSpectatorAllowed: false,
-  //     },
-  //     invitedID: [],
-  //     status: "Waiting",
-  //     players: [],
-  //     biddingPhase: null,
-  //     trickTakingPhase: null,
-  //   },
-  // ];
+  const gameRoomsCollection = collection(firestore, `gameRooms`) as CollectionReference<GameState>;
+  const gameRoomsQuery = query(gameRoomsCollection, orderBy("createdAt", "desc"));
 
-  const gameRoomsCollection = collection(
-    firestore,
-    `gameRooms`
-  ) as CollectionReference<GameState>;
-  const gameRoomsQuery = query<GameState>(
-    gameRoomsCollection,
-    orderBy("createdAt", "desc")
+  const [gameRoomList, isLoading, error] = useCollectionData<GameState>(gameRoomsQuery);
+
+  if (isLoading) return <Loading />;
+  if (!gameRoomList) return <Loading />;
+  if (error) toast.error(error.message);
+
+  const openRoomList: GameState[] = gameRoomList.filter((room) => !room.settings.isInviteOnly);
+
+  const spectateRoomList: GameState[] = gameRoomList.filter(
+    (room) => room.settings.isSpectatorAllowed && !(room.status === "Waiting")
   );
-
-  const [gameRoomList, isLoading, error] =
-    useCollectionData<GameState>(gameRoomsQuery);
-
-  const openRoomList: GameState[] =
-    gameRoomList?.filter((room) => !room.settings.isInviteOnly) || [];
-
-  const spectateRoomList: GameState[] =
-    gameRoomList?.filter(
-      (room) => room.settings.isSpectatorAllowed && !(room.status === "Waiting")
-    ) || [];
 
   return (
     <Tabs className="w-75">

@@ -9,6 +9,7 @@ import "./party.css";
 
 const GameParty = () => {
   const room: GameState = {
+    roomID: "roomID",
     biddingPhase: null,
     hostID: "host",
     createdAt: new Date(),
