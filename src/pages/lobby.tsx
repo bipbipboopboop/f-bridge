@@ -38,10 +38,10 @@ const Lobby = () => {
           <div className="d-flex justify-content-center">
             <OrangeButton
               onClick={async () => {
-                const gameRoom = await createGameRoom();
+                const gameRoom = (await createGameRoom())?.data;
                 if (gameRoom) {
                   toast.success("Room created!");
-                  navigate(`/party/${gameRoom.data.hostID}`);
+                  navigate(`/party/${gameRoom.roomID}`);
                 }
               }}
             >
