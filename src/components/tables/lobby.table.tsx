@@ -1,14 +1,14 @@
+import {toast} from "react-toastify";
 import PlayerSVG from "../../assets/player_assets/player.svg";
+import useFunctions from "../../hooks/useFunctions";
 import "./lobby.table.css";
 import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from "@tanstack/react-table";
 
 import {GameState} from "types/GameState";
+import Loading from "../loading";
 
 const RoomTable = (props: {gameRoomList: GameState[]}) => {
-  const {gameRoomList} = props;
-
   const columnHelper = createColumnHelper<GameState>();
-
   const columns = [
     columnHelper.accessor("roomID", {
       header: () => <span>Room ID</span>,
@@ -39,11 +39,19 @@ const RoomTable = (props: {gameRoomList: GameState[]}) => {
     }),
   ];
 
+  const {gameRoomList} = props;
+  const {joinGameRoom, isLoading, error} = useFunctions();
+
   const table = useReactTable({
     data: gameRoomList,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  if (error) {
+    toast.error(error.message);
+  }
+  if (isLoading) return <Loading />;
 
   return (
     <table className="lobby-table">
@@ -60,7 +68,16 @@ const RoomTable = (props: {gameRoomList: GameState[]}) => {
       </thead>
       <tbody>
         {table.getRowModel().rows.map((row) => (
-          <tr key={row.id}>
+          <tr
+            key={row.id}
+            onClick={async () => {
+              const roomID = row.original.roomID;
+              const success = await joinGameRoom(roomID);
+              if (success) {
+                toast.success("Successfully joined room");
+              }
+            }}
+          >
             {row.getVisibleCells().map((cell) => (
               <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
             ))}
