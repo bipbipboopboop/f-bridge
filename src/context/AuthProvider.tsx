@@ -57,7 +57,7 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
       }
     })();
     return () => {};
-  }, [firebaseUser, isLoadingFirebaseUser]);
+  }, [firebaseUser, isLoadingFirebaseUser, isLoadingPlayerProfile]);
 
   const authContextValue: AuthContextValue = {
     user: firebaseUser || null,

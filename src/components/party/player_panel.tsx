@@ -45,8 +45,8 @@ const PlayerPanel: React.FC<PlayerPanelProps> = ({players}) => {
           <GreenButton
             onClick={async () => {
               console.log({roomID: playerProfile?.roomID});
-              await leaveGameRoom(playerProfile?.roomID);
-              navigate("/lobby");
+              const success = await leaveGameRoom(playerProfile?.roomID);
+              if (success) navigate("/lobby");
             }}
           >
             Leave Room

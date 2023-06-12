@@ -5,199 +5,26 @@ import GamePanel from "../components/gameroom/game.panel";
 import "./gameroom.css";
 // import GameStateInfo from "../components/gameroom/game_state_info/gamestate.info";
 import {toast} from "react-toastify";
+import {useDocumentData} from "react-firebase-hooks/firestore";
+import {DocumentReference, LoadBundleTask, doc} from "firebase/firestore";
+import {firestore} from "../firebase";
+import {useParams} from "react-router-dom";
+import Loading from "../components/loading";
 
 const GameRoomComponent = () => {
-  // TODO: Get from cloud function
-  const gameState: GameState = {
-    roomID: "roomID",
-    hostID: "0",
-    createdAt: new Date(),
-    settings: {
-      isInviteOnly: false,
-      isSpectatorAllowed: false,
-    },
-    invitedID: [],
+  const {roomID} = useParams();
+  const roomRef = doc(firestore, "rooms", roomID || "ERROR") as DocumentReference<GameState>;
+  const [gameState, isLoading, error] = useDocumentData<GameState>(roomRef);
 
-    status: "Bidding",
-    players: [
-      {
-        avatarID: "0",
-        displayName: "Player 1",
-        id: "0",
-        country: "US",
-        position: 0,
-        email: "email",
-        isHost: false,
-        isReady: true,
-        numOfGamesPlayed: 1,
-        numOfGamesWon: 0,
-        roomID: "roomID",
-      },
-      {
-        avatarID: "1",
-        displayName: "Player 2",
-        id: "1",
-        country: "US",
-        position: 1,
-        email: "email",
-        isHost: false,
-        isReady: true,
-        numOfGamesPlayed: 1,
-        numOfGamesWon: 0,
-        roomID: "roomID",
-      },
-      {
-        avatarID: "3",
-        displayName: "Player 3",
-        id: "2",
-        country: "US",
-        position: 2,
-        email: "email",
-        isHost: false,
-        isReady: true,
-        numOfGamesPlayed: 1,
-        numOfGamesWon: 0,
-        roomID: "roomID",
-      },
-      {
-        avatarID: "4",
-        displayName: "Player 4",
-        id: "3",
-        country: "US",
-        position: 3,
-        email: "email",
-        isHost: false,
-        isReady: true,
-        numOfGamesPlayed: 1,
-        numOfGamesWon: 0,
-        roomID: "roomID",
-      },
-    ],
+  if (isLoading) return <Loading />;
+  if (!gameState) return <Loading />;
 
-    biddingPhase: {
-      gameroomPlayersList: [
-        {
-          avatarID: "1",
-          displayName: "Player 1",
-          id: "0",
-          numCardsOnHand: 13,
-          position: 0,
-          currentCardOnTable: null,
-          numTricksWon: 0,
-        },
-        {
-          avatarID: "2",
-          displayName: "Player 2",
-          id: "1",
-          numCardsOnHand: 13,
-          position: 1,
-          currentCardOnTable: null,
-          numTricksWon: 0,
-        },
-        {
-          avatarID: "3",
-          displayName: "Player 3",
-          id: "2",
-          numCardsOnHand: 13,
-          position: 2,
-          currentCardOnTable: null,
-          numTricksWon: 0,
-        },
-        {
-          avatarID: "4",
-          displayName: "Player 4",
-          id: "3",
-          numCardsOnHand: 13,
-          position: 3,
-          currentCardOnTable: null,
-          numTricksWon: 0,
-        },
-      ],
+  if (error) {
+    toast.error(error.message);
+    return <>404</>;
+  }
 
-      currentBidderIndex: 0,
-      highestBid: {number: 1, suit: "♣"},
-      bidHistory: [
-        {
-          p0: {bid: null, info: {displayName: "Player 1", id: "0"}},
-          p1: {
-            bid: {number: 1, suit: "♣"},
-            info: {displayName: "Player 2", id: "1"},
-          },
-          p2: {bid: null, info: {displayName: "Player 3", id: "2"}},
-          p3: {bid: null, info: {displayName: "Player 4", id: "3"}},
-        },
-        {
-          p0: {bid: null, info: {displayName: "Player 1", id: "0"}},
-          p1: {bid: null, info: {displayName: "Player 2", id: "1"}},
-          p2: {bid: null, info: {displayName: "Player 3", id: "2"}},
-          p3: {bid: null, info: {displayName: "Player 4", id: "3"}},
-        },
-        {
-          p0: {bid: null, info: {displayName: "Player 1", id: "0"}},
-          p1: {bid: null, info: {displayName: "Player 2", id: "1"}},
-          p2: {bid: null, info: {displayName: "Player 3", id: "2"}},
-          p3: {bid: null, info: {displayName: "Player 4", id: "3"}},
-        },
-        {
-          p0: {bid: null, info: {displayName: "Player 1", id: "0"}},
-          p1: {bid: null, info: {displayName: "Player 2", id: "1"}},
-          p2: {bid: null, info: {displayName: "Player 3", id: "2"}},
-          p3: {bid: null, info: {displayName: "Player 4", id: "3"}},
-        },
-        {
-          p0: {bid: null, info: {displayName: "Player 1", id: "0"}},
-          p1: {bid: null, info: {displayName: "Player 2", id: "1"}},
-          p2: {bid: null, info: {displayName: "Player 3", id: "2"}},
-          p3: {bid: null, info: {displayName: "Player 4", id: "3"}},
-        },
-      ],
-    },
-
-    // trickTakingPhase: {
-    //   currentPlayerIndex: 0,
-    //   leadPlayerIndex: 0,
-    //   trumpSuit: "♠",
-    //   gameroomPlayersList: [
-    //     {
-    //       avatarID: "1",
-    //       displayName: "Player 1",
-    //       id: "1",
-    //       numCardsOnHand: 13,
-    //       position: 0,
-    //       currentCardOnTable: {stringValue: "A", suit: "♠", value: 14},
-    //       numTricksWon: 0,
-    //     },
-    //     {
-    //       displayName: "Player 2",
-    //       id: "2",
-    //       avatarID: "2",
-    //       numCardsOnHand: 13,
-    //       position: 1,
-    //       currentCardOnTable: {stringValue: "K", suit: "♠", value: 13},
-    //       numTricksWon: 0,
-    //     },
-    //     {
-    //       displayName: "Player 3",
-    //       id: "3",
-    //       avatarID: "3",
-    //       numCardsOnHand: 13,
-    //       position: 2,
-    //       currentCardOnTable: {stringValue: "Q", suit: "♠", value: 12},
-    //       numTricksWon: 0,
-    //     },
-    //     {
-    //       displayName: "Player 4",
-    //       id: "4",
-    //       avatarID: "4",
-    //       numCardsOnHand: 13,
-    //       position: 3,
-    //       currentCardOnTable: {stringValue: "J", suit: "♠", value: 11},
-    //       numTricksWon: 0,
-    //     },
-    //   ],
-    // },
-    trickTakingPhase: null,
-  };
+  console.log({gameState});
 
   // TODO: Obtain playerID from AuthContext
   const playerID = "0";

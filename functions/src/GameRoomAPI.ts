@@ -36,12 +36,12 @@ export const createGameRoom = functions.https.onCall(async (data: void, context)
 
   // Check if the player is already in a room
   if (playerProfileData.roomID) {
-    console.log("hi");
     throw new functions.https.HttpsError("already-exists", "You can't create a room when you're already in one :/");
   }
 
+  const roomID = nanoid(9);
   const gameRoomData: GameState = {
-    roomID: nanoid(9),
+    roomID,
     hostID: context.auth.uid,
     createdAt: new Date(),
     settings: {
@@ -53,6 +53,7 @@ export const createGameRoom = functions.https.onCall(async (data: void, context)
     players: [
       {
         ...playerProfileData,
+        roomID,
         isReady: false,
         isHost: true,
         position: 0,
@@ -147,7 +148,7 @@ export const joinGameRoom = functions.https.onCall(async (roomID: string, contex
 
   await Promise.all([
     gameRoomRef.update({
-      players: admin.firestore.FieldValue.arrayUnion(playerData),
+      players: gameRoomData.players.concat(playerData),
     }),
     playerProfileRef.update({
       roomID,

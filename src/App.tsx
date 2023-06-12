@@ -26,7 +26,7 @@ function App() {
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/lobby" element={<Lobby />} />
         <Route path="/party/:roomID" element={<GameParty />} />
-        <Route path="/gameroom" element={<GameRoomComponent />} />
+        <Route path="/gameroom/:roomID" element={<GameRoomComponent />} />
         <Route path="/test" element={<Test />} />
         <Route path="*" element={<div>404</div>} />
       </Routes>
