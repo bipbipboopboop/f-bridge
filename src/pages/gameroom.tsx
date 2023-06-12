@@ -3,7 +3,7 @@ import Chatbox from "../components/chat/chatbox";
 import GamePanel from "../components/gameroom/game.panel";
 
 import "./gameroom.css";
-import GameStateInfo from "../components/gameroom/game_state_info/gamestate.info";
+// import GameStateInfo from "../components/gameroom/game_state_info/gamestate.info";
 import {toast} from "react-toastify";
 
 const GameRoomComponent = () => {
