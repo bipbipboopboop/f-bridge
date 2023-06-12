@@ -5,12 +5,24 @@ import PlayerBox from "./player_box";
 
 import "./player_panel.css";
 import GreenButton from "../buttons/button.green";
+import useFunctions from "../../hooks/useFunctions";
+import {useAuth} from "../../hooks/useAuth";
+import Loading from "../loading";
+import {toast} from "react-toastify";
+import {useNavigate} from "react-router-dom";
 
 interface PlayerPanelProps {
   players: LobbyPlayerProfile[];
 }
 
 const PlayerPanel: React.FC<PlayerPanelProps> = ({players}) => {
+  const {playerProfile} = useAuth();
+  const {leaveGameRoom, isLoading, error} = useFunctions();
+  const navigate = useNavigate();
+
+  if (isLoading) return <Loading />;
+  if (error) toast.error(error.message);
+
   return (
     <>
       <h4>Players</h4>
@@ -30,7 +42,15 @@ const PlayerPanel: React.FC<PlayerPanelProps> = ({players}) => {
         </div>
         <div className="d-flex justify-content-center">
           <OrangeButton onClick={() => alert("start game")}>Start Game</OrangeButton>
-          <GreenButton>Leave Room</GreenButton>
+          <GreenButton
+            onClick={async () => {
+              console.log({roomID: playerProfile?.roomID});
+              await leaveGameRoom(playerProfile?.roomID);
+              navigate("/lobby");
+            }}
+          >
+            Leave Room
+          </GreenButton>
         </div>
       </div>
     </>
