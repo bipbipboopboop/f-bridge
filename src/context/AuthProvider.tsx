@@ -1,13 +1,15 @@
 import {createContext, ReactNode, useEffect, useState} from "react";
+import {toast} from "react-toastify";
+import {useAuthState} from "react-firebase-hooks/auth";
+import {useDocumentData} from "react-firebase-hooks/firestore";
 
-import {auth} from "../firebase";
+import {auth, firestore} from "../firebase";
 import {signInAnonymously, User} from "firebase/auth";
 import {PlayerProfile} from "types/PlayerProfile";
 
-import {useAuthState} from "react-firebase-hooks/auth";
 import Loading from "../components/loading";
 import useFunctions from "../hooks/useFunctions";
-import {toast} from "react-toastify";
+import {doc, DocumentReference} from "firebase/firestore";
 
 export const AuthContext = createContext<AuthContextValue>({
   user: null,
@@ -21,9 +23,14 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
    */
   const [firebaseUser, isLoadingFirebaseUser, firebaseUserError] = useAuthState(auth);
 
-  const {createPlayerProfile, retrieveMyPlayerProfile, isLoading, error} = useFunctions();
+  const {createPlayerProfile, isLoading, error} = useFunctions();
 
-  const [playerProfile, setPlayerProfile] = useState<PlayerProfile | null>(null);
+  const gamePlayerRef = doc(
+    firestore,
+    `playerProfiles/${firebaseUser?.uid || "ERROR"}`
+  ) as DocumentReference<PlayerProfile>;
+
+  const [playerProfile, isLoadingPlayerProfile] = useDocumentData<PlayerProfile>(gamePlayerRef);
 
   // Signs the user in anonymously if they don't log in and creates a player profile for them.
   // Otherwise, they are already logged in and we can just retrieve their player profile.
@@ -34,16 +41,10 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
 
       if (!firebaseUser) {
         await signInAnonymously(auth);
+        return;
       }
 
-      if (firebaseUser) {
-        const playerProfile = (await retrieveMyPlayerProfile())?.data;
-
-        if (playerProfile) {
-          setPlayerProfile(playerProfile);
-          return;
-        }
-
+      if (!playerProfile && !isLoadingPlayerProfile) {
         const newUserInfo = {
           displayName: firebaseUser.displayName,
           email: firebaseUser.email,
@@ -52,8 +53,7 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
           uid: firebaseUser.uid,
           providerId: firebaseUser.providerId,
         };
-        const newPlayerProfile = (await createPlayerProfile(newUserInfo))!.data;
-        setPlayerProfile(newPlayerProfile);
+        await createPlayerProfile(newUserInfo);
       }
     })();
     return () => {};
@@ -61,7 +61,7 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
 
   const authContextValue: AuthContextValue = {
     user: firebaseUser || null,
-    playerProfile: playerProfile,
+    playerProfile: playerProfile || null,
     isLoggingIn: isLoadingFirebaseUser || isLoading,
   };
 
