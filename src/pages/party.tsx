@@ -6,87 +6,33 @@ import RoomSettings from "../components/party/settings";
 import Chatbox from "../components/chat/chatbox";
 
 import "./party.css";
+import {firestore} from "../firebase";
+import {DocumentReference, doc} from "firebase/firestore";
+import {useParams} from "react-router-dom";
+import {useDocumentData} from "react-firebase-hooks/firestore";
+import Loading from "../components/loading";
+import {toast} from "react-toastify";
 
 const GameParty = () => {
-  const room: GameState = {
-    roomID: "roomID",
-    biddingPhase: null,
-    hostID: "host",
-    createdAt: new Date(),
-    invitedID: [],
-    players: [],
-    trickTakingPhase: null,
+  const {roomID} = useParams();
+  const roomRef = doc(firestore, "gameRooms", roomID || "ERROR") as DocumentReference<GameState>;
+  const [gameState, isLoading, error] = useDocumentData<GameState>(roomRef);
 
-    settings: {
-      isInviteOnly: false,
-      isSpectatorAllowed: false,
-    },
+  if (isLoading) return <Loading />;
+  if (!gameState) return <>404</>;
 
-    status: "Waiting",
-  };
-
-  const players: LobbyPlayerProfile[] = [
-    {
-      id: "1",
-      email: "player1@example.com",
-      displayName: "Player 1",
-      country: "International",
-      avatarID: "1",
-      numOfGamesWon: 10,
-      numOfGamesPlayed: 20,
-      roomID: null,
-      position: 1,
-      isReady: true,
-      isHost: true,
-    },
-    {
-      id: "2",
-      email: "player2@example.com",
-      displayName: "Player 2",
-      country: "International",
-      avatarID: "2",
-      numOfGamesWon: 5,
-      numOfGamesPlayed: 15,
-      roomID: null,
-      position: 2,
-      isReady: false,
-      isHost: false,
-    },
-    {
-      id: "3",
-      email: "player3@example.com",
-      displayName: "Player 3",
-      country: "International",
-      avatarID: "3",
-      numOfGamesWon: 2,
-      numOfGamesPlayed: 10,
-      roomID: null,
-      position: 3,
-      isReady: true,
-      isHost: false,
-    },
-    {
-      id: "4",
-      email: "player4@example.com",
-      displayName: "Player 4",
-      country: "International",
-      avatarID: "4",
-      numOfGamesWon: 8,
-      numOfGamesPlayed: 18,
-      roomID: null,
-      position: 4,
-      isReady: true,
-      isHost: false,
-    },
-  ];
+  if (error) {
+    toast.error(error.message);
+    return <>404</>;
+  }
 
   return (
     <div className="w-100 h-100 d-flex mb-4 justify-content-center">
       <div className="game-room-left">
-        <RoomSettings room={room} />
+        <RoomSettings room={gameState} />
       </div>
       <div className="game-room-middle">
-        <PlayerPanel players={players} />
+        <PlayerPanel players={gameState.players} />
       </div>
       <div className="game-room-right">
         <Chatbox />

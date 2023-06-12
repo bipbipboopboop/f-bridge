@@ -6,6 +6,7 @@ import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from "@t
 
 import {GameState} from "types/GameState";
 import Loading from "../loading";
+import {useNavigate} from "react-router-dom";
 
 const RoomTable = (props: {gameRoomList: GameState[]}) => {
   const columnHelper = createColumnHelper<GameState>();
@@ -41,6 +42,7 @@ const RoomTable = (props: {gameRoomList: GameState[]}) => {
 
   const {gameRoomList} = props;
   const {joinGameRoom, isLoading, error} = useFunctions();
+  const navigate = useNavigate();
 
   const table = useReactTable({
     data: gameRoomList,
@@ -56,8 +58,8 @@ const RoomTable = (props: {gameRoomList: GameState[]}) => {
   return (
     <table className="lobby-table">
       <thead>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id}>
+        {table.getHeaderGroups().map((headerGroup, index) => (
+          <tr key={index}>
             {headerGroup.headers.map((header, index) => (
               <th key={index}>
                 {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
@@ -67,19 +69,20 @@ const RoomTable = (props: {gameRoomList: GameState[]}) => {
         ))}
       </thead>
       <tbody>
-        {table.getRowModel().rows.map((row) => (
+        {table.getRowModel().rows.map((row, index) => (
           <tr
-            key={row.id}
+            key={index}
             onClick={async () => {
               const roomID = row.original.roomID;
               const success = await joinGameRoom(roomID);
               if (success) {
                 toast.success("Successfully joined room");
+                navigate(`/party/${roomID}`);
               }
             }}
           >
-            {row.getVisibleCells().map((cell) => (
-              <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+            {row.getVisibleCells().map((cell, index) => (
+              <td key={index}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
             ))}
           </tr>
         ))}
