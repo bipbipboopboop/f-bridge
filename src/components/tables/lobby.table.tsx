@@ -1,11 +1,6 @@
 import PlayerSVG from "../../assets/player_assets/player.svg";
 import "./lobby.table.css";
-import {
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from "@tanstack/react-table";
 
 import {GameState} from "types/GameState";
 
@@ -15,7 +10,7 @@ const RoomTable = (props: {gameRoomList: GameState[]}) => {
   const columnHelper = createColumnHelper<GameState>();
 
   const columns = [
-    columnHelper.accessor("biddingPhase", {
+    columnHelper.accessor("roomID", {
       header: () => <span>Room ID</span>,
       cell: (info) => info.getValue(),
     }),
@@ -33,9 +28,7 @@ const RoomTable = (props: {gameRoomList: GameState[]}) => {
             {[0, 1, 2, 3].map((index) => (
               <img
                 key={index}
-                className={`lobby_table_data_players-${
-                  plyrList[index] ? "occupied" : "vacant"
-                }`}
+                className={`lobby_table_data_players-${plyrList[index] ? "occupied" : "vacant"}`}
                 src={PlayerSVG}
               />
             ))}
@@ -58,12 +51,7 @@ const RoomTable = (props: {gameRoomList: GameState[]}) => {
           <tr key={headerGroup.id}>
             {headerGroup.headers.map((header) => (
               <th key={header.id}>
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
+                {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
               </th>
             ))}
           </tr>
@@ -73,9 +61,7 @@ const RoomTable = (props: {gameRoomList: GameState[]}) => {
         {table.getRowModel().rows.map((row) => (
           <tr key={row.id}>
             {row.getVisibleCells().map((cell) => (
-              <td key={cell.id}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </td>
+              <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
             ))}
           </tr>
         ))}

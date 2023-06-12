@@ -3,13 +3,7 @@ admin.initializeApp();
 
 import {retrieveMyPlayerProfile, createPlayerProfile} from "./PlayerAPI";
 
-import {
-  createGameRoom,
-  joinGameRoom,
-  leaveGameRoom,
-  startGame,
-  toggleReady,
-} from "./GameRoomAPI";
+import {createGameRoom, joinGameRoom, leaveGameRoom, startGame, toggleReady} from "./GameRoomAPI";
 
 export {
   /**

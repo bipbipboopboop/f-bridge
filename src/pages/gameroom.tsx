@@ -9,6 +9,7 @@ import {toast} from "react-toastify";
 const GameRoomComponent = () => {
   // TODO: Get from cloud function
   const gameState: GameState = {
+    roomID: "roomID",
     hostID: "0",
     createdAt: new Date(),
     settings: {
@@ -200,8 +201,7 @@ const GameRoomComponent = () => {
 
   // TODO: Obtain playerID from AuthContext
   const playerID = "0";
-  const isPlayerInRoom =
-    gameState.players.filter((player) => player.id === playerID).length > 0;
+  const isPlayerInRoom = gameState.players.filter((player) => player.id === playerID).length > 0;
 
   if (!isPlayerInRoom) {
     toast.error("You are not in this room!");
