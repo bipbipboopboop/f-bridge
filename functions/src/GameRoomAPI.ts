@@ -178,64 +178,60 @@ export const leaveGameRoom = functions.https.onCall(async (roomID: string, conte
     throw new functions.https.HttpsError("unauthenticated", "User is not authenticated.");
   }
 
-  // Get the player's profile
   const playerProfileRef = admin
     .firestore()
     .collection("playerProfiles")
     .doc(context.auth.uid) as DocumentReference<PlayerProfile>;
-
-  const playerProfileSnapshot = await playerProfileRef.get();
-  const playerProfileData = playerProfileSnapshot!.data() as PlayerProfile;
-
-  // Get the game room
   const gameRoomRef = admin.firestore().collection("gameRooms").doc(roomID) as DocumentReference<GameState>;
-  const gameRoomSnapshot = await gameRoomRef.get();
-  const gameRoomData = gameRoomSnapshot.data() as GameState;
 
-  // Check if the player is in this room
-  if (playerProfileData.roomID !== roomID) {
-    throw new functions.https.HttpsError("failed-precondition", "Player is not in this room.");
+  const [playerProfileSnapshot, gameRoomSnapshot] = await Promise.all([playerProfileRef.get(), gameRoomRef.get()]);
+
+  const playerProfileData = playerProfileSnapshot.data();
+  const gameRoomData = gameRoomSnapshot.data();
+
+  // Check if the player exists and is in this room
+  if (!playerProfileData || playerProfileData.roomID !== roomID) {
+    throw new functions.https.HttpsError("failed-precondition", "You can't leave a room you don't belong to");
   }
 
-  // Check if the room is in waiting status
-  if (gameRoomData.status !== "Waiting") {
-    throw new functions.https.HttpsError(
-      "failed-precondition",
-      "Cannot leave this room because the game has either already started or ended."
-    );
+  // Check if the game room exists
+  if (!gameRoomData) {
+    throw new functions.https.HttpsError("not-found", "This game no longer exists :(");
   }
 
-  // Check if the player is the host
-  if (gameRoomData.hostID === context.auth.uid) {
-    // Check if the player is the only player
-    if (gameRoomData.players.length === 1) {
-      // Delete the game room
-      await gameRoomRef.delete();
-    } else {
-      // Pass the host to another player
-      const newHostID = gameRoomData.players[1].id;
+  // Check if the player is the only one in the room
+  if (gameRoomData.players.length === 1) {
+    await Promise.all([
+      gameRoomRef.delete(),
+      playerProfileRef.update({
+        roomID: null,
+      }),
+    ]);
+    return;
+  }
 
-      // Recalculate position
-      const newPlayers = gameRoomData.players
-        .filter((player) => player.id !== context!.auth!.uid)
-        .map((player, index) => {
-          return {
-            ...player,
-            position: index,
-          };
-        });
+  const isPlayerAHost = gameRoomData.hostID === context.auth.uid;
+  const remainingPlayers = gameRoomData.players
+    .filter((player) => player.id !== context.auth!.uid)
+    .map((player, index) => ({
+      ...player,
+      position: index,
+    }));
 
-      await gameRoomRef.update({
-        hostID: newHostID,
-        players: newPlayers,
-      });
-    }
-
-    // Update the player's profile
-    await playerProfileRef.update({
-      roomID: "",
+  if (isPlayerAHost) {
+    await gameRoomRef.update({
+      hostID: remainingPlayers[0]?.id,
+      players: remainingPlayers,
+    });
+  } else {
+    await gameRoomRef.update({
+      players: remainingPlayers,
     });
   }
+
+  await playerProfileRef.update({
+    roomID: null,
+  });
 });
 
 /**
