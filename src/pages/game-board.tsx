@@ -3,7 +3,7 @@ import Chatbox from "../components/chat/chatbox";
 import GamePanel from "../components/game-board/game-panel";
 
 import "./game-board.css";
-// import GameStateInfo from "../components/gameroom/game_state_info/gamestate.info";
+
 import {toast} from "react-toastify";
 import {useDocumentData} from "react-firebase-hooks/firestore";
 import {DocumentReference, doc} from "firebase/firestore";
@@ -11,7 +11,7 @@ import {firestore} from "../firebase";
 import {useParams} from "react-router-dom";
 import Loading from "../components/loading";
 
-const GameRoomComponent = () => {
+const GameBoard = () => {
   const {roomID} = useParams();
   const roomRef = doc(firestore, "rooms", roomID || "ERROR") as DocumentReference<GameState>;
   const [gameState, isLoading, error] = useDocumentData<GameState>(roomRef);
@@ -54,4 +54,4 @@ const GameRoomComponent = () => {
   );
 };
 
-export default GameRoomComponent;
+export default GameBoard;
