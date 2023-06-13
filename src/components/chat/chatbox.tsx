@@ -1,43 +1,33 @@
-import {Message} from "types/Chat";
-import GreenButton from "../buttons/button.green";
-import "./chat.css";
-import ChatMessage from "./chat.message";
 import {memo} from "react";
+import {useCollectionData} from "react-firebase-hooks/firestore";
+import {useParams} from "react-router-dom";
+
+import "./chat.css";
+import {Message} from "types/Chat";
+import ChatMessage from "./chat.message";
+
+import {CollectionReference, collection, orderBy, query} from "firebase/firestore";
+import {firestore} from "../../firebase";
+import ChatboxInput from "./chatbox-input";
 
 const Chatbox = () => {
-  const messageList: Message[] = [
-    {
-      playerName: "Player 1",
-      text: "Hi",
-      createdAt: new Date(),
-      uid: "2",
-    },
-    {
-      playerName: "Player 2",
-      text: "Hi",
-      createdAt: new Date(),
-      uid: "2",
-    },
-    {
-      playerName: "Player 1",
-      text: "Wassup",
-      createdAt: new Date(),
-      uid: "2",
-    },
-  ];
+  const {roomID} = useParams();
+  const messagesCollection = collection(firestore, `gameRooms/${roomID}/messages`) as CollectionReference<Message>;
+  const messagesQuery = query(messagesCollection, orderBy("createdAt", "asc"));
+
+  const [messageList, isLoading, error] = useCollectionData<Message>(messagesQuery);
+
   console.log("Chat loaded");
+
   return (
     <div className="chatbox">
       <h4>Chat</h4>
-      <div className="message-list">
-        {messageList.map((message, index) => (
+      <div className="h-75" style={{overflowY: "scroll"}}>
+        {messageList?.map((message, index) => (
           <ChatMessage message={message} key={index} />
         ))}
       </div>
-      <div className="chatbox-bottom">
-        <input type="text" className="textbox" />
-        <GreenButton>Send</GreenButton>
-      </div>
+      <ChatboxInput />
     </div>
   );
 };

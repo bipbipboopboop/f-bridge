@@ -5,6 +5,8 @@ import {retrieveMyPlayerProfile, createPlayerProfile} from "./PlayerAPI";
 
 import {createGameRoom, joinGameRoom, leaveGameRoom, startGame, toggleReady} from "./GameRoomAPI";
 
+import {sendMessage} from "./ChatAPI";
+
 export {
   /**
    * PLAYER API
@@ -20,4 +22,9 @@ export {
   leaveGameRoom,
   startGame,
   toggleReady,
+
+  /**
+   * CHAT API
+   */
+  sendMessage,
 };
