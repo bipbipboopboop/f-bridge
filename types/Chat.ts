@@ -4,5 +4,5 @@ export interface Message {
   playerName: string;
 
   text: string;
-  createdAt: Date;
+  createdAt: string;
 }
