@@ -42,7 +42,7 @@ const Lobby = () => {
                 const gameRoom = (await createGameRoom())?.data;
                 if (gameRoom) {
                   toast.success("Room created!");
-                  navigate(`/party/${gameRoom.roomID}`);
+                  navigate(`/gameroom/${gameRoom.roomID}`);
                 }
               }}
             >

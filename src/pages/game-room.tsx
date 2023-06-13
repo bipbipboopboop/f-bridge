@@ -1,5 +1,4 @@
 import {GameState} from "types/GameState";
-import {LobbyPlayerProfile} from "types/PlayerProfile";
 
 import PlayerPanel from "../components/game-room/player-panel";
 import RoomSettings from "../components/game-room/settings";
@@ -13,7 +12,7 @@ import {useDocumentData} from "react-firebase-hooks/firestore";
 import Loading from "../components/loading";
 import {toast} from "react-toastify";
 
-const GameParty = () => {
+const GameRoom = () => {
   const {roomID} = useParams();
   const roomRef = doc(firestore, "gameRooms", roomID || "ERROR") as DocumentReference<GameState>;
   const [gameState, isLoading, error] = useDocumentData<GameState>(roomRef);
@@ -41,4 +40,4 @@ const GameParty = () => {
   );
 };
 
-export default GameParty;
+export default GameRoom;

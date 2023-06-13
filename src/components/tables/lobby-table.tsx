@@ -77,7 +77,7 @@ const RoomTable = (props: {gameRoomList: GameState[]}) => {
               const success = await joinGameRoom(roomID);
               if (success) {
                 toast.success("Successfully joined room");
-                navigate(`/party/${roomID}`);
+                navigate(`/gameroom/${roomID}`);
               }
             }}
           >

@@ -7,8 +7,8 @@ import Loading from "./components/loading";
 import Navbar from "./components/navbar";
 
 import Lobby from "./pages/lobby";
-import GameRoomComponent from "./pages/game-board";
-import GameParty from "./pages/game-room";
+import GameBoard from "./pages/game-board";
+import GameRoom from "./pages/game-room";
 import Home from "./pages/home";
 import Leaderboard from "./pages/leaderboard";
 import Test from "./pages/Test";
@@ -25,8 +25,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/lobby" element={<Lobby />} />
-        <Route path="/party/:roomID" element={<GameParty />} />
-        <Route path="/gameroom/:roomID" element={<GameRoomComponent />} />
+        <Route path="/gameroom/:roomID" element={<GameRoom />} />
+        <Route path="/gameboard/:roomID" element={<GameBoard />} />
         <Route path="/test" element={<Test />} />
         <Route path="*" element={<div>404</div>} />
       </Routes>
