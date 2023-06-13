@@ -13,16 +13,14 @@ import {AuthProvider} from "./context/AuthProvider";
 
 import App from "./App";
 
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
+const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <>
     {/* <React.StrictMode> */}
     <AuthProvider>
       <BrowserRouter>
         <App />
-        <ToastContainer />
+        <ToastContainer limit={2} autoClose={1000} />
       </BrowserRouter>
     </AuthProvider>
     {/* </React.StrictMode> */}
