@@ -1,6 +1,6 @@
 import {GameState} from "types/GameState";
-import BiddingInfo from "./bidding.info";
-import TrickTakingInfo from "./tricktaking.info";
+import BiddingInfo from "./bidding-info";
+import TrickTakingInfo from "./tricktaking-info";
 
 const GameStateInfo = (props: {gameState: GameState}) => {
   const gameStateLookup = {

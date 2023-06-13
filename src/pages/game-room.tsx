@@ -1,11 +1,11 @@
 import {GameState} from "types/GameState";
 import {LobbyPlayerProfile} from "types/PlayerProfile";
 
-import PlayerPanel from "../components/party/player_panel";
-import RoomSettings from "../components/party/settings";
+import PlayerPanel from "../components/game-room/player-panel";
+import RoomSettings from "../components/game-room/settings";
 import Chatbox from "../components/chat/chatbox";
 
-import "./party.css";
+import "./game-room.css";
 import {firestore} from "../firebase";
 import {DocumentReference, doc} from "firebase/firestore";
 import {useParams} from "react-router-dom";
