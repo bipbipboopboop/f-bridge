@@ -253,53 +253,44 @@ export const toggleReady = functions.https.onCall(async (roomID: string, context
     throw new functions.https.HttpsError("unauthenticated", "User is not authenticated.");
   }
 
-  try {
-    // Get the player's profile
-    const playerProfileRef = admin.firestore().collection("playerProfiles").doc(context.auth.uid);
-    const playerProfileSnapshot = await playerProfileRef.get();
-    const playerProfileData = playerProfileSnapshot.data() as PlayerProfile;
+  // Get the player's profile
+  const playerProfileRef = admin.firestore().collection("playerProfiles").doc(context.auth.uid);
+  const playerProfileSnapshot = await playerProfileRef.get();
+  const playerProfileData = playerProfileSnapshot.data() as PlayerProfile;
 
-    // Get the game room
-    const gameRoomRef = admin.firestore().collection("gameRooms").doc(roomID);
-    const gameRoomSnapshot = await gameRoomRef.get();
-    const gameRoomData = gameRoomSnapshot.data() as GameState;
+  // Get the game room
+  const gameRoomRef = admin.firestore().collection("gameRooms").doc(roomID);
+  const gameRoomSnapshot = await gameRoomRef.get();
+  const gameRoomData = gameRoomSnapshot.data() as GameState;
 
-    // Check if the player is already in a game
-    if (gameRoomData.status !== "Waiting") {
-      throw new functions.https.HttpsError("already-exists", "Game has already started or ended.");
-    }
+  // Check if the game room exists
+  if (!gameRoomData) throw new functions.https.HttpsError("not-found", "This game no longer exists :(");
 
-    // Check if the player is in the room
-    if (playerProfileData.roomID !== roomID) {
-      throw new functions.https.HttpsError("failed-precondition", "Player is not in the specified room.");
-    }
+  // Check if the player is already in a game
+  if (gameRoomData.status !== "Waiting")
+    throw new functions.https.HttpsError("already-exists", "Game has already started or ended.");
 
-    // Find the player in the game room
-    const playerIndex = gameRoomData.players.findIndex((player) => player.id === context.auth!.uid);
+  // Check if the player is in the room
+  if (playerProfileData.roomID !== roomID)
+    throw new functions.https.HttpsError("failed-precondition", "Player is not in the specified room.");
 
-    // Check if the player is in the game room
-    if (playerIndex === -1) {
-      throw new functions.https.HttpsError("failed-precondition", "Player is not in the specified room.");
-    }
+  // Find the player in the game room
+  const playerIndex = gameRoomData.players.findIndex((player) => player.id === context.auth!.uid);
 
-    // Check if the game room exists
-    if (!gameRoomSnapshot.exists) {
-      throw new functions.https.HttpsError("not-found", "Game room does not exist.");
-    }
+  // Check if the player is in the game room
+  if (playerIndex === -1)
+    throw new functions.https.HttpsError("failed-precondition", "Player is not in the specified room.");
 
-    // Toggle the player's ready status
-    const updatedGameRoom = produce(gameRoomData, (draftGameRoom) => {
-      const player = draftGameRoom.players[playerIndex];
-      player.isReady = !player.isReady;
-    });
+  // Toggle the player's ready status
+  const updatedGameRoom = produce(gameRoomData, (draftGameRoom) => {
+    const player = draftGameRoom.players[playerIndex];
+    player.isReady = !player.isReady;
+  });
 
-    // Update the game room with the updated player list
-    await gameRoomRef.update(updatedGameRoom);
+  // Update the game room with the updated player list
+  await gameRoomRef.update(updatedGameRoom);
 
-    return;
-  } catch (error) {
-    throw new functions.https.HttpsError("internal", "Failed to toggle the ready status.", error);
-  }
+  return;
 });
 
 /**
