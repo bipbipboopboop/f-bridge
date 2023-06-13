@@ -1,4 +1,5 @@
-.playing-card {
+.playing-card-red,
+.playing-card-black {
   border: 3px solid black;
   background-color: white;
   color: #000;
@@ -11,7 +12,12 @@
   align-items: center;
 }
 
-.playing-card .suit {
+.playing-card-red {
+  color: red;
+}
+
+.playing-card-black .suit,
+.playing-card-red .suit {
   height: 30%;
   width: 100%;
   font-size: 2rem;
@@ -20,7 +26,8 @@
   justify-content: center;
 }
 
-.playing-card .string-value {
+.playing-card-black .string-value,
+.playing-card-red .string-value {
   height: 70%;
   width: 100%;
   display: flex;
@@ -28,6 +35,7 @@
   align-items: center;
 }
 
-.playing-card:hover {
+.playing-card-black:hover,
+.playing-card-red:hover {
   transform: translate(0, -10px);
 }
