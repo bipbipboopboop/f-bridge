@@ -350,7 +350,15 @@ export const startGame = functions.https.onCall(async (data: void, context) => {
   const biddingPhase: BiddingPhase = {
     currentBidderIndex: 0,
     highestBid: null,
-    gameroomPlayersList: [], // TODO: Populate it later
+    gameroomPlayersList: gameRoomData.players.map((player) => ({
+      id: player.id,
+      displayName: player.displayName,
+      avatarID: player.avatarID,
+      position: player.position,
+      numCardsOnHand: 13,
+      numTricksWon: 0,
+      currentCardOnTable: null,
+    })),
     bidHistory: [
       {
         p0: {bid: null, info: {displayName: "Player 1", id: "1"}},

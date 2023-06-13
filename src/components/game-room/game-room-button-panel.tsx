@@ -6,7 +6,7 @@ import {useParams} from "react-router-dom";
 
 const GameRoomButtonPanel = (props: {gameState: GameState}) => {
   const {playerProfile} = useAuth();
-  const {toggleReady} = useFunctions();
+  const {toggleReady, startGame} = useFunctions();
   const {roomID} = useParams();
 
   const {gameState} = props;
@@ -21,7 +21,13 @@ const GameRoomButtonPanel = (props: {gameState: GameState}) => {
   if (isPlayerAHost) {
     return (
       <div className="d-flex justify-content-center">
-        <OrangeButton onClick={() => alert("start game")} disabled={!isGameReady}>
+        <OrangeButton
+          onClick={async () => {
+            await toggleReady(roomID);
+            await startGame();
+          }}
+          disabled={!isGameReady}
+        >
           Start Game
         </OrangeButton>
       </div>

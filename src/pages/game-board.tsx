@@ -8,27 +8,35 @@ import {toast} from "react-toastify";
 import {useDocumentData} from "react-firebase-hooks/firestore";
 import {DocumentReference, doc} from "firebase/firestore";
 import {firestore} from "../firebase";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import Loading from "../components/loading";
+import {useAuth} from "../hooks/useAuth";
 
 const GameBoard = () => {
   const {roomID} = useParams();
-  const roomRef = doc(firestore, "rooms", roomID || "ERROR") as DocumentReference<GameState>;
+  const {playerProfile} = useAuth();
+  const navigate = useNavigate();
+
+  const roomRef = doc(firestore, "gameRooms", roomID || "ERROR") as DocumentReference<GameState>;
   const [gameState, isLoading, error] = useDocumentData<GameState>(roomRef);
 
   if (isLoading) return <Loading />;
-  if (!gameState) return <Loading />;
+  if (!gameState) {
+    toast.error("You are not allowed in this room!");
+    navigate("/lobby");
+    return <></>;
+  }
 
-  if (error) {
-    toast.error(error.message);
-    return <>404</>;
+  const isPlayerAllowedIn =
+    gameState.players.some((player) => player.id === playerProfile?.id) || gameState.settings.isSpectatorAllowed;
+  if (!isPlayerAllowedIn || error) {
+    toast.error("You are not allowed in this room");
+    navigate("/lobby");
   }
 
   console.log({gameState});
 
-  // TODO: Obtain playerID from AuthContext
-  const playerID = "0";
-  const isPlayerInRoom = gameState.players.filter((player) => player.id === playerID).length > 0;
+  const isPlayerInRoom = gameState.players.some((player) => player.id === playerProfile?.id);
 
   if (!isPlayerInRoom) {
     toast.error("You are not in this room!");

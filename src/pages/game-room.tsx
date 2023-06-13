@@ -38,6 +38,10 @@ const GameRoom = () => {
     navigate("/lobby");
   }
 
+  if (gameState.status === "Bidding" || gameState.status === "Taking Trick") {
+    navigate(`/gameboard/${roomID}`);
+  }
+
   return (
     <div className="w-100 h-100 d-flex mb-4 justify-content-center">
       <div className="game-room-left">
