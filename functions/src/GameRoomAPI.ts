@@ -218,6 +218,8 @@ export const leaveGameRoom = functions.https.onCall(async (roomID: string, conte
       position: index,
     }));
 
+  remainingPlayers[0].isHost = true;
+
   if (isPlayerAHost) {
     await gameRoomRef.update({
       hostID: remainingPlayers[0]?.id,
