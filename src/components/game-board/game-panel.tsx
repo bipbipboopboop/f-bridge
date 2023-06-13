@@ -16,12 +16,6 @@ import MainGameplayArea from "./gameplay_area/gameplay_area.main";
 const GamePanel = (props: {gameState: GameState}) => {
   const {gameState} = props;
 
-  const phaseLookup = {
-    Bidding: gameState?.biddingPhase,
-    "Taking Trick": gameState?.trickTakingPhase,
-    Waiting: null,
-  };
-
   const gamePlayersListLookup = {
     Bidding: gameState?.biddingPhase?.gameroomPlayersList || [],
     "Taking Trick": gameState?.trickTakingPhase?.gameroomPlayersList || [],
@@ -30,8 +24,7 @@ const GamePanel = (props: {gameState: GameState}) => {
 
   const players: GameRoomPlayer[] = gamePlayersListLookup[gameState.status];
 
-  const currentGamePhase = phaseLookup[gameState.status];
-
+  // TODO: change current player index based on status
   return (
     <div className="game-panel">
       <div className="top">

@@ -11,28 +11,28 @@ const BiddingTable = (props: {biddingPhase: BiddingPhase}) => {
 
   const columns = [
     columnHelper.accessor("p0", {
-      header: () => <span>{biddingPhase.gameroomPlayersList.at(0)!.displayName}</span>,
+      header: () => <span>{biddingPhase.gameroomPlayersList[0]!.displayName}</span>,
       cell: (info) => {
         const bid = info.getValue().bid;
         return bid ? `${bid.number + bid.suit}` : "Pass";
       },
     }),
     columnHelper.accessor("p1", {
-      header: () => <span>{biddingPhase.gameroomPlayersList.at(1)!.displayName}</span>,
+      header: () => <span>{biddingPhase.gameroomPlayersList[1]!.displayName}</span>,
       cell: (info) => {
         const bid = info.getValue().bid;
         return bid ? `${bid.number + bid.suit}` : "Pass";
       },
     }),
     columnHelper.accessor("p2", {
-      header: () => <span>{biddingPhase?.gameroomPlayersList.at(2)!.displayName}</span>,
+      header: () => <span>{biddingPhase?.gameroomPlayersList[2]!.displayName}</span>,
       cell: (info) => {
         const bid = info.getValue().bid;
         return bid ? `${bid.number + bid.suit}` : "Pass";
       },
     }),
     columnHelper.accessor("p3", {
-      header: () => <span>{biddingPhase.gameroomPlayersList.at(3)!.displayName}</span>,
+      header: () => <span>{biddingPhase.gameroomPlayersList[3]!.displayName}</span>,
       cell: (info) => {
         const bid = info.getValue().bid;
         return bid ? `${bid.number + bid.suit}` : "Pass";
