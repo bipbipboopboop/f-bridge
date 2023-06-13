@@ -46,3 +46,10 @@
 .btn-primary:hover {
   background-color: #b34d00;
 }
+
+.btn-primary:disabled {
+  opacity: 0.7;
+}
+.btn-primary:disabled:hover {
+  background-color: #f06800;
+}

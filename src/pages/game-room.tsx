@@ -33,7 +33,7 @@ const GameRoom = () => {
 
   const isPlayerAllowedIn =
     gameState.players.some((player) => player.id === playerProfile?.id) || gameState.settings.isSpectatorAllowed;
-  if (!isPlayerAllowedIn || !gameState || error) {
+  if (!isPlayerAllowedIn || error) {
     toast.error("You are not allowed in this room");
     navigate("/lobby");
   }
@@ -44,7 +44,7 @@ const GameRoom = () => {
         <RoomSettings room={gameState} />
       </div>
       <div className="game-room-middle">
-        <PlayerPanel players={gameState.players} />
+        <PlayerPanel gameState={gameState} />
       </div>
       <div className="game-room-right">
         <Chatbox />

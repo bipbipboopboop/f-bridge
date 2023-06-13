@@ -1,28 +1,12 @@
-import React from "react";
-import {LobbyPlayerProfile} from "types/PlayerProfile";
-import OrangeButton from "../buttons/button-orange";
-import PlayerBox from "./player_box";
-
 import "./player_panel.css";
-import GreenButton from "../buttons/button-green";
-import useFunctions from "../../hooks/useFunctions";
-import {useAuth} from "../../hooks/useAuth";
-import Loading from "../loading";
-import {toast} from "react-toastify";
-import {useNavigate} from "react-router-dom";
+import {GameState} from "types/GameState";
 
-interface PlayerPanelProps {
-  players: LobbyPlayerProfile[];
-}
+import PlayerBox from "./player_box";
+import GameRoomButtonPanel from "./game-room-button-panel";
 
-const PlayerPanel: React.FC<PlayerPanelProps> = ({players}) => {
-  const {playerProfile} = useAuth();
-  const {leaveGameRoom, isLoading, error} = useFunctions();
-  const navigate = useNavigate();
-
-  if (isLoading) return <Loading />;
-  if (error) toast.error(error.message);
-
+const PlayerPanel = (props: {gameState: GameState}) => {
+  const {gameState} = props;
+  const {players} = gameState;
   return (
     <>
       <h4>Players</h4>
@@ -40,21 +24,7 @@ const PlayerPanel: React.FC<PlayerPanelProps> = ({players}) => {
             <PlayerBox player={players[3]} />
           </div>
         </div>
-        <div className="d-flex justify-content-center">
-          <OrangeButton onClick={() => alert("start game")}>Start Game</OrangeButton>
-          <GreenButton
-            onClick={async () => {
-              console.log({roomID: playerProfile?.roomID});
-              const success = await leaveGameRoom(playerProfile?.roomID);
-              if (success) {
-                toast.success(`You left the room!`);
-                navigate("/lobby");
-              }
-            }}
-          >
-            Leave Room
-          </GreenButton>
-        </div>
+        <GameRoomButtonPanel gameState={gameState} />
       </div>
     </>
   );
