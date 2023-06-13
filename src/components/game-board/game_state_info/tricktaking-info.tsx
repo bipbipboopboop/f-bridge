@@ -1,5 +1,5 @@
 import {GameState} from "types/GameState";
-import ScoreTable from "../../tables/tricks.table";
+import ScoreTable from "../../tables/tricks-table";
 
 const TrickTakingInfo = (props: {gameState: GameState}) => {
   const {gameState} = props;

@@ -1,6 +1,6 @@
 import {BiddingPhase} from "types/GameState";
-import BiddingTable from "../../tables/bidding.table";
-import GreenButton from "../../buttons/button.green";
+import BiddingTable from "../../tables/bidding-table";
+import GreenButton from "../../buttons/button-green";
 import {GameRoomPlayer} from "types/PlayerProfile";
 import {Bid, BidNumber, BidSuit} from "types/Bid";
 import {useState} from "react";
@@ -9,13 +9,9 @@ const BiddingGameplayArea = (props: {biddingPhase: BiddingPhase}) => {
   const {biddingPhase} = props;
   const {currentBidderIndex, gameroomPlayersList, highestBid} = biddingPhase;
 
-  const currentBidder = gameroomPlayersList.filter(
-    (plyr) => plyr.position === currentBidderIndex
-  )[0];
+  const currentBidder = gameroomPlayersList.filter((plyr) => plyr.position === currentBidderIndex)[0];
 
-  const [selectedBidValue, setSelectedBidValue] = useState<BidNumber | null>(
-    null
-  );
+  const [selectedBidValue, setSelectedBidValue] = useState<BidNumber | null>(null);
 
   // TODO: Get from AuthContext
   const myID = "0";
@@ -25,10 +21,7 @@ const BiddingGameplayArea = (props: {biddingPhase: BiddingPhase}) => {
 
   return (
     <div className="w-75 h-75 d-flex flex-column justify-content-center align-items-center">
-      <BiddingMessage
-        currentBidder={currentBidder}
-        isMyTurnToBid={isMyTurnToBid}
-      />
+      <BiddingMessage currentBidder={currentBidder} isMyTurnToBid={isMyTurnToBid} />
 
       <BiddingTable biddingPhase={biddingPhase} />
       <div>
@@ -51,10 +44,7 @@ const BiddingGameplayArea = (props: {biddingPhase: BiddingPhase}) => {
         <div className="d-flex">
           {selectedBidValue &&
             (["♣", "♦", "♥", "♠", "NT"] as BidSuit[]).map((suit) => (
-              <button
-                key={suit}
-                disabled={!possibleBids[selectedBidValue].includes(suit)}
-              >
+              <button key={suit} disabled={!possibleBids[selectedBidValue].includes(suit)}>
                 {suit}
               </button>
             ))}
@@ -66,10 +56,7 @@ const BiddingGameplayArea = (props: {biddingPhase: BiddingPhase}) => {
 
 export default BiddingGameplayArea;
 
-const BiddingMessage = (props: {
-  isMyTurnToBid: boolean;
-  currentBidder: GameRoomPlayer;
-}) => {
+const BiddingMessage = (props: {isMyTurnToBid: boolean; currentBidder: GameRoomPlayer}) => {
   const {currentBidder, isMyTurnToBid} = props;
   return (
     <div>

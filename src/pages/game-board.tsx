@@ -1,12 +1,12 @@
 import {GameState} from "types/GameState";
 import Chatbox from "../components/chat/chatbox";
-import GamePanel from "../components/gameroom/game.panel";
+import GamePanel from "../components/game-board/game-panel";
 
-import "./gameroom.css";
+import "./game-board.css";
 // import GameStateInfo from "../components/gameroom/game_state_info/gamestate.info";
 import {toast} from "react-toastify";
 import {useDocumentData} from "react-firebase-hooks/firestore";
-import {DocumentReference, LoadBundleTask, doc} from "firebase/firestore";
+import {DocumentReference, doc} from "firebase/firestore";
 import {firestore} from "../firebase";
 import {useParams} from "react-router-dom";
 import Loading from "../components/loading";

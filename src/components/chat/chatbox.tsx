@@ -4,7 +4,7 @@ import {useParams} from "react-router-dom";
 
 import "./chat.css";
 import {Message} from "types/Chat";
-import ChatMessage from "./chat.message";
+import ChatMessage from "./chatbox-message";
 
 import {CollectionReference, collection, orderBy, query} from "firebase/firestore";
 import {firestore} from "../../firebase";

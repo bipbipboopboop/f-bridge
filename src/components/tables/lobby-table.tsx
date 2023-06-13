@@ -1,7 +1,7 @@
 import {toast} from "react-toastify";
 import PlayerSVG from "../../assets/player_assets/player.svg";
 import useFunctions from "../../hooks/useFunctions";
-import "./lobby.table.css";
+import "./lobby-table.css";
 import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from "@tanstack/react-table";
 
 import {GameState} from "types/GameState";

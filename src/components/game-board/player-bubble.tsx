@@ -1,6 +1,6 @@
 import {GameRoomPlayer} from "types/PlayerProfile";
 import dino_sprite_1 from "assets/player_assets/dino_sprite_1.gif";
-import "./player_bubble.css";
+import "./player-bubble.css";
 
 type Props = {
   player: GameRoomPlayer;

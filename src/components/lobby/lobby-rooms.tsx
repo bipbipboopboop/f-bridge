@@ -1,6 +1,6 @@
 import "./lobby-rooms.css";
 import {Tab, Tabs, TabList, TabPanel} from "react-tabs";
-import RoomTable from "../tables/lobby.table";
+import RoomTable from "../tables/lobby-table";
 import {GameState} from "types/GameState";
 
 import {useCollectionData} from "react-firebase-hooks/firestore";

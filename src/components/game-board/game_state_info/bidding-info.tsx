@@ -1,5 +1,5 @@
 import {GameState} from "types/GameState";
-import BiddingTable from "../../tables/bidding.table";
+import BiddingTable from "../../tables/bidding-table";
 
 const BiddingInfo = (props: {gameState: GameState}) => {
   const {gameState} = props;

@@ -1,10 +1,10 @@
 import React from "react";
 import {LobbyPlayerProfile} from "types/PlayerProfile";
-import OrangeButton from "../buttons/button.orange";
+import OrangeButton from "../buttons/button-orange";
 import PlayerBox from "./player_box";
 
 import "./player_panel.css";
-import GreenButton from "../buttons/button.green";
+import GreenButton from "../buttons/button-green";
 import useFunctions from "../../hooks/useFunctions";
 import {useAuth} from "../../hooks/useAuth";
 import Loading from "../loading";

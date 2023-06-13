@@ -7,8 +7,8 @@ import Loading from "./components/loading";
 import Navbar from "./components/navbar";
 
 import Lobby from "./pages/lobby";
-import GameRoomComponent from "./pages/gameroom";
-import GameParty from "./pages/party";
+import GameRoomComponent from "./pages/game-board";
+import GameParty from "./pages/game-room";
 import Home from "./pages/home";
 import Leaderboard from "./pages/leaderboard";
 import Test from "./pages/Test";

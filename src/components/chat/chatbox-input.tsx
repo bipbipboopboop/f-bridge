@@ -1,5 +1,5 @@
 import {memo, useState} from "react";
-import GreenButton from "../buttons/button.green";
+import GreenButton from "../buttons/button-green";
 import useFunctions from "../../hooks/useFunctions";
 import {useParams} from "react-router-dom";
 
