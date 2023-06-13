@@ -46,7 +46,10 @@ const PlayerPanel: React.FC<PlayerPanelProps> = ({players}) => {
             onClick={async () => {
               console.log({roomID: playerProfile?.roomID});
               const success = await leaveGameRoom(playerProfile?.roomID);
-              if (success) navigate("/lobby");
+              if (success) {
+                toast.success(`You left the room!`);
+                navigate("/lobby");
+              }
             }}
           >
             Leave Room
