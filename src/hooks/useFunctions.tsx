@@ -25,7 +25,7 @@ const useFunctions = () => {
   const [joinGameRoom, l8, e8] = useHttpsCallable<string, void>(functions, "joinGameRoom");
   const [leaveGameRoom, l9, e9] = useHttpsCallable(functions, "leaveGameRoom");
 
-  const [toggleReady, l10, e10] = useHttpsCallable(functions, "toggleReady");
+  const [toggleReady, l10, e10] = useHttpsCallable<string, void>(functions, "toggleReady");
   const [startGame, l11, e11] = useHttpsCallable(functions, "startGame");
 
   /**
