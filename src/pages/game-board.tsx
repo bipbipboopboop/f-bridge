@@ -34,7 +34,7 @@ const GameBoard = () => {
     navigate("/lobby");
   }
 
-  console.log({gameState});
+  // console.log({gameState});
 
   const isPlayerInRoom = gameState.players.some((player) => player.id === playerProfile?.id);
 

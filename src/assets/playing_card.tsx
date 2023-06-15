@@ -8,7 +8,7 @@ type PlayingCardProps = {
 const PlayingCard: React.FC<React.HTMLAttributes<HTMLDivElement> & PlayingCardProps> = ({...props}) => {
   const {card} = props;
   const cardColor = ["♥", "♦"].includes(card.suit) ? "red" : "black";
-  console.log({cardColor});
+
   return (
     <div className={`playing-card-${cardColor}`} {...props}>
       <div className="suit">{card.suit}</div>
