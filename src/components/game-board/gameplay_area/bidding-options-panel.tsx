@@ -3,6 +3,7 @@ import GreenButton from "../../buttons/button-green";
 import {Bid, BidNumber, BidSuit} from "types/Bid";
 import {FC, HTMLAttributes, useState} from "react";
 import {useAuth} from "../../../hooks/useAuth";
+import Button from "../../buttons/button";
 
 type BiddingOptionsPanelProps = {
   biddingPhase: BiddingPhase;
@@ -26,29 +27,38 @@ const BiddingOptionsPanel: FC<HTMLAttributes<HTMLDivElement> & BiddingOptionsPan
 
   return (
     <div {...divProps}>
-      <GreenButton>Pass</GreenButton>
-      <GreenButton>Bid</GreenButton>
-      <GreenButton>Clear</GreenButton>
-      <div className="d-flex">
-        {[1, 2, 3, 4, 5, 6].map((bidNumber) => (
-          <button
-            key={bidNumber}
-            disabled={possibleBids[bidNumber as 1].length === 0}
-            onClick={() => {
-              setSelectedBidValue(bidNumber as 1);
-            }}
-          >
-            {bidNumber}
-          </button>
-        ))}
-      </div>
-      <div className="d-flex">
-        {selectedBidValue &&
-          (["♣", "♦", "♥", "♠", "NT"] as BidSuit[]).map((suit) => (
-            <button key={suit} disabled={!possibleBids[selectedBidValue].includes(suit)}>
-              {suit}
-            </button>
-          ))}
+      <div className="d-flex w-100">
+        <div>
+          <div className="d-flex">
+            {[1, 2, 3, 4, 5, 6].map((bidNumber) => (
+              <Button
+                theme={"yellow"}
+                key={bidNumber}
+                disabled={possibleBids[bidNumber as 1].length === 0}
+                onClick={() => {
+                  setSelectedBidValue(bidNumber as 1);
+                }}
+              >
+                {bidNumber}
+              </Button>
+            ))}
+          </div>
+          <div className="d-flex">
+            {selectedBidValue &&
+              (["♣", "♦", "♥", "♠", "NT"] as BidSuit[]).map((suit) => (
+                <Button theme={"yellow"} key={suit} disabled={!possibleBids[selectedBidValue].includes(suit)}>
+                  {suit}
+                </Button>
+              ))}
+          </div>
+        </div>
+        <div>
+          <div>
+            <Button theme={"yellow"}>Pass</Button>
+            <Button theme={"yellow"}>Bid</Button>
+          </div>
+          <Button theme={"yellow"}>Clear</Button>
+        </div>
       </div>
     </div>
   );
