@@ -1,17 +1,31 @@
 import {BiddingPhase} from "types/GameState";
 import GreenButton from "../../buttons/button-green";
 import {Bid, BidNumber, BidSuit} from "types/Bid";
-import {useState} from "react";
+import {FC, HTMLAttributes, useState} from "react";
+import {useAuth} from "../../../hooks/useAuth";
 
-const BiddingOptionsPanel = (props: {biddingPhase: BiddingPhase}) => {
-  const {biddingPhase} = props;
+type BiddingOptionsPanelProps = {
+  biddingPhase: BiddingPhase;
+};
+
+const BiddingOptionsPanel: FC<HTMLAttributes<HTMLDivElement> & BiddingOptionsPanelProps> = ({...props}) => {
+  const {biddingPhase, ...divProps} = props;
   const {highestBid} = biddingPhase;
+  const {currentBidderIndex, gameroomPlayersList} = biddingPhase;
 
   const [selectedBidValue, setSelectedBidValue] = useState<BidNumber | null>(null);
   const possibleBids = getPossibleBids(highestBid);
 
+  const {playerProfile} = useAuth();
+
+  const currentBidder = gameroomPlayersList.filter((plyr) => plyr.position === currentBidderIndex)[0];
+
+  const isMyTurnToBid = currentBidder.id === playerProfile?.id;
+
+  if (!isMyTurnToBid) return <></>;
+
   return (
-    <div>
+    <div {...divProps}>
       <GreenButton>Pass</GreenButton>
       <GreenButton>Bid</GreenButton>
       <GreenButton>Clear</GreenButton>

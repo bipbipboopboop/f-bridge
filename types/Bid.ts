@@ -1,6 +1,7 @@
 export type Bid = {
   suit: BidSuit;
   number: number;
+  isPass: boolean;
 };
 
 export type BidNumber = 1 | 2 | 3 | 4 | 5 | 6;
