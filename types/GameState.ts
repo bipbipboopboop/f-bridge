@@ -48,7 +48,7 @@ export type BidSnapshot = {
 };
 
 export type BiddingPhase = {
-  currentBidderIndex: 0 | 1 | 2 | 3;
+  currentPlayerIndex: 0 | 1 | 2 | 3;
 
   highestBid: Bid | null;
 

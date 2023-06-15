@@ -348,7 +348,7 @@ export const startGame = functions.https.onCall(async (data: void, context) => {
 
   // Initialize bidding phase
   const biddingPhase: BiddingPhase = {
-    currentBidderIndex: 0,
+    currentPlayerIndex: 0,
     highestBid: null,
     gameroomPlayersList: gameRoomData.players.map((player) => ({
       id: player.id,
