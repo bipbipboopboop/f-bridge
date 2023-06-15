@@ -12,34 +12,71 @@ import {GameRoomPlayer} from "types/PlayerProfile";
 // Styles
 import "./game-panel.css";
 import MainGameplayArea from "./gameplay_area/gameplay_area.main";
+import {useAuth} from "../../hooks/useAuth";
 
 const GamePanel = (props: {gameState: GameState}) => {
   const {gameState} = props;
+  const {playerProfile} = useAuth();
+
+  const gameStateLookup = {
+    Bidding: gameState?.biddingPhase,
+    "Taking Trick": gameState?.trickTakingPhase,
+    Waiting: null,
+  };
 
   const gamePlayersListLookup = {
-    Bidding: gameState?.biddingPhase?.gameroomPlayersList || [],
-    "Taking Trick": gameState?.trickTakingPhase?.gameroomPlayersList || [],
+    Bidding: gameStateLookup["Bidding"]?.gameroomPlayersList || [],
+    "Taking Trick": gameStateLookup["Taking Trick"]?.gameroomPlayersList || [],
     Waiting: [],
   };
 
   const players: GameRoomPlayer[] = gamePlayersListLookup[gameState.status];
+  const currentGameState = gameStateLookup[gameState.status];
+  const currentPlayerIndex = currentGameState!.currentPlayerIndex;
 
-  // TODO: change current player index based on status
+  const myPlayer = currentGameState?.gameroomPlayersList.find((plyr) => plyr.id === playerProfile?.id);
+  const myPosition = myPlayer?.position as number;
+  const positionLookup = {
+    top: (myPosition + 2) % 4,
+    right: (myPosition + 1) % 4,
+    bottom: myPosition,
+    left: (myPosition + 3) % 4,
+  };
+
+  const playerLookup = {
+    top: players[positionLookup["top"]],
+    right: players[positionLookup["right"]],
+    bottom: players[positionLookup["bottom"]],
+    left: players[positionLookup["left"]],
+  };
+
   return (
     <div className="game-panel">
       <div className="top">
-        <PlayerBubble player={players[0]} currentPlayerIndex={0} location="top" />
+        <PlayerBubble player={playerLookup["top"]} currentPlayerIndex={currentPlayerIndex} location="top" />
       </div>
       <div className="middle">
-        <PlayerBubble player={players[1]} currentPlayerIndex={0} location="left" />
+        <PlayerBubble
+          player={players[positionLookup["left"]]}
+          currentPlayerIndex={currentPlayerIndex}
+          location="left"
+        />
 
         <MainGameplayArea gameState={gameState} />
 
-        <PlayerBubble player={players[2]} currentPlayerIndex={0} location="right" />
+        <PlayerBubble
+          player={players[positionLookup["right"]]}
+          currentPlayerIndex={currentPlayerIndex}
+          location="right"
+        />
       </div>
       <div className="bottom">
         <div style={{width: "15%"}}>
-          <PlayerBubble player={players[3]} currentPlayerIndex={0} location="bottom" />
+          <PlayerBubble
+            player={players[positionLookup["bottom"]]}
+            currentPlayerIndex={currentPlayerIndex}
+            location="bottom"
+          />
         </div>
         <div style={{width: "70%"}}>
           <Hand />

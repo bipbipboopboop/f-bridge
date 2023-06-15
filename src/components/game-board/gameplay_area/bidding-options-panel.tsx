@@ -12,14 +12,14 @@ type BiddingOptionsPanelProps = {
 const BiddingOptionsPanel: FC<HTMLAttributes<HTMLDivElement> & BiddingOptionsPanelProps> = ({...props}) => {
   const {biddingPhase, ...divProps} = props;
   const {highestBid} = biddingPhase;
-  const {currentBidderIndex, gameroomPlayersList} = biddingPhase;
+  const {currentPlayerIndex, gameroomPlayersList} = biddingPhase;
 
   const [selectedBidValue, setSelectedBidValue] = useState<BidNumber | null>(null);
   const possibleBids = getPossibleBids(highestBid);
 
   const {playerProfile} = useAuth();
 
-  const currentBidder = gameroomPlayersList.filter((plyr) => plyr.position === currentBidderIndex)[0];
+  const currentBidder = gameroomPlayersList.filter((plyr) => plyr.position === currentPlayerIndex)[0];
 
   const isMyTurnToBid = currentBidder.id === playerProfile?.id;
 
