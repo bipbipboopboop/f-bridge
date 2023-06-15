@@ -38,13 +38,17 @@ const GamePanel = (props: {gameState: GameState}) => {
         <PlayerBubble player={players[2]} currentPlayerIndex={0} location="right" />
       </div>
       <div className="bottom">
-        <PlayerBubble player={players[3]} currentPlayerIndex={0} location="bottom" />
-        <Hand />
+        <div style={{width: "15%"}}>
+          <PlayerBubble player={players[3]} currentPlayerIndex={0} location="bottom" />
+        </div>
+        <div style={{width: "70%"}}>
+          <Hand />
+        </div>
 
         {/* TODO: Change based on status */}
-        <div className="d-flex flex-column justify-content-between  ">
-          <GreenButton>Sort</GreenButton>
-          <GreenButton>Play</GreenButton>
+        <div style={{width: "15%"}} className="d-flex flex-column justify-content-between  ">
+          {/* <GreenButton>Sort</GreenButton>
+          <GreenButton>Play</GreenButton> */}
         </div>
       </div>
     </div>

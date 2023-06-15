@@ -1,7 +1,7 @@
 .hand {
   display: flex;
-  margin-left: 2rem;
-  width: 59%;
+  margin-left: 4.4rem;
+  /* Twice the amount of the card margin-left */
 }
 
 /* .hand :nth-child(n + 1) {
