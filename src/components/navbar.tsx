@@ -4,7 +4,6 @@ import {Link} from "react-router-dom";
 
 import {useSignInWithGoogle} from "react-firebase-hooks/auth";
 import {useAuth} from "../hooks/useAuth";
-import GreenButton from "./buttons/button-green";
 
 import spinning from "../assets/spinning.gif";
 

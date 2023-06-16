@@ -54,6 +54,49 @@
   background-color: #f06800;
 }
 
+.btn-orange {
+  border-radius: 8px;
+
+  text-align: center;
+  color: white;
+  gap: 10px;
+
+  background: #f06800;
+
+  /* Shadow */
+  border: none;
+  box-shadow: 2px 2px 4px rgba(32, 32, 32, 0.15);
+}
+.btn-orange:hover {
+  background-color: #b34d00;
+}
+.btn-orange:disabled {
+  opacity: 0.7;
+}
+.btn-orange:disabled:hover {
+  background-color: #f06800;
+}
+
+.btn-green {
+  text-align: center;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+
+  background-color: #20da1c;
+
+  border: none;
+  box-shadow: 2px 2px 4px rgba(32, 32, 32, 0.15);
+}
+
+.btn-green:hover {
+  background-color: #157613;
+}
+
+.btn-green:disabled {
+  background-color: #1fab1c;
+}
+
 .btn-yellow {
   color: #212529;
   background-color: #f2c409;
