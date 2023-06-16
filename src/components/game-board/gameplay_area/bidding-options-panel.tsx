@@ -1,9 +1,8 @@
 import {BiddingPhase} from "types/GameState";
-import GreenButton from "../../buttons/button-green";
 import {Bid, BidNumber, BidSuit} from "types/Bid";
 import {FC, HTMLAttributes, useState} from "react";
 import {useAuth} from "../../../hooks/useAuth";
-import Button from "../../buttons/button";
+import BidButton from "../../buttons/button-bid";
 
 type BiddingOptionsPanelProps = {
   biddingPhase: BiddingPhase;
@@ -27,37 +26,42 @@ const BiddingOptionsPanel: FC<HTMLAttributes<HTMLDivElement> & BiddingOptionsPan
 
   return (
     <div {...divProps}>
-      <div className="d-flex w-100">
-        <div>
-          <div className="d-flex">
-            {[1, 2, 3, 4, 5, 6].map((bidNumber) => (
-              <Button
-                theme={"yellow"}
-                key={bidNumber}
-                disabled={possibleBids[bidNumber as 1].length === 0}
-                onClick={() => {
-                  setSelectedBidValue(bidNumber as 1);
-                }}
-              >
-                {bidNumber}
-              </Button>
-            ))}
-          </div>
-          <div className="d-flex">
-            {selectedBidValue &&
-              (["♣", "♦", "♥", "♠", "NT"] as BidSuit[]).map((suit) => (
-                <Button theme={"yellow"} key={suit} disabled={!possibleBids[selectedBidValue].includes(suit)}>
-                  {suit}
-                </Button>
-              ))}
-          </div>
+      <div className="w-100">
+        <div className="d-flex">
+          {[1, 2, 3, 4, 5, 6].map((bidNumber) => (
+            <BidButton
+              style={{marginRight: "0.5rem"}}
+              key={bidNumber}
+              disabled={possibleBids[bidNumber as 1].length === 0}
+              onClick={() => {
+                setSelectedBidValue(bidNumber as 1);
+              }}
+            >
+              {bidNumber}
+            </BidButton>
+          ))}
+          <BidButton style={{width: "6rem"}}>Pass</BidButton>
         </div>
-        <div>
-          <div>
-            <Button theme={"yellow"}>Pass</Button>
-            <Button theme={"yellow"}>Bid</Button>
-          </div>
-          <Button theme={"yellow"}>Clear</Button>
+        <div className="d-flex">
+          {selectedBidValue && (
+            <>
+              {(["♣", "♦", "♥", "♠", "NT"] as BidSuit[]).map((suit) => (
+                <BidButton
+                  style={{
+                    marginTop: "0.5rem",
+                    marginRight: "0.5rem",
+                    fontSize: `${suit === "NT" ? "1rem" : "2rem"}`,
+                  }}
+                  key={suit}
+                  disabled={!possibleBids[selectedBidValue].includes(suit)}
+                >
+                  {suit}
+                </BidButton>
+              ))}
+              <BidButton style={{marginTop: "0.5rem", marginRight: "0.5rem"}}>↩︎︎</BidButton>
+              <BidButton style={{width: "6rem", marginTop: "0.5rem"}}>Bid</BidButton>
+            </>
+          )}
         </div>
       </div>
     </div>

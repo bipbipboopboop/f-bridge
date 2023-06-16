@@ -4,7 +4,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const Button = (props: ButtonProps) => {
   const {theme, ...buttonProps} = props;
-  const className = `${props.className} btn-${theme}`;
+  const className = `btn-${theme}`;
   return <button className={className} {...buttonProps} />;
 };
 
