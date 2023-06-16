@@ -1,7 +1,7 @@
 import {ChangeEvent, FormEvent, memo, useState} from "react";
-import GreenButton from "../buttons/button-green";
 import useFunctions from "../../hooks/useFunctions";
 import {useParams} from "react-router-dom";
+import Button from "../buttons/button";
 
 const ChatboxInput = () => {
   const {roomID} = useParams();
@@ -25,9 +25,9 @@ const ChatboxInput = () => {
   return (
     <form className="chatbox-bottom" onSubmit={onSendMessage}>
       <input type="text" className="textbox" value={inputMessage} onChange={onChangeInput} />
-      <GreenButton type="submit" disabled={!inputMessage}>
+      <Button theme="green" type="submit" disabled={!inputMessage}>
         Send
-      </GreenButton>
+      </Button>
     </form>
   );
 };

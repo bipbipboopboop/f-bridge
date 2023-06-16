@@ -1,5 +1,5 @@
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  theme: "primary" | "secondary" | "yellow";
+  theme: "orange" | "green" | "yellow";
 }
 
 const Button = (props: ButtonProps) => {
