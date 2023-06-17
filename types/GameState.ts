@@ -60,7 +60,7 @@ export type BiddingPhase = {
 export type TrickTakingPhase = {
   currentPlayerIndex: 0 | 1 | 2 | 3;
   leadPlayerIndex: 0 | 1 | 2 | 3;
-  trumpSuit: BidSuit;
+  trumpSuit: BidSuit | null;
 
   gameroomPlayersList: GameRoomPlayer[];
 };
@@ -76,16 +76,15 @@ export type GameRoomSettings = {
   isSpectatorAllowed: boolean;
 };
 
-/**
- * LPI = 3 -> 1 2 3 0
- * LPI = 2 -> 2 3 0 1
- * LPI = 1 -> 3 0 1 2
- * LPI = 0 -> 0 1 2 3
- * z-index = (playerIndex - LPI  + 4) % 4
- *
- * pos = 0 : btm:0, left: 1, top: 2, right: 3
- * pos = 1 : btm:1, left: 2, top: 3, right: 0
- * pos = 2 : btm:2, left: 3, top: 0, right: 1
- * pos = 3 : btm:3, left: 0, top: 1, right: 2
- *
- */
+export type TrickTakingPhaseHidden = {
+  defenderTeam: {
+    playerList: GameRoomPlayer[];
+    tricksWon: number;
+    tricksNeeded: number;
+  };
+  declarerTeam: {
+    playerList: GameRoomPlayer[];
+    tricksWon: number;
+    tricksNeeded: number;
+  };
+};
