@@ -9,17 +9,17 @@ type BiddingOptionsPanelProps = {
 };
 
 const BiddingOptionsPanel: FC<HTMLAttributes<HTMLDivElement> & BiddingOptionsPanelProps> = ({...props}) => {
-  const {biddingPhase, ...divProps} = props;
-  const {highestBid} = biddingPhase;
-  const {currentPlayerIndex, gameroomPlayersList} = biddingPhase;
-
   const [selectedBidValue, setSelectedBidValue] = useState<BidNumber | null>(null);
-  const possibleBids = getPossibleBids(highestBid);
-
+  const [selectedBidSuit, setSelectedBidSuit] = useState<BidSuit | null>(null);
   const {playerProfile} = useAuth();
 
-  const currentBidder = gameroomPlayersList.filter((plyr) => plyr.position === currentPlayerIndex)[0];
+  const {
+    biddingPhase: {currentPlayerIndex, highestBid, gameroomPlayersList},
+    ...divProps
+  } = props;
 
+  const possibleBids = getPossibleBids(highestBid);
+  const currentBidder = gameroomPlayersList.filter((plyr) => plyr.position === currentPlayerIndex)[0];
   const isMyTurnToBid = currentBidder.id === playerProfile?.id;
 
   if (!isMyTurnToBid) return <></>;
@@ -28,16 +28,16 @@ const BiddingOptionsPanel: FC<HTMLAttributes<HTMLDivElement> & BiddingOptionsPan
     <div {...divProps}>
       <div className="w-100">
         <div className="d-flex">
-          {[1, 2, 3, 4, 5, 6].map((bidNumber) => (
+          {[1, 2, 3, 4, 5, 6].map((bidValue) => (
             <BidButton
-              style={{marginRight: "0.5rem"}}
-              key={bidNumber}
-              disabled={possibleBids[bidNumber as 1].length === 0}
+              style={{marginRight: "0.5rem", border: `${bidValue === selectedBidValue ? "5px solid #BD8E63" : ""}`}}
+              key={bidValue}
+              disabled={possibleBids[bidValue as 1].length === 0}
               onClick={() => {
-                setSelectedBidValue(bidNumber as 1);
+                setSelectedBidValue(bidValue as 1);
               }}
             >
-              {bidNumber}
+              {bidValue}
             </BidButton>
           ))}
           <BidButton style={{width: "6rem"}}>Pass</BidButton>
@@ -50,16 +50,30 @@ const BiddingOptionsPanel: FC<HTMLAttributes<HTMLDivElement> & BiddingOptionsPan
                   style={{
                     marginTop: "0.5rem",
                     marginRight: "0.5rem",
+                    color: `${suit === "♦" || suit === "♥" ? "#ff525d" : "black"}`,
                     fontSize: `${suit === "NT" ? "1rem" : "2rem"}`,
+                    border: `${suit === selectedBidSuit ? "5px solid #BD8E63" : ""}`,
                   }}
                   key={suit}
                   disabled={!possibleBids[selectedBidValue].includes(suit)}
+                  onClick={() => {
+                    setSelectedBidSuit(suit);
+                  }}
                 >
                   {suit}
                 </BidButton>
               ))}
-              <BidButton style={{marginTop: "0.5rem", marginRight: "0.5rem"}}>↩︎︎</BidButton>
-              <BidButton style={{width: "6rem", marginTop: "0.5rem"}}>Bid</BidButton>
+              <BidButton style={{marginTop: "0.5rem", marginRight: "0.5rem"}} onClick={() => setSelectedBidValue(null)}>
+                ↩︎︎
+              </BidButton>
+              <BidButton
+                style={{width: "6rem", marginTop: "0.5rem"}}
+                onClick={() => {
+                  alert(JSON.stringify({selectedBidSuit, selectedBidValue}));
+                }}
+              >
+                Bid
+              </BidButton>
             </>
           )}
         </div>
