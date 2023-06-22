@@ -7,7 +7,7 @@ import LobbyPlayerCard from "../components/lobby/lobby-player-card";
 import {useAuth} from "../hooks/useAuth";
 import useFunctions from "../hooks/useFunctions";
 import {toast} from "react-toastify";
-import Loading from "../components/loading";
+import Loading from "../components/Loading";
 
 const Lobby = () => {
   const {playerProfile} = useAuth();

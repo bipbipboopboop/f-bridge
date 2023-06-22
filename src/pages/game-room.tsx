@@ -12,7 +12,7 @@ import {GameState} from "types/GameState";
 import PlayerPanel from "../components/game-room/player-panel";
 import RoomSettings from "../components/game-room/settings";
 import Chatbox from "../components/chat/chatbox";
-import Loading from "../components/loading";
+import Loading from "../components/Loading";
 
 import {useAuth} from "../hooks/useAuth";
 

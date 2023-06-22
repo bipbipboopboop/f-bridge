@@ -7,7 +7,7 @@ import {useCollectionData} from "react-firebase-hooks/firestore";
 import {CollectionReference, collection, orderBy, query} from "firebase/firestore";
 import {firestore} from "../../firebase";
 import {toast} from "react-toastify";
-import Loading from "../loading";
+import Loading from "../Loading";
 
 const LobbyRooms = () => {
   const gameRoomsCollection = collection(firestore, `gameRooms`) as CollectionReference<GameState>;

@@ -7,7 +7,7 @@ import {auth, firestore} from "../firebase";
 import {signInAnonymously, User} from "firebase/auth";
 import {GamePlayer, PlayerProfile} from "types/PlayerProfile";
 
-import Loading from "../components/loading";
+import Loading from "../components/Loading";
 import useFunctions from "../hooks/useFunctions";
 import {doc, DocumentReference} from "firebase/firestore";
 

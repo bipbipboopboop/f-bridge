@@ -3,7 +3,7 @@ import {Route, Routes} from "react-router-dom";
 
 import useFunctions from "./hooks/useFunctions";
 
-// import Loading from "./components/loading";
+import Loading from "./components/Loading";
 import Navbar from "./components/navbar";
 
 import Lobby from "./pages/lobby";
@@ -12,7 +12,6 @@ import GameRoom from "./pages/game-room";
 import Home from "./pages/home";
 import Leaderboard from "./pages/leaderboard";
 import Test from "./pages/Test";
-import {PacmanLoader} from "react-spinners";
 
 function App() {
   const {isLoading} = useFunctions();
@@ -35,14 +34,4 @@ function App() {
   );
 }
 
-const Loading = () => {
-  return (
-    <div className="h-100 d-flex justify-content-center align-items-center">
-      <div>
-        <h2>Loading</h2>
-        <PacmanLoader color={"#98FB98"} />
-      </div>
-    </div>
-  );
-};
 export default App;

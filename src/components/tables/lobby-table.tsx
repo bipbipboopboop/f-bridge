@@ -5,7 +5,7 @@ import "./lobby-table.css";
 import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from "@tanstack/react-table";
 
 import {GameState} from "types/GameState";
-import Loading from "../loading";
+import Loading from "../Loading";
 import {useNavigate} from "react-router-dom";
 
 const RoomTable = (props: {gameRoomList: GameState[]}) => {
