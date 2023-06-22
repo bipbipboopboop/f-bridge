@@ -396,7 +396,7 @@ export const startGame = functions.https.onCall(async (data: void, context) => {
       numCardsOnHand: 13,
       numTricksWon: 0,
       cards: hand,
-      currentCardOnTable: null,
+
       team: null,
     };
   });
