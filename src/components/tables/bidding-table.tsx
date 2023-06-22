@@ -8,13 +8,13 @@ const BiddingTable = (props: {biddingPhase: BiddingPhase}) => {
 
   const data = biddingPhase!.bidHistory;
   const columnHelper = createColumnHelper<BidSnapshot>();
-  console.log({data});
+
   const columns = [
     columnHelper.accessor("p0", {
       header: () => <span>{biddingPhase.gameroomPlayersList[0]!.displayName}</span>,
       cell: (info) => {
         const bid = info.getValue().bid;
-        console.log({bid});
+
         return !bid ? <></> : bid.isPass ? "Pass" : `${bid.number + bid.suit}`;
       },
     }),
