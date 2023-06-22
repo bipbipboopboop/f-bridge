@@ -5,7 +5,7 @@ import {useDocumentData} from "react-firebase-hooks/firestore";
 
 import {auth, firestore} from "../firebase";
 import {signInAnonymously, User} from "firebase/auth";
-import {PlayerProfile} from "types/PlayerProfile";
+import {GamePlayer, PlayerProfile} from "types/PlayerProfile";
 
 import Loading from "../components/loading";
 import useFunctions from "../hooks/useFunctions";
@@ -14,6 +14,7 @@ import {doc, DocumentReference} from "firebase/firestore";
 export const AuthContext = createContext<AuthContextValue>({
   user: null,
   playerProfile: null,
+  gamePlayer: null,
   isLoggingIn: false,
 });
 
@@ -25,12 +26,19 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
 
   const {createPlayerProfile, isLoading, error} = useFunctions();
 
-  const gamePlayerRef = doc(
+  const playerProfileRef = doc(
     firestore,
     `playerProfiles/${firebaseUser?.uid || "ERROR"}`
   ) as DocumentReference<PlayerProfile>;
 
-  const [playerProfile, isLoadingPlayerProfile] = useDocumentData<PlayerProfile>(gamePlayerRef);
+  const [playerProfile, isLoadingPlayerProfile] = useDocumentData<PlayerProfile>(playerProfileRef);
+
+  const gamePlayerRef = doc(
+    firestore,
+    `gameRooms/${playerProfile?.roomID || "ERROR"}/players/${playerProfile?.id || "ERROR"}`
+  ) as DocumentReference<GamePlayer>;
+
+  const [gamePlayer, isLoadingGamePlayer] = useDocumentData(gamePlayerRef);
 
   // Signs the user in anonymously if they don't log in and creates a player profile for them.
   // Otherwise, they are already logged in and we can just retrieve their player profile.
@@ -62,6 +70,7 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
   const authContextValue: AuthContextValue = {
     user: firebaseUser || null,
     playerProfile: playerProfile || null,
+    gamePlayer: gamePlayer || null,
     isLoggingIn: isLoadingFirebaseUser || isLoading || isLoadingPlayerProfile,
   };
 
@@ -85,6 +94,7 @@ interface AuthProviderProps {
 interface AuthContextValue {
   user: User | null;
   playerProfile: PlayerProfile | null;
+  gamePlayer: GamePlayer | null;
   isLoggingIn: boolean;
 }
 
