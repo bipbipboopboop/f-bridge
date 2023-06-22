@@ -34,20 +34,13 @@ const stringValueLookup: StringValueLookup = {
   2: "2",
 };
 
-/**
- * Shuffles a deck of cards.
- * @returns A shuffled deck of cards
- */
 export const shuffleCards = () => {
   // Create a deck of cards
   const deck: Card[] = [];
   for (let suit = 0; suit < 4; suit++) {
     for (let rank = 2; rank < 15; rank++) {
-      let suitString: Suit;
-      let stringValue: CardStringValue;
-
-      suitString = suitLookup[suit];
-      stringValue = stringValueLookup[rank];
+      const suitString = suitLookup[suit];
+      const stringValue = stringValueLookup[rank];
 
       deck.push({
         suit: suitString,

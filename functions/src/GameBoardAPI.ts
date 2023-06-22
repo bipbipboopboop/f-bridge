@@ -10,7 +10,10 @@ import {BidSuit} from "types/Bid";
 export const placeBid = functions.https.onCall(async (bid: Bid, context) => {
   // 0. Check if the user is authenticated
   if (!context.auth) {
-    throw new functions.https.HttpsError("unauthenticated", "The user is not authenticated.");
+    throw new functions.https.HttpsError(
+      "unauthenticated",
+      "The user is not authenticated."
+    );
   }
 
   // Get the user's profile
@@ -22,26 +25,40 @@ export const placeBid = functions.https.onCall(async (bid: Bid, context) => {
   const gameRoom = (await gameRoomRef.get()).data();
 
   if (!gameRoom) {
-    throw new functions.https.HttpsError("not-found", "This room does not exist.");
+    throw new functions.https.HttpsError(
+      "not-found",
+      "This room does not exist."
+    );
   }
 
   // 1. Check if the game is in the bidding phase
   if (gameRoom.status !== "Bidding") {
-    throw new functions.https.HttpsError("failed-precondition", "The game is not in the bidding phase.");
+    throw new functions.https.HttpsError(
+      "failed-precondition",
+      "The game is not in the bidding phase."
+    );
   }
 
   // 2. Check if the player is in the room
-  const playerRef = gameRoomRef.collection("players").doc(context.auth.uid) as DocumentReference<GameRoomPlayer>;
+  const playerRef = gameRoomRef
+    .collection("players")
+    .doc(context.auth.uid) as DocumentReference<GameRoomPlayer>;
   const playerSnapshot = await playerRef.get();
   const playerData = playerSnapshot.data();
 
   if (!playerData) {
-    throw new functions.https.HttpsError("failed-precondition", "Player is not in the room.");
+    throw new functions.https.HttpsError(
+      "failed-precondition",
+      "Player is not in the room."
+    );
   }
 
   // 3. Check if it's the player's turn
   if (playerData.position !== gameRoom.biddingPhase!.currentPlayerIndex) {
-    throw new functions.https.HttpsError("failed-precondition", "It's not the player's turn to place a bid.");
+    throw new functions.https.HttpsError(
+      "failed-precondition",
+      "It's not the player's turn to place a bid."
+    );
   }
 
   // 4. Check if the bid is smaller than the highest bid
@@ -51,7 +68,10 @@ export const placeBid = functions.https.onCall(async (bid: Bid, context) => {
   const isValidBid = isFirstBid || bidComparator(bid, highestBid!) === 1;
 
   if (isValidBid) {
-    throw new functions.https.HttpsError("failed-precondition", "The bid must be greater than the highest bid.");
+    throw new functions.https.HttpsError(
+      "failed-precondition",
+      "The bid must be greater than the highest bid."
+    );
   }
 
   // TODO: Perform the bid placement logic here
