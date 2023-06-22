@@ -1,18 +1,21 @@
 import {Dispatch, SetStateAction, useState} from "react";
-import {useAuth} from "../hooks/useAuth";
+import {useAuth} from "../../../hooks/useAuth";
 
 import PlayingCard from "assets/playing_card";
 import {Card, Suit} from "types/Card";
-import BidButton from "../components/buttons/button-bid";
-import {deck} from "../utils/deck";
+import {deck} from "../../../utils/deck";
+import BidButton from "../../buttons/button-bid";
 
-const Test = () => {
+const PickTeammatePanel = () => {
   const [selectedSuit, setSelectedSuit] = useState<Suit | null>(null);
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
 
   return (
-    <div className="w-100 h-100 d-flex flex-column align-items-center" style={{border: "1px solid white"}}>
-      <div className="h-50 d-flex align-items-end">{selectedCard && <PlayingCard card={selectedCard} />}</div>
+    <div
+      className="w-100 h-100 d-flex flex-column justify-content-center align-items-center"
+      style={{border: "1px solid white"}}
+    >
+      <div className="h-50">{selectedCard && <PlayingCard card={selectedCard} />}</div>
       <div className="h-50 w-100 d-flex flex-column">
         {["♣", "♦", "♥", "♠"].map((suit) => (
           <div className="d-flex my-2" key={suit}>
@@ -31,7 +34,7 @@ const Test = () => {
     </div>
   );
 };
-export default Test;
+export default PickTeammatePanel;
 
 const OtherCardsComponent = (props: {
   suit: Suit;
@@ -57,6 +60,7 @@ const OtherCardsComponent = (props: {
       .filter((card) => card.suit === "♠")
       .filter((card) => !gamePlayer.cards.some((c) => c.stringValue === card.stringValue && c.suit === card.suit)),
   };
+  console.log({suit, selectedSuit});
 
   if (!(suit === selectedSuit)) return <></>;
 
