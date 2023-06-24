@@ -7,6 +7,7 @@ const GameStateInfo = (props: {gameState: GameState}) => {
     Waiting: () => <></>,
     Bidding: BiddingInfo,
     "Taking Trick": TrickTakingInfo,
+    "Choosing Teammate": () => <></>,
   };
   const gameroom = props.gameState;
   const GameStateInfoComponent = gameStateLookup[gameroom.status];

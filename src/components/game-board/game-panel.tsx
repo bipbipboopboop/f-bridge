@@ -1,6 +1,3 @@
-// Common Component
-import GreenButton from "../buttons/button-green";
-
 // Components
 import PlayerBubble from "./player-bubble";
 import Hand from "./hand";
@@ -21,12 +18,14 @@ const GamePanel = (props: {gameState: GameState}) => {
   const gameStateLookup = {
     Bidding: gameState?.biddingPhase,
     "Taking Trick": gameState?.trickTakingPhase,
+    "Choosing Teammate": null, // TODO CHANGE
     Waiting: null,
   };
 
   const gamePlayersListLookup = {
     Bidding: gameStateLookup["Bidding"]?.gameroomPlayersList || [],
     "Taking Trick": gameStateLookup["Taking Trick"]?.gameroomPlayersList || [],
+    "Choosing Teammate": [], // TODO: CHANGE
     Waiting: [],
   };
 

@@ -9,7 +9,7 @@ export type GameState = {
   settings: GameRoomSettings;
   invitedID: string[];
 
-  status: "Waiting" | "Bidding" | "Taking Trick";
+  status: "Waiting" | "Bidding" | "Choosing Teammate" | "Taking Trick";
   players: LobbyPlayerProfile[];
 
   biddingPhase: BiddingPhase | null;
