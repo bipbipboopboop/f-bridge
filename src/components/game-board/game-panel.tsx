@@ -18,14 +18,14 @@ const GamePanel = (props: {gameState: GameState}) => {
   const gameStateLookup = {
     Bidding: gameState?.biddingPhase,
     "Taking Trick": gameState?.trickTakingPhase,
-    "Choosing Teammate": null, // TODO CHANGE
+    "Choosing Teammate": gameState?.biddingPhase,
     Waiting: null,
   };
 
   const gamePlayersListLookup = {
     Bidding: gameStateLookup["Bidding"]?.gameroomPlayersList || [],
     "Taking Trick": gameStateLookup["Taking Trick"]?.gameroomPlayersList || [],
-    "Choosing Teammate": [], // TODO: CHANGE
+    "Choosing Teammate": gameStateLookup["Choosing Teammate"]?.gameroomPlayersList || [],
     Waiting: [],
   };
 
