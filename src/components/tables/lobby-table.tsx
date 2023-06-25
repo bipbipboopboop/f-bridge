@@ -7,8 +7,11 @@ import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from "@t
 import {GameState} from "types/GameState";
 import Loading from "../Loading";
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "../../hooks/useAuth";
 
 const RoomTable = (props: {gameRoomList: GameState[]}) => {
+  const {playerProfile} = useAuth();
+  const navigate = useNavigate();
   const columnHelper = createColumnHelper<GameState>();
   const columns = [
     columnHelper.accessor("roomID", {
@@ -42,7 +45,6 @@ const RoomTable = (props: {gameRoomList: GameState[]}) => {
 
   const {gameRoomList} = props;
   const {joinGameRoom, isLoading, error} = useFunctions();
-  const navigate = useNavigate();
 
   const table = useReactTable({
     data: gameRoomList,
@@ -54,6 +56,7 @@ const RoomTable = (props: {gameRoomList: GameState[]}) => {
     toast.error(error.message);
   }
   if (isLoading) return <Loading />;
+  if (!playerProfile) return <></>;
 
   return (
     <table className="lobby-table">
@@ -73,11 +76,23 @@ const RoomTable = (props: {gameRoomList: GameState[]}) => {
           <tr
             key={index}
             onClick={async () => {
-              const roomID = row.original.roomID;
-              const success = await joinGameRoom(roomID);
-              if (success) {
-                toast.success("Successfully joined room");
-                navigate(`/gameroom/${roomID}`);
+              if (!playerProfile.roomID) {
+                const roomID = row.original.roomID;
+                const success = await joinGameRoom(roomID);
+                if (success) {
+                  toast.success("Successfully joined room");
+                  navigate(`/gameroom/${roomID}`);
+                }
+              }
+
+              if (playerProfile.roomID === row.original.roomID) {
+                navigate(`/gameroom/${playerProfile.roomID}`);
+                return;
+              }
+
+              if (row.original.players.length >= 4) {
+                toast.error("Room is full");
+                return;
               }
             }}
           >

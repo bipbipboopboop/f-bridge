@@ -37,17 +37,28 @@ const Lobby = () => {
         </div>
         <div className="d-flex flex-column p-3" style={{gap: "20px"}}>
           <div className="d-flex justify-content-center">
-            <OrangeButton
-              onClick={async () => {
-                const gameRoom = (await createGameRoom())?.data;
-                if (gameRoom) {
-                  toast.success("Room created!");
-                  navigate(`/gameroom/${gameRoom.roomID}`);
-                }
-              }}
-            >
-              Create Room
-            </OrangeButton>
+            {playerProfile.roomID && (
+              <OrangeButton
+                onClick={() => {
+                  navigate(`/gameroom/${playerProfile.roomID}`);
+                }}
+              >
+                Back to room
+              </OrangeButton>
+            )}
+            {!playerProfile.roomID && (
+              <OrangeButton
+                onClick={async () => {
+                  const gameRoom = (await createGameRoom())?.data;
+                  if (gameRoom) {
+                    toast.success("Room created!");
+                    navigate(`/gameroom/${gameRoom.roomID}`);
+                  }
+                }}
+              >
+                Create Room
+              </OrangeButton>
+            )}
           </div>
         </div>
       </div>
