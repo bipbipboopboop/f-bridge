@@ -6,6 +6,7 @@ import {Card, Suit} from "types/Card";
 import {deck} from "../../../utils/deck";
 import BidButton from "../../buttons/button-bid";
 import {BiddingPhase} from "types/GameState";
+import Button from "../../buttons/button";
 
 const ChoosingTeammatePanel = (props: {biddingPhase: BiddingPhase}) => {
   const {biddingPhase} = props;
@@ -44,35 +45,32 @@ const ChoosingTeammatePanel = (props: {biddingPhase: BiddingPhase}) => {
   };
 
   return (
-    <div
-      className="w-100 h-100 d-flex flex-column justify-content-center align-items-center"
-      style={{border: "1px solid white"}}
-    >
+    <div className="w-100 h-100 px-3 d-flex flex-column justify-content-center align-items-center">
       {selectedCard && (
-        <>
-          Your teammate will be the owner of {selectedCard.stringValue}
-          {selectedCard.suit}
-        </>
+        <Button theme="yellow" style={{width: "28rem"}}>
+          Your teammate will be the owner of {selectedCard.stringValue} {selectedCard.suit}
+        </Button>
       )}
-      <div className="h-50 w-100 d-flex flex-column">
+      <div className="h-50 d-flex flex-column">
         <table>
           <tbody>
-            {["♣", "♦", "♥", "♠"].map((suit) => (
+            {(["♣", "♦", "♥", "♠"] as Suit[]).map((suit) => (
               <tr>
                 <td>
                   <BidButton
-                    style={{marginRight: "0.6rem", color: "black"}}
+                    style={{marginRight: "0.6rem", color: suit === "♣" || suit === "♠" ? "#222222" : "#ff525d"}}
                     onClick={() => {
-                      setSelectedSuit(suit as Suit);
+                      setSelectedSuit(suit);
                     }}
                   >
                     {suit}
                   </BidButton>
                 </td>
+
                 <td>
                   <div className="d-flex">
                     {suit === selectedSuit &&
-                      otherCardsLookup[suit as Suit].map((card) => (
+                      otherCardsLookup[suit].map((card) => (
                         <BidButton key={`${card.suit} - ${card.stringValue}`} onClick={() => setSelectedCard(card)}>
                           {card.stringValue}
                         </BidButton>
