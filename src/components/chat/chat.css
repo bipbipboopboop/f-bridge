@@ -18,11 +18,16 @@
   width: 100%;
 }
 
+.system-message,
 .message {
   margin-bottom: 0.25rem;
   border-radius: 5px;
   padding: 1rem 0rem;
   word-break: break-word;
+}
+.system-message {
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .message:hover {
