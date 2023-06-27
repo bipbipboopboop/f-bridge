@@ -94,6 +94,7 @@ const ChoosingTeammatePanel = (props: {biddingPhase: BiddingPhase}) => {
               style={{
                 color: suit === "♣" || suit === "♠" ? "#222222" : "#ff525d",
                 marginBottom: "0.5rem",
+                border: `${selectedSuit === suit ? "5px solid #BD8E63" : ""}`,
               }}
               onClick={() => {
                 setSelectedSuit(suit);
@@ -106,15 +107,22 @@ const ChoosingTeammatePanel = (props: {biddingPhase: BiddingPhase}) => {
 
         <div className="w-50 d-flex flex-wrap justify-content-center align-items-center">
           {selectedSuit &&
-            otherCardsLookup[selectedSuit as Suit].map((card) => (
-              <BidButton
-                style={{marginRight: "1rem"}}
-                key={`${card.suit} - ${card.stringValue}`}
-                onClick={() => setSelectedCard(card)}
-              >
-                {card.stringValue}
-              </BidButton>
-            ))}
+            otherCardsLookup[selectedSuit as Suit]
+              .sort((a, b) => b.value - a.value)
+              .map((card) => (
+                <BidButton
+                  style={{
+                    marginRight: "1rem",
+                    border: `${
+                      card === selectedCard ? "5px solid #BD8E63" : ""
+                    }`,
+                  }}
+                  key={`${card.suit} - ${card.stringValue}`}
+                  onClick={() => setSelectedCard(card)}
+                >
+                  {card.stringValue}
+                </BidButton>
+              ))}
         </div>
       </div>
     </div>
