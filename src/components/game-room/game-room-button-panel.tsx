@@ -1,8 +1,8 @@
-import OrangeButton from "../buttons/button-orange";
 import {GameState} from "types/GameState";
 import {useAuth} from "../../hooks/useAuth";
 import useFunctions from "../../hooks/useFunctions";
 import {useParams} from "react-router-dom";
+import Button from "../buttons/button";
 
 const GameRoomButtonPanel = (props: {gameState: GameState}) => {
   const {playerProfile} = useAuth();
@@ -12,16 +12,23 @@ const GameRoomButtonPanel = (props: {gameState: GameState}) => {
   const {gameState} = props;
 
   const isRoomFull = gameState.players.length === 4;
-  const otherPlayers = gameState.players.filter((player) => player.id !== playerProfile?.id);
-  const isGameReady = isRoomFull && otherPlayers.every((player) => player.isReady);
-  const isPlayerAHost = gameState.players.find((player) => player.isHost)?.id === playerProfile?.id;
+  const otherPlayers = gameState.players.filter(
+    (player) => player.id !== playerProfile?.id
+  );
+  const isGameReady =
+    isRoomFull && otherPlayers.every((player) => player.isReady);
+  const isPlayerAHost =
+    gameState.players.find((player) => player.isHost)?.id === playerProfile?.id;
 
-  const isPlayerReady = gameState.players.find((player) => player.id === playerProfile?.id)?.isReady;
+  const isPlayerReady = gameState.players.find(
+    (player) => player.id === playerProfile?.id
+  )?.isReady;
 
   if (isPlayerAHost) {
     return (
       <div className="d-flex justify-content-center">
-        <OrangeButton
+        <Button
+          theme="orange"
           onClick={async () => {
             await toggleReady(roomID);
             await startGame();
@@ -29,14 +36,16 @@ const GameRoomButtonPanel = (props: {gameState: GameState}) => {
           disabled={!isGameReady}
         >
           Start Game
-        </OrangeButton>
+        </Button>
       </div>
     );
   }
 
   return (
     <div className="d-flex justify-content-center">
-      <OrangeButton onClick={async () => await toggleReady(roomID)}>{isPlayerReady ? "Cancel" : "Ready"}</OrangeButton>
+      <Button theme="orange" onClick={async () => await toggleReady(roomID)}>
+        {isPlayerReady ? "Cancel" : "Ready"}
+      </Button>
     </div>
   );
 };
