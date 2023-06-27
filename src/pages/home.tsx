@@ -1,9 +1,38 @@
+import {useNavigate} from "react-router-dom";
+import spinning from "../assets/spinning.gif";
+import Button from "../components/buttons/button";
+import {useAuth} from "../hooks/useAuth";
+
 const Home = () => {
+  const {playerProfile} = useAuth();
+  const navigate = useNavigate();
+
+  const isPlayerInRoom = !!playerProfile?.roomID;
+
   return (
-    <div className="w-100 h-100 d-flex">
-      <div className="w-50">{/* <img src={spinning} className="h-100 w-100" /> */}</div>
-      <div className="w-50 h-100 d-flex flex-column align-items-center justify-content-center">
-        <h1 style={{fontSize: "5rem"}}>FOR DA BOIS</h1>
+    <div className="w-100 h-100 d-flex flex-column align-items-center">
+      <div className="d-flex">
+        <img src={spinning} style={{height: "4rem"}} />
+        <p style={{fontSize: "4rem"}}>Floating Bridge</p>
+        <img src={spinning} style={{height: "4rem"}} />
+      </div>
+      <div className="w-100 h-100 d-flex flex-column justify-content-center align-items-center">
+        <Button
+          theme="orange"
+          style={{marginBottom: "1rem"}}
+          onClick={() => {
+            if (isPlayerInRoom) {
+              navigate(`gameroom/${playerProfile.roomID}`);
+              return;
+            }
+            navigate("/lobby");
+          }}
+        >
+          {`${isPlayerInRoom ? "Return to game room" : "Create game room"}`}
+        </Button>
+        <Button theme="green" onClick={() => navigate("/lobby")}>
+          Go To Lobby
+        </Button>
       </div>
     </div>
   );

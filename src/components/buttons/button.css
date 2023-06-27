@@ -25,7 +25,7 @@
   background: #1fab1c;
 }
 
-.btn-primary {
+.btn-orange {
   width: 300px;
   height: 90px;
   top: 16px;
@@ -43,14 +43,14 @@
   box-shadow: 2px 2px 4px rgba(32, 32, 32, 0.15);
 }
 
-.btn-primary:hover {
+.btn-orange:hover {
   background-color: #b34d00;
 }
 
-.btn-primary:disabled {
+.btn-orange:disabled {
   opacity: 0.7;
 }
-.btn-primary:disabled:hover {
+.btn-orange:disabled:hover {
   background-color: #f06800;
 }
 

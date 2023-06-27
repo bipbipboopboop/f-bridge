@@ -25,10 +25,10 @@ const Navbar = () => {
         <span className="navbar-toggler-icon"></span>
       </button>
       <div className="collapse navbar-collapse" id="navbarNavDropdown">
-        <Link className="navbar-brand" to="/">
+        {/* <Link className="navbar-brand" to="/">
           <img src={spinning} style={{height: "2rem"}} />
           Floating Bridge
-        </Link>
+        </Link> */}
         <ul className="navbar-nav">
           <li className="nav-item active">
             <Link className="nav-link" to="/lobby">
@@ -53,10 +53,15 @@ const Navbar = () => {
           >
             {playerProfile?.displayName}
           </a>
-          <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <div
+            className="dropdown-menu"
+            aria-labelledby="navbarDropdownMenuLink"
+          >
             <a className="dropdown-item">Edit Profile</a>
             <a className="dropdown-item">Settings</a>
-            <a className="dropdown-item">{user?.isAnonymous ? "Login" : "Logout"}</a>
+            <a className="dropdown-item">
+              {user?.isAnonymous ? "Login" : "Logout"}
+            </a>
           </div>
         </li>
       </ul>
