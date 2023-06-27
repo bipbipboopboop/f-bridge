@@ -1,7 +1,6 @@
-import {Dispatch, SetStateAction, useState} from "react";
+import {useState} from "react";
 import {useAuth} from "../../../hooks/useAuth";
 
-import PlayingCard from "assets/playing_card";
 import {Card, Suit} from "types/Card";
 import {deck} from "../../../utils/deck";
 import BidButton from "../../buttons/button-bid";
@@ -69,60 +68,54 @@ const ChoosingTeammatePanel = (props: {biddingPhase: BiddingPhase}) => {
 
   return (
     <div
-      className="h-100 px-3 d-flex flex-column justify-content-center align-items-center"
+      className="h-100 d-flex flex-column align-items-center"
       style={{backgroundColor: "rgba(0, 0, 0, 0.3)", width: "90%"}}
     >
-      {selectedCard && (
-        <Button
-          theme="yellow"
-          style={{width: "28rem", marginBottom: "1rem"}}
-          onMouseEnter={() => {
-            setIsHovering(true);
-          }}
-          onMouseLeave={() => {
-            setIsHovering(false);
-          }}
-        >
-          {isHovering ? "Lock in" : promptText}
-        </Button>
-      )}
-      <div className="h-50 d-flex flex-column">
-        <table>
-          <tbody>
-            {(["♣", "♦", "♥", "♠"] as Suit[]).map((suit) => (
-              <tr>
-                <td>
-                  <BidButton
-                    style={{
-                      marginRight: "0.6rem",
-                      color:
-                        suit === "♣" || suit === "♠" ? "#222222" : "#ff525d",
-                    }}
-                    onClick={() => {
-                      setSelectedSuit(suit);
-                    }}
-                  >
-                    {suit}
-                  </BidButton>
-                </td>
+      <div className="h-25 d-flex justify-content-center align-items-center">
+        {selectedCard && (
+          <Button
+            theme="yellow"
+            style={{width: "28rem", marginBottom: "1rem"}}
+            onMouseEnter={() => {
+              setIsHovering(true);
+            }}
+            onMouseLeave={() => {
+              setIsHovering(false);
+            }}
+          >
+            {isHovering ? "Lock in" : promptText}
+          </Button>
+        )}
+      </div>
+      <div className="h-75 w-100 d-flex">
+        <div className="w-50 h-100 d-flex flex-column justify-content-center align-items-center">
+          {(["♣", "♦", "♥", "♠"] as Suit[]).map((suit) => (
+            <BidButton
+              style={{
+                color: suit === "♣" || suit === "♠" ? "#222222" : "#ff525d",
+                marginBottom: "0.5rem",
+              }}
+              onClick={() => {
+                setSelectedSuit(suit);
+              }}
+            >
+              {suit}
+            </BidButton>
+          ))}
+        </div>
 
-                <td>
-                  <div className="d-flex">
-                    {suit === selectedSuit &&
-                      otherCardsLookup[suit].map((card) => (
-                        <BidButton
-                          key={`${card.suit} - ${card.stringValue}`}
-                          onClick={() => setSelectedCard(card)}
-                        >
-                          {card.stringValue}
-                        </BidButton>
-                      ))}
-                  </div>
-                </td>
-              </tr>
+        <div className="w-50 d-flex flex-wrap justify-content-center align-items-center">
+          {selectedSuit &&
+            otherCardsLookup[selectedSuit as Suit].map((card) => (
+              <BidButton
+                style={{marginRight: "1rem"}}
+                key={`${card.suit} - ${card.stringValue}`}
+                onClick={() => setSelectedCard(card)}
+              >
+                {card.stringValue}
+              </BidButton>
             ))}
-          </tbody>
-        </table>
+        </div>
       </div>
     </div>
   );
