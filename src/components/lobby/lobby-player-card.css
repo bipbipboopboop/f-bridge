@@ -1,13 +1,14 @@
 .lobby-player-card {
   display: flex;
   padding: 1rem;
+  width: 100%;
   border: 6px solid grey;
   border-radius: 20px;
   background-color: #5090e0;
 }
 
 .lobby-player-card img {
-  height: 15rem;
+  height: 12rem;
   border: 2px solid lightblue;
   border-radius: 20px;
   background-color: #68a0e0;

@@ -30,8 +30,8 @@ const Lobby = () => {
       </div>
       <div className="w-50 h-100 p-3 d-flex flex-column justify-content-between">
         <LobbyPlayerCard playerProfile={playerProfile} />
-        <div className="p-3" style={{border: "1px solid"}}>
-          <p>Join A Room!</p>
+        <div className="p-3 py-5" style={{backgroundColor: "rgba(0, 0, 0, 0.1)"}}>
+          <p>Join A Room! (Coming Soon)</p>
           <input type="text" style={{height: "52px"}} />
           <GreenButton style={{marginRight: "0.5rem"}}>Join Room</GreenButton>
         </div>

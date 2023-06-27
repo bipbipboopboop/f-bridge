@@ -9,11 +9,13 @@ const LobbyPlayerCard = (props: {playerProfile: PlayerProfile}) => {
       <div className="mx-2">
         <img src={dino} alt={":/"} />
       </div>
-      <div className="player-info">
+      <div className="player-info" style={{width: "100%"}}>
+        Name:
         <div>
           {playerProfile.displayName} ({playerProfile.country})
         </div>
-        <div>Games Played:{playerProfile.numOfGamesPlayed}</div>
+        Games Played:
+        <div>{playerProfile.numOfGamesPlayed}</div>
       </div>
     </div>
   );
