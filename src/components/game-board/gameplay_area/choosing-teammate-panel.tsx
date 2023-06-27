@@ -14,6 +14,7 @@ const ChoosingTeammatePanel = (props: {biddingPhase: BiddingPhase}) => {
 
   const [selectedSuit, setSelectedSuit] = useState<Suit | null>(null);
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
+  const [isHovering, setIsHovering] = useState(false);
 
   // Check whether the player is the bid winner
   const bidWinner = biddingPhase.gameroomPlayersList.find(
@@ -32,23 +33,57 @@ const ChoosingTeammatePanel = (props: {biddingPhase: BiddingPhase}) => {
   const otherCardsLookup: Record<Suit, Card[]> = {
     "♣": deck
       .filter((card) => card.suit === "♣")
-      .filter((card) => !gamePlayer.cards.some((c) => c.stringValue === card.stringValue && c.suit === card.suit)),
+      .filter(
+        (card) =>
+          !gamePlayer.cards.some(
+            (c) => c.stringValue === card.stringValue && c.suit === card.suit
+          )
+      ),
     "♦": deck
       .filter((card) => card.suit === "♦")
-      .filter((card) => !gamePlayer.cards.some((c) => c.stringValue === card.stringValue && c.suit === card.suit)),
+      .filter(
+        (card) =>
+          !gamePlayer.cards.some(
+            (c) => c.stringValue === card.stringValue && c.suit === card.suit
+          )
+      ),
     "♥": deck
       .filter((card) => card.suit === "♥")
-      .filter((card) => !gamePlayer.cards.some((c) => c.stringValue === card.stringValue && c.suit === card.suit)),
+      .filter(
+        (card) =>
+          !gamePlayer.cards.some(
+            (c) => c.stringValue === card.stringValue && c.suit === card.suit
+          )
+      ),
     "♠": deck
       .filter((card) => card.suit === "♠")
-      .filter((card) => !gamePlayer.cards.some((c) => c.stringValue === card.stringValue && c.suit === card.suit)),
+      .filter(
+        (card) =>
+          !gamePlayer.cards.some(
+            (c) => c.stringValue === card.stringValue && c.suit === card.suit
+          )
+      ),
   };
 
+  const promptText = `Your teammate will be the owner of ${selectedCard?.stringValue} ${selectedCard?.suit}`;
+
   return (
-    <div className="w-100 h-100 px-3 d-flex flex-column justify-content-center align-items-center">
+    <div
+      className="h-100 px-3 d-flex flex-column justify-content-center align-items-center"
+      style={{backgroundColor: "rgba(0, 0, 0, 0.3)", width: "90%"}}
+    >
       {selectedCard && (
-        <Button theme="yellow" style={{width: "28rem"}}>
-          Your teammate will be the owner of {selectedCard.stringValue} {selectedCard.suit}
+        <Button
+          theme="yellow"
+          style={{width: "28rem", marginBottom: "1rem"}}
+          onMouseEnter={() => {
+            setIsHovering(true);
+          }}
+          onMouseLeave={() => {
+            setIsHovering(false);
+          }}
+        >
+          {isHovering ? "Lock in" : promptText}
         </Button>
       )}
       <div className="h-50 d-flex flex-column">
@@ -58,7 +93,11 @@ const ChoosingTeammatePanel = (props: {biddingPhase: BiddingPhase}) => {
               <tr>
                 <td>
                   <BidButton
-                    style={{marginRight: "0.6rem", color: suit === "♣" || suit === "♠" ? "#222222" : "#ff525d"}}
+                    style={{
+                      marginRight: "0.6rem",
+                      color:
+                        suit === "♣" || suit === "♠" ? "#222222" : "#ff525d",
+                    }}
                     onClick={() => {
                       setSelectedSuit(suit);
                     }}
@@ -71,7 +110,10 @@ const ChoosingTeammatePanel = (props: {biddingPhase: BiddingPhase}) => {
                   <div className="d-flex">
                     {suit === selectedSuit &&
                       otherCardsLookup[suit].map((card) => (
-                        <BidButton key={`${card.suit} - ${card.stringValue}`} onClick={() => setSelectedCard(card)}>
+                        <BidButton
+                          key={`${card.suit} - ${card.stringValue}`}
+                          onClick={() => setSelectedCard(card)}
+                        >
                           {card.stringValue}
                         </BidButton>
                       ))}
