@@ -69,7 +69,7 @@ const ChoosingTeammatePanel = (props: {biddingPhase: BiddingPhase}) => {
   return (
     <div
       className="h-100 d-flex flex-column align-items-center"
-      style={{backgroundColor: "rgba(0, 0, 0, 0.3)", width: "90%"}}
+      style={{backgroundColor: "rgba(0, 0, 0, 0.2)", width: "90%"}}
     >
       <div className="h-25 d-flex justify-content-center align-items-center">
         {selectedCard && (
