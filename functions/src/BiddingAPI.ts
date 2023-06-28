@@ -1,80 +1,107 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 
-import {Bid} from "types/Bid";
+import { CallableContext, HttpsError } from "firebase-functions/v1/https";
+import { Bid } from "types/Bid";
 import {DocumentReference} from "firebase-admin/firestore";
 import {GameState} from "types/GameState";
 import {GameRoomPlayer} from "types/PlayerProfile";
 import {BidSuit} from "types/Bid";
+import { PLAYERS_COLLECTION, GAME_STATES_COLLECTION } from "./colllections";
 
-export const placeBid = functions.https.onCall(async (bid: Bid, context) => {
-  // 0. Check if the user is authenticated
+function getUidOrThrow(context: CallableContext): string {
   if (!context.auth) {
-    throw new functions.https.HttpsError(
-      "unauthenticated",
-      "The user is not authenticated."
-    );
+    throw new HttpsError("unauthenticated", "The user is not authenticated");
   }
+  return context.auth.uid;
+}
+
+async function getGameStateOrThrow(gameStateRef: DocumentReference<GameState>): Promise<GameState> {
+  const gameStateSnapshot = await gameStateRef.get();
+  const gameState = gameStateSnapshot.data();
+  if (!gameState) {
+    throw new HttpsError("not-found", "The game does not exist");
+  }
+  return gameState;
+}
+
+async function getPlayerInRoomOrThrow(
+  gameRoomPlayerRef: DocumentReference<GameRoomPlayer>
+): Promise<GameRoomPlayer> {
+  const gameRoomPlayerSnapshot = await gameRoomPlayerRef.get();
+  const gameRoomPlayer = gameRoomPlayerSnapshot.data();
+  if (!gameRoomPlayer) {
+    throw new HttpsError("failed-precondition", "No such player in the room");
+  }
+  return gameRoomPlayer;
+}
+
+function requireBiddingPhase(gameState: GameState) {
+  if (gameState.status !== "Bidding") {
+    throw new HttpsError("failed-precondition", "The game must be in bidding phase");
+  }
+}
+
+function requirePlayerTurn() {
+
+}
+
+function requireHiggerBid() {
+
+}
+
+
+export const placeBid = functions.https.onCall(async ({ bid, gameId }: { bid: Bid, gameId: string }, context) => {
+  // 0. Check if the user is authenticated
+  const uid = getUidOrThrow(context);
 
   // Get the user's profile
-  const gameRoomRef = admin
-    .firestore()
-    .collection("playerProfiles")
-    .doc(context.auth.uid) as DocumentReference<GameState>;
-
-  const gameRoom = (await gameRoomRef.get()).data();
-
-  if (!gameRoom) {
-    throw new functions.https.HttpsError(
-      "not-found",
-      "This room does not exist."
-    );
-  }
+  const gameStateRef = GAME_STATES_COLLECTION.doc(gameId) as DocumentReference<GameState>;
+  const gameState = await getGameStateOrThrow(gameStateRef);
 
   // 1. Check if the game is in the bidding phase
-  if (gameRoom.status !== "Bidding") {
-    throw new functions.https.HttpsError(
-      "failed-precondition",
-      "The game is not in the bidding phase."
-    );
-  }
+  requireBiddingPhase(gameState);
 
   // 2. Check if the player is in the room
-  const playerRef = gameRoomRef
+  const gameRoomPlayerRef = gameStateRef
     .collection("players")
-    .doc(context.auth.uid) as DocumentReference<GameRoomPlayer>;
-  const playerSnapshot = await playerRef.get();
-  const playerData = playerSnapshot.data();
+    .doc(uid) as DocumentReference<GameRoomPlayer>;
 
-  if (!playerData) {
-    throw new functions.https.HttpsError(
-      "failed-precondition",
-      "Player is not in the room."
-    );
-  }
+  const gameRoomPlayer = await getPlayerInRoomOrThrow(gameRoomPlayerRef);
+  requirePlayerTurn();
+  requireHiggerBid();
+
 
   // 3. Check if it's the player's turn
-  if (playerData.position !== gameRoom.biddingPhase!.currentPlayerIndex) {
-    throw new functions.https.HttpsError(
-      "failed-precondition",
-      "It's not the player's turn to place a bid."
-    );
-  }
+  // if (gameRoomPlayer.position !== gameState.biddingPhase!.currentPlayerIndex) {
+  //   throw new functions.https.HttpsError(
+  //     "failed-precondition",
+  //     "It's not the player's turn to place a bid."
+  //   );
+  // }
 
   // 4. Check if the bid is smaller than the highest bid
-  const highestBid = gameRoom.biddingPhase!.highestBid;
+  // const highestBid = gameRoom.biddingPhase!.highestBid;
 
-  const isFirstBid = !highestBid;
-  const isValidBid = isFirstBid || bidComparator(bid, highestBid!) === 1;
+  // const isFirstBid = !highestBid;
+  // const isHighestBid = isFirstBid || bidComparator(bid, highestBid!) === 1;
 
-  if (isValidBid) {
-    throw new functions.https.HttpsError(
-      "failed-precondition",
-      "The bid must be greater than the highest bid."
-    );
-  }
-
+  // if (!isHighestBid) {
+  //   throw new functions.https.HttpsError(
+  //     "failed-precondition",
+  //     "The bid must be greater than the highest bid."
+  //   );
+  // }
+    
   // TODO: Perform the bid placement logic here
+  
+  /**
+   * What are the updates that we need to execute on each bid?
+   * - Update the highest bid
+   * - Update the number of consecutive pass
+   * - Take actions based on the number of consecutives passes
+   * - 
+   */
 
   return null; // TODO: Return any desired response
 });
