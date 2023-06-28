@@ -1,13 +1,25 @@
 import * as functions from "firebase-functions";
-import * as admin from "firebase-admin";
 
 import { CallableContext, HttpsError } from "firebase-functions/v1/https";
 import { Bid } from "types/Bid";
 import {DocumentReference} from "firebase-admin/firestore";
-import {GameState} from "types/GameState";
+// import {BiddingPhase, GameState} from "types/GameState";
 import {GameRoomPlayer} from "types/PlayerProfile";
 import {BidSuit} from "types/Bid";
-import { PLAYERS_COLLECTION, GAME_STATES_COLLECTION } from "./colllections";
+import { GAME_STATES_COLLECTION } from "./colllections";
+
+// TODO: Redifined the API
+// TODO: write wrapper for the DB
+
+type GameState = {
+  biddingPhase: BiddingPhase | null;
+}
+
+type BiddingPhase = {
+  currentPlayerIndex: number;
+  highestBid: Bid | null;
+  numberOfPasses: number;
+}
 
 function getUidOrThrow(context: CallableContext): string {
   if (!context.auth) {
@@ -16,7 +28,9 @@ function getUidOrThrow(context: CallableContext): string {
   return context.auth.uid;
 }
 
-async function getGameStateOrThrow(gameStateRef: DocumentReference<GameState>): Promise<GameState> {
+async function getGameStateOrThrow(
+  gameStateRef: DocumentReference<GameState>
+): Promise<GameState> {
   const gameStateSnapshot = await gameStateRef.get();
   const gameState = gameStateSnapshot.data();
   if (!gameState) {
@@ -36,65 +50,60 @@ async function getPlayerInRoomOrThrow(
   return gameRoomPlayer;
 }
 
-function requireBiddingPhase(gameState: GameState) {
-  if (gameState.status !== "Bidding") {
+function getBiddingPhaseOrThrow(gameState: GameState): BiddingPhase {
+  const { biddingPhase } = gameState;
+  if (biddingPhase === null) {
     throw new HttpsError("failed-precondition", "The game must be in bidding phase");
+  }
+  return gameState.biddingPhase!;
+}
+
+function requirePlayerTurn(biddingPhase: BiddingPhase, gameRoomPlayer: GameRoomPlayer) {
+  const { position } = gameRoomPlayer;
+  const { currentPlayerIndex } = biddingPhase;
+  if (position !== currentPlayerIndex) {
+    throw new HttpsError("failed-precondition", "It's not this player turn");
+  } 
+}
+
+function requireHiggerBid(biddingPhase: BiddingPhase, bid: Bid) {
+  const { highestBid } = biddingPhase;
+  if (highestBid !== null && bidComparator(bid, highestBid) <= 0) {
+    throw new HttpsError("failed-precondition", "New bid should be greater than the highest bid");
   }
 }
 
-function requirePlayerTurn() {
-
+function handleLogic(biddingPhase: BiddingPhase, bid: Bid): BiddingPhase {
+  if (bid.isPass) {
+    let { numberOfPasses } = biddingPhase;
+    numberOfPasses++;
+    return { ...biddingPhase, numberOfPasses };
+  } else {
+    return { ...biddingPhase, highestBid: bid };
+  }
 }
 
-function requireHiggerBid() {
+function update() {
 
 }
-
 
 export const placeBid = functions.https.onCall(async ({ bid, gameId }: { bid: Bid, gameId: string }, context) => {
-  // 0. Check if the user is authenticated
   const uid = getUidOrThrow(context);
-
-  // Get the user's profile
   const gameStateRef = GAME_STATES_COLLECTION.doc(gameId) as DocumentReference<GameState>;
+  
   const gameState = await getGameStateOrThrow(gameStateRef);
+  const biddingPhase = getBiddingPhaseOrThrow(gameState);
 
-  // 1. Check if the game is in the bidding phase
-  requireBiddingPhase(gameState);
-
-  // 2. Check if the player is in the room
   const gameRoomPlayerRef = gameStateRef
     .collection("players")
     .doc(uid) as DocumentReference<GameRoomPlayer>;
 
   const gameRoomPlayer = await getPlayerInRoomOrThrow(gameRoomPlayerRef);
-  requirePlayerTurn();
-  requireHiggerBid();
-
-
-  // 3. Check if it's the player's turn
-  // if (gameRoomPlayer.position !== gameState.biddingPhase!.currentPlayerIndex) {
-  //   throw new functions.https.HttpsError(
-  //     "failed-precondition",
-  //     "It's not the player's turn to place a bid."
-  //   );
-  // }
-
-  // 4. Check if the bid is smaller than the highest bid
-  // const highestBid = gameRoom.biddingPhase!.highestBid;
-
-  // const isFirstBid = !highestBid;
-  // const isHighestBid = isFirstBid || bidComparator(bid, highestBid!) === 1;
-
-  // if (!isHighestBid) {
-  //   throw new functions.https.HttpsError(
-  //     "failed-precondition",
-  //     "The bid must be greater than the highest bid."
-  //   );
-  // }
-    
-  // TODO: Perform the bid placement logic here
   
+  requirePlayerTurn(biddingPhase, gameRoomPlayer);
+  requireHiggerBid(biddingPhase, bid);
+
+  // TODO: Perform the bid placement logic here
   /**
    * What are the updates that we need to execute on each bid?
    * - Update the highest bid
@@ -102,8 +111,14 @@ export const placeBid = functions.https.onCall(async ({ bid, gameId }: { bid: Bi
    * - Take actions based on the number of consecutives passes
    * - 
    */
-
-  return null; // TODO: Return any desired response
+  const nextBiddingPhase = handleLogic(biddingPhase, bid);
+  
+  // TODO: write io logic here
+  /**
+   * Upload the modified state into the database
+   */
+  update();
+  return nextBiddingPhase; // TODO: Return any desired response
 });
 
 const bidComparator = (bid1: Bid, bid2: Bid) => {
