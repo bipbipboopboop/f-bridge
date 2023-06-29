@@ -6,20 +6,11 @@ import {DocumentReference} from "firebase-admin/firestore";
 // import {BiddingPhase, GameState} from "types/GameState";
 import {GameRoomPlayer} from "types/PlayerProfile";
 import {BidSuit} from "types/Bid";
-import { GAME_STATES_COLLECTION } from "./colllections";
+import { GAME_ROOMS_COLLECTION } from "./colllections";
+import { BiddingPhase, GameState } from "./GameType";
 
 // TODO: Redifined the API
 // TODO: write wrapper for the DB
-
-type GameState = {
-  biddingPhase: BiddingPhase | null;
-}
-
-type BiddingPhase = {
-  currentPlayerIndex: number;
-  highestBid: Bid | null;
-  numberOfPasses: number;
-}
 
 function getUidOrThrow(context: CallableContext): string {
   if (!context.auth) {
@@ -52,10 +43,10 @@ async function getPlayerInRoomOrThrow(
 
 function getBiddingPhaseOrThrow(gameState: GameState): BiddingPhase {
   const { biddingPhase } = gameState;
-  if (biddingPhase === null) {
+  if (!biddingPhase) {
     throw new HttpsError("failed-precondition", "The game must be in bidding phase");
   }
-  return gameState.biddingPhase!;
+  return biddingPhase;
 }
 
 function requirePlayerTurn(biddingPhase: BiddingPhase, gameRoomPlayer: GameRoomPlayer) {
@@ -63,7 +54,7 @@ function requirePlayerTurn(biddingPhase: BiddingPhase, gameRoomPlayer: GameRoomP
   const { currentPlayerIndex } = biddingPhase;
   if (position !== currentPlayerIndex) {
     throw new HttpsError("failed-precondition", "It's not this player turn");
-  } 
+  }
 }
 
 function requireHiggerBid(biddingPhase: BiddingPhase, bid: Bid) {
@@ -73,16 +64,38 @@ function requireHiggerBid(biddingPhase: BiddingPhase, bid: Bid) {
   }
 }
 
-function handleLogic(biddingPhase: BiddingPhase, bid: Bid): BiddingPhase {
+/**
+ * The bidding phase will end when: 3 consecutive people passed
+ */
+function handleLogic(
+  biddingPhase: BiddingPhase, 
+  playerID: string,
+  bid: Bid): BiddingPhase {
+  
+  let { currentPlayerIndex, numberOfPasses, highestBid } = biddingPhase;
   if (bid.isPass) {
-    let { numberOfPasses } = biddingPhase;
     numberOfPasses++;
+  }
+  if (numberOfPasses === 4) {
+    // the bidding phase is terminated
+    // return
+  } else if (numberOfPasses === 3 && highestBid) {
+    // the bidding phase will end, and the player play that will win
+    // return
+  }
+  // increment the player indicies
+  // 
+  if (bid.isPass) {
     return { ...biddingPhase, numberOfPasses };
   } else {
-    return { ...biddingPhase, highestBid: bid };
+    // we need to update the highest bid
+    return { ...biddingPhase, highestBid: { ...bid,  };
   }
 }
 
+/**
+ * Flushes all the changes into the database
+ */
 function update() {
 
 }

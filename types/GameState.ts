@@ -1,6 +1,6 @@
 // types/GameState.ts
-import {Bid, BidSuit} from "types/Bid";
-import {GameRoomPlayer, LobbyPlayerProfile} from "./PlayerProfile";
+import { Bid, BidSuit } from "types/Bid";
+import { GameRoomPlayer, LobbyPlayerProfile } from "./PlayerProfile";
 
 export type GameState = {
   roomID: string;
