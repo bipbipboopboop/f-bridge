@@ -13,24 +13,6 @@ import {PlayerProfile} from "types/PlayerProfile";
 import {DocumentReference} from "firebase-admin/firestore";
 import {UserInfo} from "firebase-admin/auth";
 import {UnauthenticatedError} from "./error/error";
-import {retrievePlayerProfile} from "./utils/player_functions";
-
-export const retrieveMyPlayerProfile = functions.https.onCall(
-  async (data: void, context) => {
-    if (!context.auth) throw UnauthenticatedError;
-    const userID = context.auth.uid;
-    const {playerProfile} = await retrievePlayerProfile(userID, true);
-
-    console.log({retrieveMyPlayerProfile_playerProfile: playerProfile, userID});
-    if (!playerProfile) {
-      throw new functions.https.HttpsError(
-        "internal",
-        "Your profile data is not found."
-      );
-    }
-    return playerProfile;
-  }
-);
 
 export const createPlayerProfile = functions.https.onCall(
   async (user: UserInfo, context) => {

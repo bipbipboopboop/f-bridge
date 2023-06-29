@@ -1,7 +1,7 @@
 import * as admin from "firebase-admin";
 admin.initializeApp();
 
-import {retrieveMyPlayerProfile, createPlayerProfile} from "./PlayerAPI";
+import {createPlayerProfile} from "./PlayerAPI";
 
 import {
   createGameRoom,
@@ -17,7 +17,7 @@ export {
   /**
    * PLAYER API
    */
-  retrieveMyPlayerProfile,
+
   createPlayerProfile,
 
   /**
