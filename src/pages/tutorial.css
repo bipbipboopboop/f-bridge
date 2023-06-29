@@ -1,0 +1,20 @@
+.tutorial-container {
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.tutorial-title {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 20px;
+  margin-top: 30px;
+}
+
+.section-description {
+  font-size: 16px;
+  margin-bottom: 15px;
+}

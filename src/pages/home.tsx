@@ -30,8 +30,19 @@ const Home = () => {
         >
           {`${isPlayerInRoom ? "Return to game room" : "Create game room"}`}
         </Button>
-        <Button theme="green" onClick={() => navigate("/lobby")}>
+        <Button
+          theme="green"
+          style={{marginBottom: "1rem", width: "300px", height: "90px"}}
+          onClick={() => navigate("/lobby")}
+        >
           Go To Lobby
+        </Button>
+        <Button
+          theme="yellow"
+          style={{marginBottom: "1rem", width: "300px", height: "90px"}}
+          onClick={() => navigate("/tutorial")}
+        >
+          Tutorial
         </Button>
       </div>
     </div>

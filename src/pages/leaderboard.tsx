@@ -1,9 +1,9 @@
-import React from "react";
-
-type Props = {};
-
-const Leaderboard = (props: Props) => {
-  return <div>Leaderboard</div>;
+const Leaderboard = () => {
+  return (
+    <div className="w-100 h-100 d-flex justify-content-center align-items-center">
+      Leaderboard(Coming Soon!)
+    </div>
+  );
 };
 
 export default Leaderboard;

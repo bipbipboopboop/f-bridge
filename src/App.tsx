@@ -12,6 +12,7 @@ import GameRoom from "./pages/game-room";
 import Home from "./pages/home";
 import Leaderboard from "./pages/leaderboard";
 import Test from "./pages/Test";
+import Tutorial from "./pages/tutorial";
 
 function App() {
   const {isLoading} = useFunctions();
@@ -25,6 +26,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/lobby" element={<Lobby />} />
+        <Route path="/tutorial" element={<Tutorial />} />
         <Route path="/gameroom/:roomID" element={<GameRoom />} />
         <Route path="/gameboard/:roomID" element={<GameBoard />} />
         <Route path="/test" element={<Test />} />
