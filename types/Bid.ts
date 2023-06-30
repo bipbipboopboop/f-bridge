@@ -5,7 +5,7 @@ export type Bid = {
 };
 
 export type BidNumber = 1 | 2 | 3 | 4 | 5 | 6;
-export type BidSuit = "♣" | "♦" | "♥" | "♠" | "No Trump";
+export type BidSuit = "♣" | "♦" | "♥" | "♠" | "NT";
 
 // export class Bid {
 //   suit: Suit;

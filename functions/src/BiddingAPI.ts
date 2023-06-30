@@ -1,33 +1,46 @@
 import * as functions from "firebase-functions";
 
+import { DocumentReference } from "firebase-admin/firestore";
 import { CallableContext, HttpsError } from "firebase-functions/v1/https";
-import { Bid } from "types/Bid";
-import {DocumentReference} from "firebase-admin/firestore";
-// import {BiddingPhase, GameState} from "types/GameState";
-import {GameRoomPlayer} from "types/PlayerProfile";
-import {BidSuit} from "types/Bid";
+import { GameRoomPlayer } from "types/PlayerProfile";
 import { GAME_ROOMS_COLLECTION } from "./colllections";
-import { BiddingPhase, GameState } from "./GameType";
+import { BID_SUITS, NUMBER_OF_PLAYERS } from "./constants";
 
-// TODO: Redifined the API
+import type {
+  Bid,
+  BidRequest,
+  BiddingPhase,
+  GameRoom,
+  GameState,
+  PlayerPosition,
+} from "./GameType";
+
+export type BidResultStatus = "continue" | "finish" | "restart";
+
+export type BidResult = {
+  status: BidResultStatus;
+  next: BiddingPhase;
+};
+
 // TODO: write wrapper for the DB
 
 function getUidOrThrow(context: CallableContext): string {
-  if (!context.auth) {
+  const { auth } = context;
+  if (!auth) {
     throw new HttpsError("unauthenticated", "The user is not authenticated");
   }
-  return context.auth.uid;
+  return auth.uid;
 }
 
-async function getGameStateOrThrow(
-  gameStateRef: DocumentReference<GameState>
-): Promise<GameState> {
-  const gameStateSnapshot = await gameStateRef.get();
-  const gameState = gameStateSnapshot.data();
-  if (!gameState) {
+async function getGameRoomOrThrow(
+  gameRoomRef: DocumentReference<GameRoom>
+): Promise<GameRoom> {
+  const gameRoomSnapshot = await gameRoomRef.get();
+  const gameRoom = gameRoomSnapshot.data();
+  if (!gameRoom) {
     throw new HttpsError("not-found", "The game does not exist");
   }
-  return gameState;
+  return gameRoom;
 }
 
 async function getPlayerInRoomOrThrow(
@@ -44,12 +57,18 @@ async function getPlayerInRoomOrThrow(
 function getBiddingPhaseOrThrow(gameState: GameState): BiddingPhase {
   const { biddingPhase } = gameState;
   if (!biddingPhase) {
-    throw new HttpsError("failed-precondition", "The game must be in bidding phase");
+    throw new HttpsError(
+      "failed-precondition",
+      "The game must be in bidding phase"
+    );
   }
   return biddingPhase;
 }
 
-function requirePlayerTurn(biddingPhase: BiddingPhase, gameRoomPlayer: GameRoomPlayer) {
+function requirePlayerTurn(
+  biddingPhase: BiddingPhase,
+  gameRoomPlayer: GameRoomPlayer
+) {
   const { position } = gameRoomPlayer;
   const { currentPlayerIndex } = biddingPhase;
   if (position !== currentPlayerIndex) {
@@ -57,89 +76,109 @@ function requirePlayerTurn(biddingPhase: BiddingPhase, gameRoomPlayer: GameRoomP
   }
 }
 
-function requireHiggerBid(biddingPhase: BiddingPhase, bid: Bid) {
+function compareBid(first: Bid, second: Bid) {
+  // compare bid number first, then compare the suit
+  const numberDiff = first.number - second.number;
+  if (numberDiff) {
+    return numberDiff;
+  }
+  return BID_SUITS.indexOf(first.suit) - BID_SUITS.indexOf(second.suit);
+}
+
+function requirePassOrHigherBid(
+  biddingPhase: BiddingPhase,
+  bidRequest: BidRequest
+) {
   const { highestBid } = biddingPhase;
-  if (highestBid !== null && bidComparator(bid, highestBid) <= 0) {
-    throw new HttpsError("failed-precondition", "New bid should be greater than the highest bid");
+  const { bid } = bidRequest;
+  if (highestBid && bid && compareBid(highestBid.bid, bid) <= 0) {
+    throw new HttpsError(
+      "failed-precondition",
+      "New bid should be greater than the highest bid"
+    );
   }
 }
 
-/**
- * The bidding phase will end when: 3 consecutive people passed
- */
 function handleLogic(
-  biddingPhase: BiddingPhase, 
+  biddingPhase: BiddingPhase,
   playerID: string,
-  bid: Bid): BiddingPhase {
-  
+  { bid }: BidRequest
+): BidResult {
   let { currentPlayerIndex, numberOfPasses, highestBid } = biddingPhase;
-  if (bid.isPass) {
+
+  if (!bid) {
     numberOfPasses++;
-  }
-  if (numberOfPasses === 4) {
-    // the bidding phase is terminated
-    // return
-  } else if (numberOfPasses === 3 && highestBid) {
-    // the bidding phase will end, and the player play that will win
-    // return
-  }
-  // increment the player indicies
-  // 
-  if (bid.isPass) {
-    return { ...biddingPhase, numberOfPasses };
   } else {
-    // we need to update the highest bid
-    return { ...biddingPhase, highestBid: { ...bid,  };
+    highestBid = { bid, playerID };
   }
+
+  let status: BidResultStatus;
+
+  if (numberOfPasses === 4) {
+    status = "restart";
+    currentPlayerIndex = 0;
+    highestBid = null;
+    numberOfPasses = 0;
+  } else if (numberOfPasses === 3 && highestBid) {
+    status = "finish";
+  } else {
+    status = "continue";
+    currentPlayerIndex = ((currentPlayerIndex + 1) %
+      NUMBER_OF_PLAYERS) as PlayerPosition;
+  }
+
+  return { status, next: { currentPlayerIndex, highestBid, numberOfPasses } };
+}
+
+function updateGameState(
+  gameState: GameState,
+  bidResult: BidResult
+): GameState {
+  const { status, next } = bidResult;
+  const newGameState = { ...gameState };
+  if (status === "finish") {
+    newGameState.status = "Picking Teammate";
+    newGameState.biddingPhase = null;
+  } else {
+    newGameState.biddingPhase = next;
+  }
+  return newGameState;
 }
 
 /**
  * Flushes all the changes into the database
  */
-function update() {
-
+async function updateDatabase(
+  gameRoomRef: DocumentReference<GameRoom>,
+  state: GameState
+) {
+  await gameRoomRef.update({ state });
 }
 
-export const placeBid = functions.https.onCall(async ({ bid, gameId }: { bid: Bid, gameId: string }, context) => {
-  const uid = getUidOrThrow(context);
-  const gameStateRef = GAME_STATES_COLLECTION.doc(gameId) as DocumentReference<GameState>;
-  
-  const gameState = await getGameStateOrThrow(gameStateRef);
-  const biddingPhase = getBiddingPhaseOrThrow(gameState);
+export const placeBid = functions.https.onCall(
+  async (
+    { bidRequest, gameId }: { bidRequest: BidRequest; gameId: string },
+    context
+  ) => {
+    const uid = getUidOrThrow(context);
 
-  const gameRoomPlayerRef = gameStateRef
-    .collection("players")
-    .doc(uid) as DocumentReference<GameRoomPlayer>;
+    const gameRoomRef = GAME_ROOMS_COLLECTION.doc(gameId);
+    const gameRoom = await getGameRoomOrThrow(gameRoomRef);
+    const gameState = gameRoom.state;
+    const biddingPhase = getBiddingPhaseOrThrow(gameState);
 
-  const gameRoomPlayer = await getPlayerInRoomOrThrow(gameRoomPlayerRef);
-  
-  requirePlayerTurn(biddingPhase, gameRoomPlayer);
-  requireHiggerBid(biddingPhase, bid);
+    const gameRoomPlayerRef = gameRoomRef
+      .collection("players")
+      .doc(uid) as DocumentReference<GameRoomPlayer>;
+    const gameRoomPlayer = await getPlayerInRoomOrThrow(gameRoomPlayerRef);
 
-  // TODO: Perform the bid placement logic here
-  /**
-   * What are the updates that we need to execute on each bid?
-   * - Update the highest bid
-   * - Update the number of consecutive pass
-   * - Take actions based on the number of consecutives passes
-   * - 
-   */
-  const nextBiddingPhase = handleLogic(biddingPhase, bid);
-  
-  // TODO: write io logic here
-  /**
-   * Upload the modified state into the database
-   */
-  update();
-  return nextBiddingPhase; // TODO: Return any desired response
-});
+    requirePlayerTurn(biddingPhase, gameRoomPlayer);
+    requirePassOrHigherBid(biddingPhase, bidRequest);
 
-const bidComparator = (bid1: Bid, bid2: Bid) => {
-  const suitOrder: BidSuit[] = ["♣", "♦", "♥", "♠", "NT"];
+    const bidResult = handleLogic(biddingPhase, uid, bidRequest);
+    const newGameState = updateGameState(gameState, bidResult);
+    await updateDatabase(gameRoomRef, newGameState);
 
-  if (bid1.suit === bid2.suit) {
-    return bid1.number - bid2.number;
+    return bidResult;
   }
-
-  return suitOrder.indexOf(bid1.suit) - suitOrder.indexOf(bid1.suit);
-};
+);

@@ -3,11 +3,13 @@
  * This is for ease of sending data between the backend and the frontend
  */
 import { Timestamp } from "firebase-admin/firestore";
-import { BidSuit } from "types/Bid";
 import { GameRoomPlayer } from "types/PlayerProfile";
 
+export type BidNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7;
+export type BidSuit =  "♣" | "♦" | "♥" | "♠" | "NT";
+
 export type Bid = {
-    number: number;
+    number: BidNumber;
     suit: BidSuit;
 };
 
@@ -20,12 +22,7 @@ export type HighestBid = {
     /**
      * Who made this bid?
      */
-    playerId: string;
-};
-
-export type GameMetadata = {
-    hostID: string;
-    createdAt: Timestamp;
+    playerID: string;
 };
 
 export type GameStatus = "Waiting" | "Bidding" | "Taking Trick" | "Picking Teammate";
@@ -53,8 +50,14 @@ export type TrickTakingPhase = {
     trumpSuit: BidSuit;
 };
 
+export type GameMetadata = {
+    hostID: string;
+    createdAt: Timestamp;
+};
+
 export type GameSettings = {
     isInviteOnly: boolean;
+    isSuddenDeath: boolean;
     isSpectatorAllowed: boolean;
     invitedID: string[];
 };
@@ -65,9 +68,3 @@ export type GameRoom = {
     metadata: GameMetadata;
     settings: GameSettings;
 };
-
-/**
- * What are the sensitive data?
- * - The teammate of a player
- * - The current hand of a player
- */ 

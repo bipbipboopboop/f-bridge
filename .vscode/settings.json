@@ -1,4 +1,8 @@
 {
-  "prettier.bracketSpacing": false,
-  "prettier.printWidth": 80
+  "prettier.bracketSpacing": true,
+  "prettier.printWidth": 80,
+  "prettier.semi": true,
+  "prettier.trailingComma": "es5",
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "modifications"
 }
