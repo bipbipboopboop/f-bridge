@@ -68,3 +68,10 @@ export type GameRoom = {
     metadata: GameMetadata;
     settings: GameSettings;
 };
+
+export type CardSuit = "♣" | "♦" | "♥" | "♠";
+export type CardValue = "A" | "K" | "Q" | "J" | "10" | "9" | "8" | "7" | "6" | "5" | "4" | "3" | "2";
+export type Card = {
+  value: CardValue;
+  suit: CardSuit;
+};
