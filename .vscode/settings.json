@@ -4,5 +4,6 @@
   "prettier.semi": true,
   "prettier.trailingComma": "es5",
   "editor.formatOnSave": true,
-  "editor.formatOnSaveMode": "modifications"
+  "editor.formatOnSaveMode": "modifications",
+  "editor.tabSize": 2
 }

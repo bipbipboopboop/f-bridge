@@ -6,67 +6,82 @@ import { Timestamp } from "firebase-admin/firestore";
 import { GameRoomPlayer } from "types/PlayerProfile";
 
 export type BidNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7;
-export type BidSuit =  "♣" | "♦" | "♥" | "♠" | "NT";
+export type BidSuit = "♣" | "♦" | "♥" | "♠" | "NT";
 
 export type Bid = {
-    number: BidNumber;
-    suit: BidSuit;
+  number: BidNumber;
+  suit: BidSuit;
 };
 
 export type BidRequest = {
-    bid: Bid | null;
+  bid: Bid | null;
 };
 
 export type HighestBid = {
-    bid: Bid;
-    /**
-     * Who made this bid?
-     */
-    playerID: string;
+  bid: Bid;
+  /**
+   * Who made this bid?
+   */
+  playerID: string;
 };
 
 export type GameStatus = "Waiting" | "Bidding" | "Taking Trick" | "Picking Teammate";
 export type PlayerPosition = 0 | 1 | 2 | 3;
 
 export type GameState = {
-    status: GameStatus;
-    players: GameRoomPlayer[];
-    biddingPhase: BiddingPhase | null;
-    trickTakingPhase: TrickTakingPhase | null;
+  status: GameStatus;
+  players: GameRoomPlayer[];
+  biddingPhase: BiddingPhase | null;
+  pickingTeammatePhase: PickingTeammatePhase | null;
+  trickTakingPhase: TrickTakingPhase | null;
 };
 
+/*
+export type GameState = {
+  status: GameStatus;
+  players: GameRoomPlayer[];
+  currentPhase: BiddingPhase | PickingTeammatePhase | TrickTakingPhase | null;
+}
+*/
+
 export type BiddingPhase = {
-  currentPlayerIndex: PlayerPosition
+  currentPlayerIndex: PlayerPosition;
   highestBid: HighestBid | null;
   numberOfPasses: number;
 };
 
+export type PickingTeammatePhase = {
+  playerID: string;
+};
+
 export type TrickTakingPhase = {
-    currentPlayerIndex: PlayerPosition;
-    /**
-     * Who is the first player to start this round
-     */
-    leadPlayerIndex: PlayerPosition;
-    trumpSuit: BidSuit;
+  currentPlayerIndex: PlayerPosition;
+  /**
+   * Who is the first player to start this round
+   */
+  leadPlayerIndex: PlayerPosition;
+  trumpSuit: BidSuit;
+  teams: [[PlayerPosition, PlayerPosition], [PlayerPosition, PlayerPosition]];
+  roundsWon: [number, number];
 };
 
 export type GameMetadata = {
-    hostID: string;
-    createdAt: Timestamp;
+  hostID: string;
+  createdAt: Timestamp;
 };
 
 export type GameSettings = {
-    isInviteOnly: boolean;
-    isSuddenDeath: boolean;
-    isSpectatorAllowed: boolean;
-    invitedID: string[];
+  isInviteOnly: boolean;
+  isSuddenDeath: boolean;
+  isSpectatorAllowed: boolean;
+  invitedID: string[];
 };
 
 export type GameRoom = {
-    roomID: string;
-    state: GameState;
-    metadata: GameMetadata;
-    settings: GameSettings;
+  roomID: string;
+  state: GameState;
+  metadata: GameMetadata;
+  settings: GameSettings;
 };
 
 export type CardSuit = "♣" | "♦" | "♥" | "♠";
