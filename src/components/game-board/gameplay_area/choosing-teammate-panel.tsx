@@ -6,6 +6,9 @@ import {deck} from "../../../utils/deck";
 import BidButton from "../../buttons/button-bid";
 import {BiddingPhase} from "types/GameState";
 import Button from "../../buttons/button";
+import useFunctions from "../../../hooks/useFunctions";
+import Loading from "../../Loading";
+import {toast} from "react-toastify";
 
 const ChoosingTeammatePanel = (props: {biddingPhase: BiddingPhase}) => {
   const {biddingPhase} = props;
@@ -15,6 +18,8 @@ const ChoosingTeammatePanel = (props: {biddingPhase: BiddingPhase}) => {
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
   const [isHovering, setIsHovering] = useState(false);
 
+  const {chooseTeammate, isLoading, error} = useFunctions();
+
   // Check whether the player is the bid winner
   const bidWinner = biddingPhase.gameroomPlayersList.find(
     (player) => player.position === biddingPhase.currentPlayerIndex
@@ -23,6 +28,14 @@ const ChoosingTeammatePanel = (props: {biddingPhase: BiddingPhase}) => {
   const isBidWinner = bidWinner?.id === playerProfile?.id;
   if (!isBidWinner) {
     return <div>{bidWinner?.displayName} is choosing a teammate...</div>;
+  }
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    toast.error(error.message);
   }
 
   if (!gamePlayer) {
@@ -81,6 +94,9 @@ const ChoosingTeammatePanel = (props: {biddingPhase: BiddingPhase}) => {
             }}
             onMouseLeave={() => {
               setIsHovering(false);
+            }}
+            onClick={() => {
+              chooseTeammate(selectedCard);
             }}
           >
             {isHovering ? "Lock in" : promptText}

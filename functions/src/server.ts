@@ -11,7 +11,7 @@ import {
   toggleReady,
 } from "./GameRoomAPI";
 
-import {placeBid} from "./BidAPI";
+import {placeBid, chooseTeammate} from "./BidAPI";
 
 import {sendMessage} from "./ChatAPI";
 
@@ -35,6 +35,7 @@ export {
    * BID API
    */
   placeBid,
+  chooseTeammate,
 
   /**
    * CHAT API
