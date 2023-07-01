@@ -8,7 +8,7 @@ const ChatboxInput = () => {
   const {sendMessage} = useFunctions();
   const [inputMessage, setInputMessage] = useState<string>("");
 
-  console.log("ChatboxInput loaded");
+  // console.log("ChatboxInput loaded");
   if (!roomID) return <></>;
 
   const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -18,7 +18,7 @@ const ChatboxInput = () => {
   const onSendMessage = async (e: FormEvent) => {
     e.preventDefault();
     await sendMessage({roomID, message: inputMessage});
-    console.log("Sent");
+    // console.log("Sent");
     setInputMessage("");
   };
 

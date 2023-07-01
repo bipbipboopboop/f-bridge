@@ -15,16 +15,16 @@ const Chatbox = () => {
   const messagesCollection = collection(firestore, `gameRooms/${roomID}/messages`) as CollectionReference<Message>;
   const messagesQuery = query(messagesCollection, orderBy("createdAt", "asc"));
 
-  const [messageList, isLoading, error] = useCollectionData<Message>(messagesQuery);
+  const [messageList] = useCollectionData<Message>(messagesQuery);
 
   const focus = useRef<HTMLSpanElement>(document.createElement("span"));
 
   useEffect(() => {
-    console.log("cursor moved");
+    // console.log("cursor moved");
     focus.current.scrollIntoView({behavior: "smooth"});
   }, [messageList]);
 
-  console.log("Chat loaded");
+  // console.log("Chat loaded");
 
   return (
     <div className="chatbox">
