@@ -50,10 +50,10 @@ export type BidSnapshot = {
 export type BiddingPhase = {
   currentPlayerIndex: 0 | 1 | 2 | 3;
 
+  numPasses: number;
+
   highestBid: Bid | null;
-
   gameroomPlayersList: GameRoomPlayer[];
-
   bidHistory: BidSnapshot[];
 };
 

@@ -3,27 +3,43 @@ import {Bid, BidNumber, BidSuit} from "types/Bid";
 import {FC, HTMLAttributes, useState} from "react";
 import {useAuth} from "../../../hooks/useAuth";
 import BidButton from "../../buttons/button-bid";
+import useFunctions from "../../../hooks/useFunctions";
+import {toast} from "react-toastify";
+import Loading from "../../Loading";
+import {getPossibleBids} from "../../../utils/bid";
 
 type BiddingOptionsPanelProps = {
   biddingPhase: BiddingPhase;
 };
 
 const BiddingOptionsPanel: FC<HTMLAttributes<HTMLDivElement> & BiddingOptionsPanelProps> = ({...props}) => {
-  const [selectedBidValue, setSelectedBidValue] = useState<BidNumber | null>(null);
-  const [selectedBidSuit, setSelectedBidSuit] = useState<BidSuit | null>(null);
-  const {playerProfile} = useAuth();
-
   const {
     biddingPhase: {currentPlayerIndex, highestBid, gameroomPlayersList},
     ...divProps
   } = props;
 
+  const [selectedBidValue, setSelectedBidValue] = useState<BidNumber | null>(null);
+  const [selectedBidSuit, setSelectedBidSuit] = useState<BidSuit | null>(null);
+
+  const {playerProfile} = useAuth();
+
   const possibleBids = getPossibleBids(highestBid);
-  const currentBidder = gameroomPlayersList.filter((plyr) => plyr.position === currentPlayerIndex)[0];
+  const currentBidder = gameroomPlayersList.find((plyr) => plyr.position === currentPlayerIndex)!;
   const isMyTurnToBid = currentBidder.id === playerProfile?.id;
+
+  const {placeBid, isLoading, error} = useFunctions();
+
+  if (error) {
+    toast.error(error.message);
+  }
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   if (!isMyTurnToBid) return <></>;
 
+  // console.log({possibleBids, highestBid, selectedBidValue, selectedBidSuit});
   return (
     <div {...divProps}>
       <div className="w-100">
@@ -40,7 +56,16 @@ const BiddingOptionsPanel: FC<HTMLAttributes<HTMLDivElement> & BiddingOptionsPan
               {bidValue}
             </BidButton>
           ))}
-          <BidButton style={{width: "6rem"}}>Pass</BidButton>
+          <BidButton
+            style={{width: "6rem"}}
+            onClick={() => {
+              placeBid({isPass: true, number: 0, suit: "♣"});
+              setSelectedBidSuit(null);
+              setSelectedBidValue(null);
+            }}
+          >
+            Pass
+          </BidButton>
         </div>
         <div className="d-flex">
           {selectedBidValue && (
@@ -63,13 +88,22 @@ const BiddingOptionsPanel: FC<HTMLAttributes<HTMLDivElement> & BiddingOptionsPan
                   {suit}
                 </BidButton>
               ))}
-              <BidButton style={{marginTop: "0.5rem", marginRight: "0.5rem"}} onClick={() => setSelectedBidValue(null)}>
+              <BidButton
+                style={{marginTop: "0.5rem", marginRight: "0.5rem"}}
+                onClick={() => {
+                  setSelectedBidValue(null);
+                  setSelectedBidSuit(null);
+                }}
+              >
                 ↩︎︎
               </BidButton>
               <BidButton
                 style={{width: "6rem", marginTop: "0.5rem"}}
+                disabled={!selectedBidSuit}
                 onClick={() => {
-                  alert(JSON.stringify({selectedBidSuit, selectedBidValue}));
+                  placeBid({isPass: false, number: selectedBidValue, suit: selectedBidSuit!});
+                  setSelectedBidSuit(null);
+                  setSelectedBidValue(null);
                 }}
               >
                 Bid
@@ -83,71 +117,3 @@ const BiddingOptionsPanel: FC<HTMLAttributes<HTMLDivElement> & BiddingOptionsPan
 };
 
 export default BiddingOptionsPanel;
-
-const bidSuitList: BidSuit[] = ["♣", "♦", "♥", "♠", "NT"];
-
-const allPossibleBids: string[] = [
-  "1♣",
-  "1♦",
-  "1♥",
-  "1♠",
-  "1NT",
-  "2♣",
-  "2♦",
-  "2♥",
-  "2♠",
-  "2NT",
-  "3♣",
-  "3♦",
-  "3♥",
-  "3♠",
-  "3NT",
-  "4♣",
-  "4♦",
-  "4♥",
-  "4♠",
-  "4NT",
-  "5♣",
-  "5♦",
-  "5♥",
-  "5♠",
-  "5NT",
-  "6♣",
-  "6♦",
-  "6♥",
-  "6♠",
-  "6NT",
-];
-const getPossibleBids = (highestBid: Bid | null) => {
-  const possibleBids: Record<BidNumber, BidSuit[]> = {
-    1: [],
-    2: [],
-    3: [],
-    4: [],
-    5: [],
-    6: [],
-  };
-
-  if (!highestBid) {
-    // If there is no highest bid, all bids from 1 to 7 in each suit are possible
-    for (let number = 1 as BidNumber; number <= 6; number++) {
-      bidSuitList.forEach((suit) => {
-        possibleBids[number].push(suit);
-      });
-    }
-    return possibleBids;
-  }
-
-  const {suit, number} = highestBid;
-  const bidString = `${number}${suit}`;
-  const bidIndex = allPossibleBids.indexOf(bidString);
-
-  const possibleBidsStrings = allPossibleBids.slice(bidIndex + 1);
-  possibleBidsStrings.forEach((bidString) => {
-    const bidNum = parseInt(bidString[0]) as BidNumber;
-    const suit = bidString.slice(1) as BidSuit;
-    possibleBids[bidNum].push(suit);
-  });
-
-  return possibleBids;
-};

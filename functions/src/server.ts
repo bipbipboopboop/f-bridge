@@ -11,6 +11,8 @@ import {
   toggleReady,
 } from "./GameRoomAPI";
 
+import {placeBid} from "./BidAPI";
+
 import {sendMessage} from "./ChatAPI";
 
 export {
@@ -28,6 +30,11 @@ export {
   leaveGameRoom,
   startGame,
   toggleReady,
+
+  /**
+   * BID API
+   */
+  placeBid,
 
   /**
    * CHAT API

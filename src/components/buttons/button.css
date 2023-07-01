@@ -123,6 +123,11 @@
   background-color: #e7e7e7;
 }
 
+.btn-yellow:disabled {
+  background-color: #f2c409;
+  opacity: 0.7;
+}
+
 .btn-brown {
   background: #f0b885;
   border: 5px solid #bd8e63;

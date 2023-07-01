@@ -452,6 +452,7 @@ export const startGame = functions.https.onCall(async (data: void, context) => {
       numTricksWon: 0,
       currentCardOnTable: null,
     })),
+    numPasses: 0,
     bidHistory: [
       {
         p0: {bid: null, info: {displayName: "Player 1", id: "1"}},
