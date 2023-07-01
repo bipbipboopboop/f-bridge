@@ -1,14 +1,16 @@
 import {useState} from "react";
+import {toast} from "react-toastify";
+
 import {useAuth} from "../../../hooks/useAuth";
+import useFunctions from "../../../hooks/useFunctions";
 
 import {Card, Suit} from "types/Card";
 import {deck} from "../../../utils/deck";
-import BidButton from "../../buttons/button-bid";
 import {BiddingPhase} from "types/GameState";
+
+import BidButton from "../../buttons/button-bid";
 import Button from "../../buttons/button";
-import useFunctions from "../../../hooks/useFunctions";
 import Loading from "../../Loading";
-import {toast} from "react-toastify";
 
 const ChoosingTeammatePanel = (props: {biddingPhase: BiddingPhase}) => {
   const {biddingPhase} = props;
@@ -45,36 +47,16 @@ const ChoosingTeammatePanel = (props: {biddingPhase: BiddingPhase}) => {
   const otherCardsLookup: Record<Suit, Card[]> = {
     "♣": deck
       .filter((card) => card.suit === "♣")
-      .filter(
-        (card) =>
-          !gamePlayer.cards.some(
-            (c) => c.stringValue === card.stringValue && c.suit === card.suit
-          )
-      ),
+      .filter((card) => !gamePlayer.cards.some((c) => c.stringValue === card.stringValue && c.suit === card.suit)),
     "♦": deck
       .filter((card) => card.suit === "♦")
-      .filter(
-        (card) =>
-          !gamePlayer.cards.some(
-            (c) => c.stringValue === card.stringValue && c.suit === card.suit
-          )
-      ),
+      .filter((card) => !gamePlayer.cards.some((c) => c.stringValue === card.stringValue && c.suit === card.suit)),
     "♥": deck
       .filter((card) => card.suit === "♥")
-      .filter(
-        (card) =>
-          !gamePlayer.cards.some(
-            (c) => c.stringValue === card.stringValue && c.suit === card.suit
-          )
-      ),
+      .filter((card) => !gamePlayer.cards.some((c) => c.stringValue === card.stringValue && c.suit === card.suit)),
     "♠": deck
       .filter((card) => card.suit === "♠")
-      .filter(
-        (card) =>
-          !gamePlayer.cards.some(
-            (c) => c.stringValue === card.stringValue && c.suit === card.suit
-          )
-      ),
+      .filter((card) => !gamePlayer.cards.some((c) => c.stringValue === card.stringValue && c.suit === card.suit)),
   };
 
   const promptText = `Your teammate will be the owner of ${selectedCard?.stringValue} ${selectedCard?.suit}`;
@@ -129,9 +111,7 @@ const ChoosingTeammatePanel = (props: {biddingPhase: BiddingPhase}) => {
                 <BidButton
                   style={{
                     marginRight: "1rem",
-                    border: `${
-                      card === selectedCard ? "5px solid #BD8E63" : ""
-                    }`,
+                    border: `${card === selectedCard ? "5px solid #BD8E63" : ""}`,
                   }}
                   key={`${card.suit} - ${card.stringValue}`}
                   onClick={() => setSelectedCard(card)}

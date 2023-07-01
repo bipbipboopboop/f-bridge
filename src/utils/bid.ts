@@ -1,6 +1,6 @@
 import {Bid, BidNumber, BidSuit} from "types/Bid";
 
-const BID_SUITS: BidSuit[] = ["♣", "♦", "♥", "♠", "NT"];
+export const BID_SUITS: BidSuit[] = ["♣", "♦", "♥", "♠", "NT"];
 
 const ALL_BIDS: string[] = [
   "1♣",

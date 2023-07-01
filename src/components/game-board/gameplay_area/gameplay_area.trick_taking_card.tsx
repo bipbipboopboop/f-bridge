@@ -1,11 +1,7 @@
 import {Card} from "types/Card";
 import PlayingCard from "assets/playing_card";
 
-const PlayingAreaCard = (props: {
-  card: Card | null;
-  location: "top" | "bottom" | "left" | "right";
-  zIndex: number;
-}) => {
+const PlayingAreaCard = (props: {card: Card | null; location: "top" | "bottom" | "left" | "right"; zIndex: number}) => {
   const {card, location, zIndex} = props;
 
   const rotationLookup = {
