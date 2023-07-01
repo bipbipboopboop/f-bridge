@@ -6,6 +6,7 @@ const TrickTakingGameplayArea = (props: {trickTakingPhase: TrickTakingPhase}) =>
   const {trickTakingPhase} = props;
   const {playerProfile} = useAuth();
 
+  const currPlayer = trickTakingPhase.gameroomPlayersList[trickTakingPhase.currentPlayerIndex];
   const myPlayer = trickTakingPhase.gameroomPlayersList.find((plyr) => plyr.id === playerProfile?.id);
   const myPosition = myPlayer?.position as number;
   const positionLookup = {
@@ -34,7 +35,8 @@ const TrickTakingGameplayArea = (props: {trickTakingPhase: TrickTakingPhase}) =>
       className="h-100 w-75 d-flex flex-column align-items-center"
       style={{backgroundColor: "rgba(0, 0, 0, 0.2)", width: "90%"}}
     >
-      {/* <pre>{JSON.stringify(zIndexLookup)}</pre> */}
+      {currPlayer.id === myPlayer?.id && <p>Your turn to play</p>}
+      {currPlayer.id !== myPlayer?.id && <p>{currPlayer.displayName}'s turn to play</p>}
       <div className="d-flex justify-content-center">
         <PlayingAreaCard location="top" card={cardLookup["top"]} zIndex={zIndexLookup["top"]} />
       </div>

@@ -1,6 +1,12 @@
 .hand {
   display: flex;
   margin-left: 4.4rem;
+
+  align-items: end;
+
+  /* align-items: end for safari */
+  -webkit-align-items: flex-end;
+
   /* Twice the amount of the card margin-left */
 }
 

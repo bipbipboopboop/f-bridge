@@ -10,7 +10,6 @@ import {GameRoomPlayer} from "types/PlayerProfile";
 import "./game-panel.css";
 import MainGameplayArea from "./gameplay_area/gameplay_area.main";
 import {useAuth} from "../../hooks/useAuth";
-import Button from "../buttons/button";
 
 const GamePanel = (props: {gameState: GameState}) => {
   const {gameState} = props;
@@ -78,13 +77,8 @@ const GamePanel = (props: {gameState: GameState}) => {
             location="bottom"
           />
         </div>
-        <div style={{width: "70%"}}>
-          <Hand />
-        </div>
-
-        {/* TODO: Change based on status */}
-        <div style={{width: "15%"}} className="d-flex flex-column justify-content-between  ">
-          {gameState.trickTakingPhase && <Button theme="green">Play</Button>}
+        <div style={{width: "85%", height: "100%"}}>
+          <Hand gameState={gameState} />
         </div>
       </div>
     </div>

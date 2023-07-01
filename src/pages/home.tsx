@@ -11,7 +11,7 @@ const Home = () => {
 
   return (
     <div className="w-100 h-100 d-flex flex-column align-items-center">
-      <div className="d-flex">
+      <div className="w-100 d-flex justify-content-center">
         <img src={spinning} style={{height: "4rem"}} />
         <p style={{fontSize: "4rem"}}>Floating Bridge</p>
         <img src={spinning} style={{height: "4rem"}} />
