@@ -3,15 +3,10 @@ admin.initializeApp();
 
 import {createPlayerProfile} from "./PlayerAPI";
 
-import {
-  createGameRoom,
-  joinGameRoom,
-  leaveGameRoom,
-  startGame,
-  toggleReady,
-} from "./GameRoomAPI";
+import {createGameRoom, joinGameRoom, leaveGameRoom, startGame, toggleReady} from "./GameRoomAPI";
 
 import {placeBid, chooseTeammate} from "./BidAPI";
+import {playCard} from "./TrickTakingAPI";
 
 import {sendMessage} from "./ChatAPI";
 
@@ -36,6 +31,11 @@ export {
    */
   placeBid,
   chooseTeammate,
+
+  /**
+   * TRICK TAKING API
+   */
+  playCard,
 
   /**
    * CHAT API

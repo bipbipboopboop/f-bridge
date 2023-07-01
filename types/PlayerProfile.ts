@@ -36,4 +36,5 @@ export interface GamePlayer extends LobbyPlayerProfile {
   team: "Defender" | "Declarer" | null;
   numTricksWon: number;
   position: number;
+  numCardsOnHand: number;
 }

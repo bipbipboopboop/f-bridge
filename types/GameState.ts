@@ -1,6 +1,6 @@
 // types/GameState.ts
 import {Bid, BidSuit} from "types/Bid";
-import {GameRoomPlayer, LobbyPlayerProfile} from "./PlayerProfile";
+import {GamePlayer, GameRoomPlayer, LobbyPlayerProfile} from "./PlayerProfile";
 
 export type GameState = {
   roomID: string;
@@ -61,7 +61,6 @@ export type TrickTakingPhase = {
   currentPlayerIndex: 0 | 1 | 2 | 3;
   leadPlayerIndex: 0 | 1 | 2 | 3;
   trumpSuit: BidSuit | null;
-
   gameroomPlayersList: GameRoomPlayer[];
 };
 
@@ -78,12 +77,12 @@ export type GameRoomSettings = {
 
 export type TrickTakingPhaseHidden = {
   defenderTeam: {
-    playerList: GameRoomPlayer[];
+    playerList: GamePlayer[]; // TODO: Change
     tricksWon: number;
     tricksNeeded: number;
   };
   declarerTeam: {
-    playerList: GameRoomPlayer[];
+    playerList: GamePlayer[]; // TODO: Change
     tricksWon: number;
     tricksNeeded: number;
   };

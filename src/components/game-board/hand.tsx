@@ -13,12 +13,14 @@ import {BID_SUITS} from "../../utils/bid";
 import {GameState} from "types/GameState";
 import Button from "../buttons/button";
 import {Card} from "types/Card";
+import useFunctions from "../../hooks/useFunctions";
+import {toast} from "react-toastify";
 
 const Hand = (props: {gameState: GameState}) => {
   const {gameState} = props;
-  const {playerProfile} = useAuth();
-
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
+  const {playerProfile} = useAuth();
+  const {playCard, error} = useFunctions();
 
   const roomID = playerProfile?.roomID;
   const gamePlayerRef = doc(
@@ -39,6 +41,10 @@ const Hand = (props: {gameState: GameState}) => {
   });
 
   const isMyTurn = gameState.trickTakingPhase && gameState.trickTakingPhase.currentPlayerIndex === gamePlayer?.position;
+
+  if (error) {
+    toast.error(error.message);
+  }
 
   return (
     <div className="w-100 h-100 d-flex">
@@ -63,7 +69,13 @@ const Hand = (props: {gameState: GameState}) => {
 
       <div style={{width: "15%"}} className="h-100 d-flex align-items-end">
         {isMyTurn && (
-          <Button theme="green" disabled={!selectedCard} onClick={() => {}}>
+          <Button
+            theme="green"
+            disabled={!selectedCard}
+            onClick={() => {
+              selectedCard && playCard(selectedCard);
+            }}
+          >
             Play
           </Button>
         )}

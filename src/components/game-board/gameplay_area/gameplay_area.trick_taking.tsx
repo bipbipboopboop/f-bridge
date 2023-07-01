@@ -37,16 +37,16 @@ const TrickTakingGameplayArea = (props: {trickTakingPhase: TrickTakingPhase}) =>
     >
       {currPlayer.id === myPlayer?.id && <p>Your turn to play</p>}
       {currPlayer.id !== myPlayer?.id && <p>{currPlayer.displayName}'s turn to play</p>}
-      <div className="d-flex justify-content-center">
+      <div className="d-flex justify-content-center w-100">
         <PlayingAreaCard location="top" card={cardLookup["top"]} zIndex={zIndexLookup["top"]} />
       </div>
 
-      <div className="d-flex justify-content-around">
+      <div className="d-flex justify-content-center w-100">
         <PlayingAreaCard location="left" card={cardLookup["left"]} zIndex={zIndexLookup["left"]} />
         <PlayingAreaCard location="right" card={cardLookup["right"]} zIndex={zIndexLookup["right"]} />
       </div>
 
-      <div className="d-flex justify-content-center">
+      <div className="d-flex justify-content-center w-100">
         <PlayingAreaCard location="bottom" card={cardLookup["bottom"]} zIndex={zIndexLookup["bottom"]} />
       </div>
     </div>
