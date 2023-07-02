@@ -1,6 +1,6 @@
 // types/GameState.ts
-import {Bid, BidSuit} from "types/Bid";
-import {GamePlayer, GameRoomPlayer, LobbyPlayerProfile} from "./PlayerProfile";
+import { Bid, BidSuit } from "types/Bid";
+import { GamePlayer, GameRoomPlayer, LobbyPlayerProfile } from "./PlayerProfile";
 
 export type GameState = {
   roomID: string;
@@ -9,7 +9,7 @@ export type GameState = {
   settings: GameRoomSettings;
   invitedID: string[];
 
-  status: "Waiting" | "Bidding" | "Choosing Teammate" | "Taking Trick";
+  status: "Waiting" | "Bidding" | "Choosing Teammate" | "Taking Trick" | "Ended";
   players: LobbyPlayerProfile[];
 
   biddingPhase: BiddingPhase | null;
@@ -85,5 +85,11 @@ export type TrickTakingPhaseHidden = {
     playerList: GamePlayer[]; // TODO: Change
     tricksWon: number;
     tricksNeeded: number;
+  };
+};
+
+export type EndedPhase = {
+  winnerTeam: {
+    playerList: GamePlayer[]; // TODO: Change
   };
 };

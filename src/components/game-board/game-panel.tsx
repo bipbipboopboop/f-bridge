@@ -3,23 +3,24 @@ import PlayerBubble from "./player-bubble";
 import Hand from "./hand";
 
 // Types
-import {GameState} from "types/GameState";
-import {GameRoomPlayer} from "types/PlayerProfile";
+import { GameState } from "types/GameState";
+import { GameRoomPlayer } from "types/PlayerProfile";
 
 // Styles
 import "./game-panel.css";
 import MainGameplayArea from "./gameplay_area/gameplay_area.main";
-import {useAuth} from "../../hooks/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 
-const GamePanel = (props: {gameState: GameState}) => {
-  const {gameState} = props;
-  const {playerProfile} = useAuth();
+const GamePanel = (props: { gameState: GameState }) => {
+  const { gameState } = props;
+  const { playerProfile } = useAuth();
 
   const gameStateLookup = {
     Bidding: gameState?.biddingPhase,
     "Taking Trick": gameState?.trickTakingPhase,
     "Choosing Teammate": gameState?.biddingPhase,
     Waiting: null,
+    Ended: null,
   };
 
   const gamePlayersListLookup = {
@@ -27,6 +28,7 @@ const GamePanel = (props: {gameState: GameState}) => {
     "Taking Trick": gameStateLookup["Taking Trick"]?.gameroomPlayersList || [],
     "Choosing Teammate": gameStateLookup["Choosing Teammate"]?.gameroomPlayersList || [],
     Waiting: [],
+    Ended: [],
   };
 
   const players: GameRoomPlayer[] = gamePlayersListLookup[gameState.status];
@@ -70,14 +72,14 @@ const GamePanel = (props: {gameState: GameState}) => {
         />
       </div>
       <div className="bottom">
-        <div style={{width: "15%"}}>
+        <div style={{ width: "15%" }}>
           <PlayerBubble
             player={players[positionLookup["bottom"]]}
             currentPlayerIndex={currentPlayerIndex}
             location="bottom"
           />
         </div>
-        <div style={{width: "85%", height: "100%"}}>
+        <div style={{ width: "85%", height: "100%" }}>
           <Hand gameState={gameState} />
         </div>
       </div>

@@ -1,5 +1,5 @@
 import "./App.css";
-import {Route, Routes} from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 import useFunctions from "./hooks/useFunctions";
 
@@ -13,9 +13,10 @@ import Home from "./pages/home";
 import Leaderboard from "./pages/leaderboard";
 import Test from "./pages/Test";
 import Tutorial from "./pages/tutorial";
+import GameResult from "./pages/game-result";
 
 function App() {
-  const {isLoading} = useFunctions();
+  const { isLoading } = useFunctions();
 
   if (isLoading) return <Loading />;
 
@@ -29,6 +30,7 @@ function App() {
         <Route path="/tutorial" element={<Tutorial />} />
         <Route path="/gameroom/:roomID" element={<GameRoom />} />
         <Route path="/gameboard/:roomID" element={<GameBoard />} />
+        <Route path="/result/:roomID" element={<GameResult />} />
         <Route path="/test" element={<Test />} />
         <Route path="*" element={<div>404</div>} />
       </Routes>

@@ -1,36 +1,31 @@
-import {GameState} from "types/GameState";
+import { GameState } from "types/GameState";
 import Chatbox from "../components/chat/chatbox";
 import GamePanel from "../components/game-board/game-panel";
 
 import "./game-board.css";
 
-import {toast} from "react-toastify";
-import {useDocumentData} from "react-firebase-hooks/firestore";
-import {DocumentReference, doc} from "firebase/firestore";
-import {firestore} from "../firebase";
-import {useNavigate, useParams} from "react-router-dom";
+import { toast } from "react-toastify";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { DocumentReference, doc } from "firebase/firestore";
+import { firestore } from "../firebase";
+import { useNavigate, useParams } from "react-router-dom";
 import Loading from "../components/Loading";
-import {useAuth} from "../hooks/useAuth";
+import { useAuth } from "../hooks/useAuth";
 
 const GameBoard = () => {
-  const {roomID} = useParams();
+  const { roomID } = useParams();
   const navigate = useNavigate();
 
   /**
    * PlayerProfile
    */
-  const {playerProfile} = useAuth();
+  const { playerProfile } = useAuth();
 
   /**
    * GameState
    */
-  const gameStateRef = doc(
-    firestore,
-    "gameRooms",
-    roomID || "ERROR"
-  ) as DocumentReference<GameState>;
-  const [gameState, isLoading, error] =
-    useDocumentData<GameState>(gameStateRef);
+  const gameStateRef = doc(firestore, "gameRooms", roomID || "ERROR") as DocumentReference<GameState>;
+  const [gameState, isLoading, error] = useDocumentData<GameState>(gameStateRef);
 
   /**
    * DEVELOPMENT TESTING
@@ -192,7 +187,7 @@ const GameBoard = () => {
   // const isLoading = false;
   // const error = null;
 
-  console.log({playerProfile, gameState});
+  console.log({ playerProfile, gameState });
 
   if (isLoading) return <Loading />;
   if (!gameState) {
@@ -202,16 +197,13 @@ const GameBoard = () => {
   }
 
   const isPlayerAllowedIn =
-    gameState.players.some((player) => player.id === playerProfile?.id) ||
-    gameState.settings.isSpectatorAllowed;
+    gameState.players.some((player) => player.id === playerProfile?.id) || gameState.settings.isSpectatorAllowed;
   if (!isPlayerAllowedIn || error) {
     toast.error("You are not allowed in this room");
     navigate("/lobby");
   }
 
-  const isPlayerInRoom = gameState.players.some(
-    (player) => player.id === playerProfile?.id
-  );
+  const isPlayerInRoom = gameState.players.some((player) => player.id === playerProfile?.id);
 
   if (!isPlayerInRoom) {
     toast.error("You are not in this room!");
