@@ -23,36 +23,31 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
    */
   const [firebaseUser, isLoadingFirebaseUser, firebaseUserError] = useAuthState(auth);
 
-  const { createPlayerProfile, isLoading, error } = useFunctions();
+  const { createPlayerProfile, isLoading: isCreatingPlayer, error } = useFunctions();
 
-  const playerProfileRef =
-    (firebaseUser && (doc(firestore, `playerProfiles/${firebaseUser.uid}`) as DocumentReference<PlayerProfile>)) ||
-    null;
+  const playerProfileRef = (firebaseUser && doc(firestore, `playerProfiles/${firebaseUser.uid}`)) || null;
 
-  const [playerProfile, isLoadingPlayerProfile] = useDocumentData<PlayerProfile>(playerProfileRef);
+  const [playerProfile, isLoadingPlayerProfile] = useDocumentData<PlayerProfile>(
+    playerProfileRef as DocumentReference<PlayerProfile>
+  );
 
   const gamePlayerRef =
-    (playerProfile &&
-      (doc(
-        firestore,
-        `gameRooms/${playerProfile.roomID}/players/${playerProfile.id}`
-      ) as DocumentReference<GamePlayer>)) ||
-    null;
+    (playerProfile && doc(firestore, `gameRooms/${playerProfile.roomID}/players/${playerProfile.id}`)) || null;
 
-  const [gamePlayer] = useDocumentData(gamePlayerRef);
+  const [gamePlayer] = useDocumentData<GamePlayer>(gamePlayerRef as DocumentReference<GamePlayer>);
 
   // Signs the user in anonymously if they don't log in and creates a player profile for them.
   // Otherwise, they are already logged in and we can just retrieve their player profile.
 
   console.log({ firebaseUser, playerProfile, gamePlayer, isLoadingFirebaseUser, isLoadingPlayerProfile });
 
-  const [isSettingUp, setIsSettingUp] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!(isLoadingFirebaseUser || isLoadingPlayerProfile || isLoading) && playerProfile) {
-      setIsSettingUp(false);
+    if (!(isLoadingFirebaseUser || isLoadingPlayerProfile || isCreatingPlayer) && playerProfile) {
+      setIsLoading(false);
     }
-  }, [isLoading, isLoadingFirebaseUser, isLoadingPlayerProfile, playerProfile]);
+  }, [isCreatingPlayer, isLoadingFirebaseUser, isLoadingPlayerProfile, playerProfile]);
 
   useEffect(() => {
     if (isLoadingFirebaseUser) return;
@@ -92,7 +87,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     toast.error(error.message);
   }
 
-  if (isSettingUp) return <Loading />;
+  if (isLoading) return <Loading />;
 
   return <AuthContext.Provider value={authContextValue}>{children}</AuthContext.Provider>;
 };
