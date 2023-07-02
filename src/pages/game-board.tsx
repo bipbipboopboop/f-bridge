@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { DocumentReference, doc } from "firebase/firestore";
 import { firestore } from "../firebase";
-import { useNavigate, useParams, Navigate } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
 import Loading from "../components/Loading";
 import { useAuth } from "../hooks/useAuth";
 
