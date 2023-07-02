@@ -189,6 +189,8 @@ export const playCard = functions.https.onCall(async (card: Card, context) => {
 
     console.log({ newHiddenTrickPhase: JSON.stringify(newHiddenTrickPhase) });
 
+    await hiddenTrickPhaseRef.update(newHiddenTrickPhase);
+
     const isDeclarerTeamWon =
       newHiddenTrickPhase.declarerTeam.tricksWon === newHiddenTrickPhase.declarerTeam.tricksNeeded;
 
@@ -208,7 +210,7 @@ export const playCard = functions.https.onCall(async (card: Card, context) => {
 
       const finalGameRoom: GameState = { ...nextRoundGameRoom, status: "Ended", endedPhase: endedPhase };
       console.log({ finalGameRoom });
-      // await gameRoomRef.update(finalGameRoom);
+      await gameRoomRef.update(finalGameRoom);
 
       // TODO: Update winner playerProfile numGamesWon
       return;

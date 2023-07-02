@@ -12,9 +12,8 @@ type Props = {
 const PlayerBubble = (props: Props) => {
   const { player, currentPlayerIndex, location } = props;
   const isPlayerTurn = currentPlayerIndex === player.position;
-  const { playerProfile } = useAuth();
 
-  const isMe = playerProfile?.id === player.id;
+  const isMe = location === "bottom";
   if (location === "top") {
     return (
       <div className={`player-bubble-${location} ${isPlayerTurn ? "selected" : "waiting"}`}>
