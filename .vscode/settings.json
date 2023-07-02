@@ -1,4 +1,4 @@
 {
-  "prettier.bracketSpacing": false,
-  "prettier.printWidth": 80
+  // "prettier.bracketSpacing": false,
+  "prettier.printWidth": 120
 }
