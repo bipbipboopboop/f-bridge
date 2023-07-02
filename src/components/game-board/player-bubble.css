@@ -1,8 +1,8 @@
 .player-bubble-top {
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 5px;
-  height: 6rem;
-  width: 8rem;
+  height: 7vw;
+  width: 10vw;
   font-size: 0.8rem;
   display: flex;
   flex-direction: column;

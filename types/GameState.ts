@@ -14,6 +14,7 @@ export type GameState = {
 
   biddingPhase: BiddingPhase | null;
   trickTakingPhase: TrickTakingPhase | null;
+  endedPhase: EndedPhase | null;
 };
 
 export type BidSnapshot = {
