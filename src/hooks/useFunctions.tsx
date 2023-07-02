@@ -15,9 +15,7 @@ const useFunctions = () => {
   const [signInWithEmailAndPassword, __, l1, e1] = useSignInWithEmailAndPassword(auth);
   const [signOut, l2, e2] = useSignOut(auth);
 
-  const [createAnonymousPlayer, l4, e4] = useHttpsCallable<void, PlayerProfile>(functions, "createAnonymousPlayer");
   const [createPlayerProfile, l5, e5] = useHttpsCallable<UserInfo, PlayerProfile>(functions, "createPlayerProfile");
-  const [deleteAnonymousPlayer, l6, e6] = useHttpsCallable(functions, "deleteAnonymousPlayer");
 
   /**
    * GAME ROOM API
@@ -45,9 +43,9 @@ const useFunctions = () => {
    */
   const [sendMessage, l12, e12] = useHttpsCallable<{roomID: string; message: string}, void>(functions, "sendMessage");
 
-  const isLoading = l0 || l1 || l2 || l3 || l4 || l5 || l6 || l7 || l8 || l9 || l10 || l11 || l12 || l13 || l14;
+  const isLoading = l0 || l1 || l2 || l3 || l5 || l7 || l8 || l9 || l10 || l11 || l12 || l13 || l14;
 
-  const error = e0 || e1 || e2 || e3 || e4 || e5 || e6 || e7 || e8 || e9 || e10 || e11 || e12 || e13 || e14;
+  const error = e0 || e1 || e2 || e3 || e5 || e7 || e8 || e9 || e10 || e11 || e12 || e13 || e14;
 
   return {
     isLoading,
@@ -63,9 +61,8 @@ const useFunctions = () => {
     /**
      * PlayerAPI
      */
-    createAnonymousPlayer,
+
     createPlayerProfile,
-    deleteAnonymousPlayer,
 
     /**
      * GameRoomAPI
