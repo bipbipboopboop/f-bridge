@@ -1,15 +1,15 @@
-import {createContext, ReactNode, useEffect, useState} from "react";
-import {toast} from "react-toastify";
-import {useAuthState} from "react-firebase-hooks/auth";
-import {useDocumentData} from "react-firebase-hooks/firestore";
+import { createContext, ReactNode, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 
-import {auth, firestore} from "../firebase";
-import {signInAnonymously, User} from "firebase/auth";
-import {GamePlayer, PlayerProfile} from "types/PlayerProfile";
+import { auth, firestore } from "../firebase";
+import { signInAnonymously, User } from "firebase/auth";
+import { GamePlayer, PlayerProfile } from "types/PlayerProfile";
 
 import Loading from "../components/Loading";
 import useFunctions from "../hooks/useFunctions";
-import {doc, DocumentReference} from "firebase/firestore";
+import { doc, DocumentReference } from "firebase/firestore";
 
 export const AuthContext = createContext<AuthContextValue>({
   user: null,
@@ -17,13 +17,13 @@ export const AuthContext = createContext<AuthContextValue>({
   gamePlayer: null,
 });
 
-export const AuthProvider = ({children}: AuthProviderProps) => {
+export const AuthProvider = ({ children }: AuthProviderProps) => {
   /**
    * HOOKS
    */
   const [firebaseUser, isLoadingFirebaseUser, firebaseUserError] = useAuthState(auth);
 
-  const {createPlayerProfile, isLoading, error} = useFunctions();
+  const { createPlayerProfile, isLoading, error } = useFunctions();
 
   const playerProfileRef =
     (firebaseUser && (doc(firestore, `playerProfiles/${firebaseUser.uid}`) as DocumentReference<PlayerProfile>)) ||
@@ -49,7 +49,9 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
   const [isSettingUp, setIsSettingUp] = useState(true);
 
   useEffect(() => {
-    setIsSettingUp(false);
+    if (!(isLoadingFirebaseUser || isLoadingPlayerProfile || isLoading)) {
+      setIsSettingUp(false);
+    }
   }, [isLoading, isLoadingFirebaseUser, isLoadingPlayerProfile]);
 
   useEffect(() => {
