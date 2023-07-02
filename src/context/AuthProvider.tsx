@@ -44,15 +44,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   // Signs the user in anonymously if they don't log in and creates a player profile for them.
   // Otherwise, they are already logged in and we can just retrieve their player profile.
 
-  // console.log({firebaseUser, playerProfile, gamePlayer, isLoadingFirebaseUser, isLoadingPlayerProfile});
+  console.log({ firebaseUser, playerProfile, gamePlayer, isLoadingFirebaseUser, isLoadingPlayerProfile });
 
   const [isSettingUp, setIsSettingUp] = useState(true);
 
   useEffect(() => {
-    if (!(isLoadingFirebaseUser || isLoadingPlayerProfile || isLoading)) {
+    if (!(isLoadingFirebaseUser || isLoadingPlayerProfile || isLoading) && playerProfile) {
       setIsSettingUp(false);
     }
-  }, [isLoading, isLoadingFirebaseUser, isLoadingPlayerProfile]);
+  }, [isLoading, isLoadingFirebaseUser, isLoadingPlayerProfile, playerProfile]);
 
   useEffect(() => {
     if (isLoadingFirebaseUser) return;
