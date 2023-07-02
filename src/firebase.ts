@@ -36,7 +36,6 @@ if (isEmulator) {
   functions = getFunctions(app, "asia-east2");
 }
 
-console.log({ functions });
 /**
  * Testing
  */
