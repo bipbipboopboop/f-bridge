@@ -58,6 +58,11 @@ const GameBoard = () => {
     return <>404</>;
   }
 
+  if (gameState.status === "Ended") {
+    navigate(`/result/${roomID}`);
+    return <></>;
+  }
+
   if (!["Bidding", "Choosing Teammate", "Taking Trick"].includes(gameState.status)) return <>404</>;
 
   return (
