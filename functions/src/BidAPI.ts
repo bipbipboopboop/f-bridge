@@ -8,7 +8,7 @@ import { GamePlayer, PlayerProfile } from "types/PlayerProfile";
 import { produce } from "immer";
 import { Card } from "types/Card";
 
-export const placeBid = functions.https.onCall(async (bid: Bid, context) => {
+export const placeBid = functions.region("asia-east2").https.onCall(async (bid: Bid, context) => {
   // 0. Check if the user is authenticated
   if (!context.auth) {
     throw new functions.https.HttpsError("unauthenticated", "The user is not authenticated.");
@@ -129,7 +129,7 @@ export const placeBid = functions.https.onCall(async (bid: Bid, context) => {
   await gameRoomRef.set(updatedGameRoom);
 });
 
-export const chooseTeammate = functions.https.onCall(async (card: Card, context) => {
+export const chooseTeammate = functions.region("asia-east2").https.onCall(async (card: Card, context) => {
   // 0. Check if the user is authenticated
   if (!context.auth) {
     throw new functions.https.HttpsError("unauthenticated", "You are not authenticated.");

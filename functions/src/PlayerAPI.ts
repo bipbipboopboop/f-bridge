@@ -8,7 +8,7 @@ import { DocumentReference } from "firebase-admin/firestore";
 import { UserInfo } from "firebase-admin/auth";
 import { UnauthenticatedError } from "./error/error";
 
-export const createPlayerProfile = functions.https.onCall(async (user: UserInfo, context) => {
+export const createPlayerProfile = functions.region("asia-east2").https.onCall(async (user: UserInfo, context) => {
   try {
     if (!context.auth) throw UnauthenticatedError;
 

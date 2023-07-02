@@ -8,7 +8,7 @@ import { produce } from "immer";
 import { Card } from "types/Card";
 import { Message } from "types/Chat";
 
-export const playCard = functions.https.onCall(async (card: Card, context) => {
+export const playCard = functions.region("asia-east2").https.onCall(async (card: Card, context) => {
   // 0. Check if the user is authenticated
   if (!context.auth) {
     throw new functions.https.HttpsError("unauthenticated", "The user is not authenticated.");

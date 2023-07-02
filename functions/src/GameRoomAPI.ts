@@ -20,7 +20,7 @@ import { nanoid } from "nanoid";
  * - already-exists: Player is already in a room.
  * - internal: Failed to create a game room.
  */
-export const createGameRoom = functions.https.onCall(async (data: void, context) => {
+export const createGameRoom = functions.region("asia-east2").https.onCall(async (data: void, context) => {
   // Check if the user is authenticated
   if (!context.auth) {
     throw new functions.https.HttpsError("unauthenticated", "User is not authenticated.");
@@ -91,7 +91,7 @@ export const createGameRoom = functions.https.onCall(async (data: void, context)
  * - permission-denied: You are not invited to this game room.
  * - internal: Failed to join the game room.
  */
-export const joinGameRoom = functions.https.onCall(async (roomID: string, context) => {
+export const joinGameRoom = functions.region("asia-east2").https.onCall(async (roomID: string, context) => {
   // Check if the user is authenticated
   if (!context.auth) {
     throw new functions.https.HttpsError("unauthenticated", "User is not authenticated.");
@@ -170,7 +170,7 @@ export const joinGameRoom = functions.https.onCall(async (roomID: string, contex
  * - internal: Failed to delete the game room.
  *
  */
-export const leaveGameRoom = functions.https.onCall(async (roomID: string, context) => {
+export const leaveGameRoom = functions.region("asia-east2").https.onCall(async (roomID: string, context) => {
   // Check if the user is authenticated
   if (!context.auth) {
     throw new functions.https.HttpsError("unauthenticated", "User is not authenticated.");
@@ -245,7 +245,7 @@ export const leaveGameRoom = functions.https.onCall(async (roomID: string, conte
  * - failed-precondition: The game has either already started or ended.
  *
  */
-export const toggleReady = functions.https.onCall(async (roomID: string, context) => {
+export const toggleReady = functions.region("asia-east2").https.onCall(async (roomID: string, context) => {
   // Check if the user is authenticated
   if (!context.auth) {
     throw new functions.https.HttpsError("unauthenticated", "User is not authenticated.");
@@ -310,7 +310,7 @@ export const toggleReady = functions.https.onCall(async (roomID: string, context
  * - invalid-argument: Game room is not full.
  * - permission-denied: Player is not the host.
  */
-export const startGame = functions.https.onCall(async (data: void, context) => {
+export const startGame = functions.region("asia-east2").https.onCall(async (data: void, context) => {
   // Get the player's profile
   const playerProfileRef = admin
     .firestore()
@@ -429,7 +429,7 @@ export const startGame = functions.https.onCall(async (data: void, context) => {
  * - invalid-argument: Invitee is the host.
  * - resource-exhausted: Room is full.
  */
-export const invitePlayer = functions.https.onCall(async (inviteeID: string, context) => {
+export const invitePlayer = functions.region("asia-east2").https.onCall(async (inviteeID: string, context) => {
   // Check if the inviter is authenticated
   if (!context.auth) {
     throw new functions.https.HttpsError("unauthenticated", "User is not authenticated.");
@@ -505,7 +505,7 @@ export const invitePlayer = functions.https.onCall(async (inviteeID: string, con
 /**
  *
  */
-export const kickPlayer = functions.https.onCall(async (targetPlayerID: string, context) => {
+export const kickPlayer = functions.region("asia-east2").https.onCall(async (targetPlayerID: string, context) => {
   if (!context.auth) {
     throw new functions.https.HttpsError("unauthenticated", "User is not authenticated.");
   }

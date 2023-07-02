@@ -1,15 +1,7 @@
-import {initializeApp, getApp} from "@firebase/app";
-import {Auth, connectAuthEmulator, getAuth} from "firebase/auth";
-import {
-  Firestore,
-  connectFirestoreEmulator,
-  getFirestore,
-} from "firebase/firestore";
-import {
-  Functions,
-  connectFunctionsEmulator,
-  getFunctions,
-} from "firebase/functions";
+import { initializeApp, getApp } from "@firebase/app";
+import { Auth, connectAuthEmulator, getAuth } from "firebase/auth";
+import { Firestore, connectFirestoreEmulator, getFirestore } from "firebase/firestore";
+import { Functions, connectFunctionsEmulator, getFunctions } from "firebase/functions";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -32,7 +24,8 @@ if (isEmulator) {
   initializeApp(firebaseConfig);
   auth = getAuth(getApp());
   firestore = getFirestore(getApp());
-  functions = getFunctions(getApp());
+  functions = getFunctions(getApp(), "asia-east2");
+
   connectAuthEmulator(auth, "http://127.0.0.1:9099");
   connectFirestoreEmulator(firestore, "localhost", 8080);
   connectFunctionsEmulator(functions, "localhost", 5001);
@@ -40,10 +33,11 @@ if (isEmulator) {
   const app = initializeApp(firebaseConfig);
   auth = getAuth(app);
   firestore = getFirestore(app);
-  functions = getFunctions(app);
+  functions = getFunctions(app, "asia-east2");
 }
 
+console.log({ functions });
 /**
  * Testing
  */
-export {auth, firestore, functions};
+export { auth, firestore, functions };
