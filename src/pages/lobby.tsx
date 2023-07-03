@@ -23,7 +23,7 @@ const Lobby = () => {
 
   return (
     <div className="w-100 h-100 d-flex">
-      <div className="w-50 p-3">
+      <div className="w-75 p-3">
         <div className="d-flex justify-content-center">
           <LobbyRooms />
         </div>
