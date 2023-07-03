@@ -1,17 +1,17 @@
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import GreenButton from "../components/buttons/button-green";
 import LobbyRooms from "../components/lobby/lobby-rooms";
 import LobbyPlayerCard from "../components/lobby/lobby-player-card";
 
-import {useAuth} from "../hooks/useAuth";
+import { useAuth } from "../hooks/useAuth";
 import useFunctions from "../hooks/useFunctions";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 import Loading from "../components/Loading";
 import Button from "../components/buttons/button";
 
 const Lobby = () => {
-  const {playerProfile} = useAuth();
-  const {createGameRoom, error, isLoading} = useFunctions();
+  const { playerProfile } = useAuth();
+  const { createGameRoom, error, isLoading } = useFunctions();
   const navigate = useNavigate();
 
   if (!playerProfile) return <></>;
@@ -30,21 +30,18 @@ const Lobby = () => {
       </div>
       <div className="w-50 h-100 p-3 d-flex flex-column justify-content-between">
         <LobbyPlayerCard playerProfile={playerProfile} />
-        <div
-          className="p-3 py-5"
-          style={{backgroundColor: "rgba(0, 0, 0, 0.1)"}}
-        >
+        <div className="p-3 py-5" style={{ backgroundColor: "rgba(0, 0, 0, 0.1)" }}>
           <p>Join A Room! (Coming Soon)</p>
-          <input type="text" style={{height: "52px"}} />
-          <GreenButton style={{marginRight: "0.5rem"}}>Join Room</GreenButton>
+          <input type="text" style={{ height: "52px" }} />
+          <GreenButton style={{ marginRight: "0.5rem" }}>Join Room</GreenButton>
         </div>
-        <div className="d-flex flex-column p-3" style={{gap: "20px"}}>
+        <div className="d-flex flex-column p-3" style={{ gap: "20px" }}>
           <div className="d-flex justify-content-center">
             {playerProfile.roomID && (
               <Button
                 theme="orange"
                 onClick={() => {
-                  navigate(`/gameroom/${playerProfile.roomID}`);
+                  navigate(`/party/${playerProfile.roomID}`);
                 }}
               >
                 Back to room
@@ -57,7 +54,7 @@ const Lobby = () => {
                   const gameRoom = (await createGameRoom())?.data;
                   if (gameRoom) {
                     toast.success("Room created!");
-                    navigate(`/gameroom/${gameRoom.roomID}`);
+                    navigate(`/party/${gameRoom.roomID}`);
                   }
                 }}
               >

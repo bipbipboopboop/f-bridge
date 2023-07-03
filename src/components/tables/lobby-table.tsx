@@ -81,12 +81,12 @@ const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
                 const success = await joinGameRoom(roomID);
                 if (success) {
                   toast.success("Successfully joined room");
-                  navigate(`/gameroom/${roomID}`);
+                  navigate(`/party/${roomID}`);
                 }
               }
 
               if (playerProfile.roomID === row.original.roomID) {
-                navigate(`/gameroom/${playerProfile.roomID}`);
+                navigate(`/party/${playerProfile.roomID}`);
                 return;
               }
 

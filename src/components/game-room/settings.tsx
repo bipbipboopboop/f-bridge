@@ -20,11 +20,12 @@ const RoomSettings = ({ room }: { room: GameRoom }) => {
         <GreenButton
           style={{ width: "100%" }}
           onClick={async () => {
+            navigate("/lobby");
+            setInterval(() => {}, 1);
             const success = await leaveGameRoom(playerProfile?.roomID);
 
             if (success) {
               toast.success(`You left the room!`);
-              navigate("/lobby");
             }
           }}
         >
