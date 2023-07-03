@@ -1,15 +1,15 @@
-import {GameState} from "types/GameState";
+import { GameRoom } from "types/GameRoom";
 import TrickTakingGameplayArea from "./gameplay_area.trick_taking";
 import BiddingGameplayArea from "./gameplay_area.bidding";
 import ChoosingTeammateGameplayArea from "./gameplay_area-choosing_teammate";
 
-const MainGameplayArea = (props: {gameState: GameState}) => {
-  const {gameState} = props;
+const MainGameplayArea = (props: { gameRoom: GameRoom }) => {
+  const { gameRoom } = props;
 
-  const trickTakingPhase = gameState.trickTakingPhase;
-  const biddingPhase = gameState.biddingPhase;
+  const trickTakingPhase = gameRoom.trickTakingPhase;
+  const biddingPhase = gameRoom.biddingPhase;
 
-  const status = gameState.status;
+  const status = gameRoom.status;
   // TODO: REFACTOR
   if (status === "Bidding") {
     return biddingPhase ? <BiddingGameplayArea biddingPhase={biddingPhase} /> : <></>;

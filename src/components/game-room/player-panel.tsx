@@ -1,12 +1,12 @@
 import "./player_panel.css";
-import {GameState} from "types/GameState";
+import { GameRoom } from "types/GameRoom";
 
 import PlayerBox from "./player_box";
 import GameRoomButtonPanel from "./game-room-button-panel";
 
-const PlayerPanel = (props: {gameState: GameState}) => {
-  const {gameState} = props;
-  const {players} = gameState;
+const PlayerPanel = (props: { gameRoom: GameRoom }) => {
+  const { gameRoom } = props;
+  const { players } = gameRoom;
   return (
     <>
       <h4>Players</h4>
@@ -24,7 +24,7 @@ const PlayerPanel = (props: {gameState: GameState}) => {
             <PlayerBox player={players[3]} />
           </div>
         </div>
-        <GameRoomButtonPanel gameState={gameState} />
+        <GameRoomButtonPanel gameRoom={gameRoom} />
       </div>
     </>
   );

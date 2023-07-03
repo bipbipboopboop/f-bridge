@@ -1,5 +1,4 @@
 import { ChangeEvent, FormEvent, memo, useState } from "react";
-import useFunctions from "../../hooks/useFunctions";
 import { useParams } from "react-router-dom";
 import Button from "../buttons/button";
 import { CollectionReference, addDoc, collection } from "firebase/firestore";

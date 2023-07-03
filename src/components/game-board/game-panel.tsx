@@ -3,7 +3,7 @@ import PlayerBubble from "./player-bubble";
 import Hand from "./hand";
 
 // Types
-import { GameState } from "types/GameState";
+import { GameRoom } from "types/GameRoom";
 import { GameRoomPlayer } from "types/PlayerProfile";
 
 // Styles
@@ -11,31 +11,31 @@ import "./game-panel.css";
 import MainGameplayArea from "./gameplay_area/gameplay_area.main";
 import { useAuth } from "../../hooks/useAuth";
 
-const GamePanel = (props: { gameState: GameState }) => {
-  const { gameState } = props;
+const GamePanel = (props: { gameRoom: GameRoom }) => {
+  const { gameRoom } = props;
   const { playerProfile } = useAuth();
 
-  const gameStateLookup = {
-    Bidding: gameState?.biddingPhase,
-    "Taking Trick": gameState?.trickTakingPhase,
-    "Choosing Teammate": gameState?.biddingPhase,
+  const gameRoomLookup = {
+    Bidding: gameRoom?.biddingPhase,
+    "Taking Trick": gameRoom?.trickTakingPhase,
+    "Choosing Teammate": gameRoom?.biddingPhase,
     Waiting: null,
     Ended: null,
   };
 
   const gamePlayersListLookup = {
-    Bidding: gameStateLookup["Bidding"]?.gameroomPlayersList || [],
-    "Taking Trick": gameStateLookup["Taking Trick"]?.gameroomPlayersList || [],
-    "Choosing Teammate": gameStateLookup["Choosing Teammate"]?.gameroomPlayersList || [],
+    Bidding: gameRoomLookup["Bidding"]?.gameroomPlayersList || [],
+    "Taking Trick": gameRoomLookup["Taking Trick"]?.gameroomPlayersList || [],
+    "Choosing Teammate": gameRoomLookup["Choosing Teammate"]?.gameroomPlayersList || [],
     Waiting: [],
     Ended: [],
   };
 
-  const players: GameRoomPlayer[] = gamePlayersListLookup[gameState.status];
-  const currentGameState = gameStateLookup[gameState.status];
-  const currentPlayerIndex = currentGameState!.currentPlayerIndex;
+  const players: GameRoomPlayer[] = gamePlayersListLookup[gameRoom.status];
+  const currentGameRoom = gameRoomLookup[gameRoom.status];
+  const currentPlayerIndex = currentGameRoom!.currentPlayerIndex;
 
-  const myPlayer = currentGameState?.gameroomPlayersList.find((plyr) => plyr.id === playerProfile?.id);
+  const myPlayer = currentGameRoom?.gameroomPlayersList.find((plyr) => plyr.id === playerProfile?.id);
   const myPosition = myPlayer?.position as number;
   const positionLookup = {
     top: (myPosition + 2) % 4,
@@ -63,7 +63,7 @@ const GamePanel = (props: { gameState: GameState }) => {
           location="left"
         />
 
-        <MainGameplayArea gameState={gameState} />
+        <MainGameplayArea gameRoom={gameRoom} />
 
         <PlayerBubble
           player={players[positionLookup["right"]]}
@@ -80,7 +80,7 @@ const GamePanel = (props: { gameState: GameState }) => {
           />
         </div>
         <div style={{ width: "85%", height: "100%" }}>
-          <Hand gameState={gameState} />
+          <Hand gameRoom={gameRoom} />
         </div>
       </div>
     </div>

@@ -1,44 +1,39 @@
 import * as admin from "firebase-admin";
-import {CollectionReference, DocumentReference} from "firebase-admin/firestore";
-import {GameState} from "types/GameState";
+import { CollectionReference, DocumentReference } from "firebase-admin/firestore";
+import { GameRoom } from "types/GameRoom";
 
 const listRoom = async (shouldQueryData: boolean) => {
   const db = admin.firestore();
-  const roomListRef = db.collection("rooms") as CollectionReference<GameState>;
+  const roomListRef = db.collection("rooms") as CollectionReference<GameRoom>;
 
-  let roomList: GameState[] | null | undefined = null;
+  let roomList: GameRoom[] | null | undefined = null;
   if (shouldQueryData) {
     const roomListSnapshot = await roomListRef.get();
     roomList = roomListSnapshot.docs.map((doc) => doc.data());
   }
-  return {roomListRef, roomList};
+  return { roomListRef, roomList };
 };
 
 const retrieveRoom = async (roomID: string, shouldQueryData: boolean) => {
   const db = admin.firestore();
-  const roomRef = db
-    .collection("rooms")
-    .doc(roomID) as DocumentReference<GameState>;
+  const roomRef = db.collection("rooms").doc(roomID) as DocumentReference<GameRoom>;
 
-  let room: GameState | null = null;
+  let room: GameRoom | null = null;
   if (shouldQueryData) {
     const roomSnapshot = await roomRef.get();
     room = roomSnapshot.data() || null;
   }
-  return {roomRef, room};
+  return { roomRef, room };
 };
 
-const updateRoom = async (
-  roomID: string,
-  updatedFields: Partial<GameState>
-) => {
-  const {roomRef} = await retrieveRoom(roomID, false);
+const updateRoom = async (roomID: string, updatedFields: Partial<GameRoom>) => {
+  const { roomRef } = await retrieveRoom(roomID, false);
   roomRef.update(updatedFields);
 };
 
 const deleteRoom = async (roomID: string) => {
-  const {roomRef} = await retrieveRoom(roomID, false);
+  const { roomRef } = await retrieveRoom(roomID, false);
   roomRef.delete();
 };
 
-export {listRoom, retrieveRoom, updateRoom, deleteRoom};
+export { listRoom, retrieveRoom, updateRoom, deleteRoom };

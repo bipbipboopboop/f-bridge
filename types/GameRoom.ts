@@ -1,8 +1,7 @@
-// types/GameState.ts
 import { Bid, BidSuit } from "types/Bid";
 import { GamePlayer, GameRoomPlayer, LobbyPlayerProfile } from "./PlayerProfile";
 
-export type GameState = {
+export type GameRoom = {
   roomID: string;
   hostID: string;
   createdAt: Date;

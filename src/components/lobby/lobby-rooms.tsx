@@ -1,27 +1,27 @@
 import "./lobby-rooms.css";
-import {Tab, Tabs, TabList, TabPanel} from "react-tabs";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import RoomTable from "../tables/lobby-table";
-import {GameState} from "types/GameState";
+import { GameRoom } from "types/GameRoom";
 
-import {useCollectionData} from "react-firebase-hooks/firestore";
-import {CollectionReference, collection, orderBy, query} from "firebase/firestore";
-import {firestore} from "../../firebase";
-import {toast} from "react-toastify";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { CollectionReference, collection, orderBy, query } from "firebase/firestore";
+import { firestore } from "../../firebase";
+import { toast } from "react-toastify";
 import Loading from "../Loading";
 
 const LobbyRooms = () => {
-  const gameRoomsCollection = collection(firestore, `gameRooms`) as CollectionReference<GameState>;
+  const gameRoomsCollection = collection(firestore, `gameRooms`) as CollectionReference<GameRoom>;
   const gameRoomsQuery = query(gameRoomsCollection, orderBy("createdAt", "desc"));
 
-  const [gameRoomList, isLoading, error] = useCollectionData<GameState>(gameRoomsQuery);
+  const [gameRoomList, isLoading, error] = useCollectionData<GameRoom>(gameRoomsQuery);
 
   if (isLoading) return <Loading />;
   if (!gameRoomList) return <Loading />;
   if (error) toast.error(error.message);
 
-  const openRoomList: GameState[] = gameRoomList.filter((room) => !room.settings.isInviteOnly);
+  const openRoomList: GameRoom[] = gameRoomList.filter((room) => !room.settings.isInviteOnly);
 
-  const spectateRoomList: GameState[] = gameRoomList.filter(
+  const spectateRoomList: GameRoom[] = gameRoomList.filter(
     (room) => room.settings.isSpectatorAllowed && !(room.status === "Waiting")
   );
 

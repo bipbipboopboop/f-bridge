@@ -1,4 +1,4 @@
-import { EndedPhase, GameState } from "types/GameState";
+import { EndedPhase, GameRoom } from "types/GameRoom";
 
 import { toast } from "react-toastify";
 import { useDocumentData } from "react-firebase-hooks/firestore";
@@ -13,11 +13,11 @@ const GameResult = () => {
   const navigate = useNavigate();
 
   /**
-   * GameState
+   * GameRoom
    */
-  const gameStateRef = (roomID && (doc(firestore, "gameRooms", roomID) as DocumentReference<GameState>)) || null;
-  const [gameState, isLoading, error] = useDocumentData<GameState>(gameStateRef);
-  console.log({ gameState });
+  const gameRoomRef = (roomID && (doc(firestore, "gameRooms", roomID) as DocumentReference<GameRoom>)) || null;
+  const [gameRoom, isLoading, error] = useDocumentData<GameRoom>(gameRoomRef);
+  console.log({ gameRoom });
 
   /**
    * Loading
@@ -27,12 +27,12 @@ const GameResult = () => {
   /**
    * Error handling
    */
-  //   if (!gameState || error) {
+  //   if (!gameRoom || error) {
   //     toast.error("Error loading game result");
   //     navigate("/lobby");
   //   }
 
-  //   if (gameState?.status !== "Ended") {
+  //   if (gameRoom?.status !== "Ended") {
   //     toast.error("Game hasn't ended yet!");
   //     navigate("/lobby");
   //   }

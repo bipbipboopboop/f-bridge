@@ -3,7 +3,7 @@ import * as admin from "firebase-admin";
 
 import { Message } from "types/Chat";
 import { DocumentReference } from "firebase-admin/firestore";
-import { GameState } from "types/GameState";
+import { GameRoom } from "types/GameRoom";
 
 export const sendMessage = functions
   .region("asia-east2")
@@ -20,7 +20,7 @@ export const sendMessage = functions
     const userID = context.auth.uid;
 
     // Check if the player is in the room
-    const roomRef = admin.firestore().collection("gameRooms").doc(roomID) as DocumentReference<GameState>;
+    const roomRef = admin.firestore().collection("gameRooms").doc(roomID) as DocumentReference<GameRoom>;
     const roomSnapshot = await roomRef.get();
     const roomData = roomSnapshot.data();
 

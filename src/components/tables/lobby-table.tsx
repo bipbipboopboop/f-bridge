@@ -1,18 +1,18 @@
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 import PlayerSVG from "../../assets/player_assets/player.svg";
 import useFunctions from "../../hooks/useFunctions";
 import "./lobby-table.css";
-import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from "@tanstack/react-table";
+import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 
-import {GameState} from "types/GameState";
+import { GameRoom } from "types/GameRoom";
 import Loading from "../Loading";
-import {useNavigate} from "react-router-dom";
-import {useAuth} from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 
-const RoomTable = (props: {gameRoomList: GameState[]}) => {
-  const {playerProfile} = useAuth();
+const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
+  const { playerProfile } = useAuth();
   const navigate = useNavigate();
-  const columnHelper = createColumnHelper<GameState>();
+  const columnHelper = createColumnHelper<GameRoom>();
   const columns = [
     columnHelper.accessor("roomID", {
       header: () => <span>Room ID</span>,
@@ -43,8 +43,8 @@ const RoomTable = (props: {gameRoomList: GameState[]}) => {
     }),
   ];
 
-  const {gameRoomList} = props;
-  const {joinGameRoom, isLoading, error} = useFunctions();
+  const { gameRoomList } = props;
+  const { joinGameRoom, isLoading, error } = useFunctions();
 
   const table = useReactTable({
     data: gameRoomList,

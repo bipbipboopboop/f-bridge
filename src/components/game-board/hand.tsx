@@ -1,26 +1,26 @@
-import {memo, useState} from "react";
-import {useDocumentData} from "react-firebase-hooks/firestore";
-import {DocumentReference, doc} from "firebase/firestore";
-import {firestore} from "../../firebase";
+import { memo, useState } from "react";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { DocumentReference, doc } from "firebase/firestore";
+import { firestore } from "../../firebase";
 
-import {useAuth} from "../../hooks/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 
-import {GamePlayer} from "types/PlayerProfile";
+import { GamePlayer } from "types/PlayerProfile";
 
 import PlayingCard from "assets/playing_card";
 import "./hand.css";
-import {BID_SUITS} from "../../utils/bid";
-import {GameState} from "types/GameState";
+import { BID_SUITS } from "../../utils/bid";
+import { GameRoom } from "types/GameRoom";
 import Button from "../buttons/button";
-import {Card} from "types/Card";
+import { Card } from "types/Card";
 import useFunctions from "../../hooks/useFunctions";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
-const Hand = (props: {gameState: GameState}) => {
-  const {gameState} = props;
+const Hand = (props: { gameRoom: GameRoom }) => {
+  const { gameRoom } = props;
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
-  const {playerProfile} = useAuth();
-  const {playCard, error} = useFunctions();
+  const { playerProfile } = useAuth();
+  const { playCard, error } = useFunctions();
 
   const roomID = playerProfile?.roomID;
   const gamePlayerRef = doc(
@@ -40,7 +40,7 @@ const Hand = (props: {gameState: GameState}) => {
     return a.value - b.value;
   });
 
-  const isMyTurn = gameState.trickTakingPhase && gameState.trickTakingPhase.currentPlayerIndex === gamePlayer?.position;
+  const isMyTurn = gameRoom.trickTakingPhase && gameRoom.trickTakingPhase.currentPlayerIndex === gamePlayer?.position;
 
   if (error) {
     toast.error(error.message);
@@ -49,7 +49,7 @@ const Hand = (props: {gameState: GameState}) => {
   return (
     <div className="w-100 h-100 d-flex">
       {/* <pre>{JSON.stringify(selectedCard)}</pre> */}
-      <div style={{width: "85%"}} className="hand">
+      <div style={{ width: "85%" }} className="hand">
         {/* <PlayingCard card={{suit: "♠", value: 10, stringValue: "10"}} /> */}
         {sortedCards?.map((card, index) => (
           <PlayingCard
@@ -67,7 +67,7 @@ const Hand = (props: {gameState: GameState}) => {
         ))}
       </div>
 
-      <div style={{width: "15%"}} className="h-100 d-flex align-items-end">
+      <div style={{ width: "15%" }} className="h-100 d-flex align-items-end">
         {isMyTurn && (
           <Button
             theme="green"

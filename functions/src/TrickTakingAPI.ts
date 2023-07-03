@@ -2,7 +2,7 @@ import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 
 import { CollectionReference, DocumentReference } from "firebase-admin/firestore";
-import { EndedPhase, GameState, TrickTakingPhaseHidden } from "types/GameState";
+import { EndedPhase, GameRoom, TrickTakingPhaseHidden } from "types/GameRoom";
 import { GamePlayer, PlayerProfile } from "types/PlayerProfile";
 import { produce } from "immer";
 import { Card } from "types/Card";
@@ -32,7 +32,7 @@ export const playCard = functions.region("asia-east2").https.onCall(async (card:
   const gameRoomRef = admin
     .firestore()
     .collection("gameRooms")
-    .doc(playerProfile.roomID) as DocumentReference<GameState>;
+    .doc(playerProfile.roomID) as DocumentReference<GameRoom>;
 
   const gameRoom = (await gameRoomRef.get()).data();
 
@@ -208,7 +208,7 @@ export const playCard = functions.region("asia-east2").https.onCall(async (card:
         winnerTeam: { playerList: winnerLookup[isDeclarerTeamWon ? "Declarer" : "Defender"] },
       };
 
-      const finalGameRoom: GameState = { ...nextRoundGameRoom, status: "Ended", endedPhase: endedPhase };
+      const finalGameRoom: GameRoom = { ...nextRoundGameRoom, status: "Ended", endedPhase: endedPhase };
       console.log({ finalGameRoom });
       await gameRoomRef.update(finalGameRoom);
 

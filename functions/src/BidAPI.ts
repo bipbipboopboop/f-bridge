@@ -3,7 +3,7 @@ import * as admin from "firebase-admin";
 
 import { Bid } from "types/Bid";
 import { CollectionReference, DocumentReference } from "firebase-admin/firestore";
-import { GameState, TrickTakingPhaseHidden } from "types/GameState";
+import { GameRoom, TrickTakingPhaseHidden } from "types/GameRoom";
 import { GamePlayer, PlayerProfile } from "types/PlayerProfile";
 import { produce } from "immer";
 import { Card } from "types/Card";
@@ -32,7 +32,7 @@ export const placeBid = functions.region("asia-east2").https.onCall(async (bid: 
   const gameRoomRef = admin
     .firestore()
     .collection("gameRooms")
-    .doc(playerProfile.roomID) as DocumentReference<GameState>;
+    .doc(playerProfile.roomID) as DocumentReference<GameRoom>;
 
   const gameRoom = (await gameRoomRef.get()).data();
 
@@ -153,7 +153,7 @@ export const chooseTeammate = functions.region("asia-east2").https.onCall(async 
   const gameRoomRef = admin
     .firestore()
     .collection("gameRooms")
-    .doc(playerProfile.roomID) as DocumentReference<GameState>;
+    .doc(playerProfile.roomID) as DocumentReference<GameRoom>;
 
   const gameRoom = (await gameRoomRef.get()).data();
 

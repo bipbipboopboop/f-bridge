@@ -1,26 +1,26 @@
-import {useState} from "react";
-import {toast} from "react-toastify";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
-import {useAuth} from "../../../hooks/useAuth";
+import { useAuth } from "../../../hooks/useAuth";
 import useFunctions from "../../../hooks/useFunctions";
 
-import {Card, Suit} from "types/Card";
-import {deck} from "../../../utils/deck";
-import {BiddingPhase} from "types/GameState";
+import { Card, Suit } from "types/Card";
+import { deck } from "../../../utils/deck";
+import { BiddingPhase } from "types/GameRoom";
 
 import BidButton from "../../buttons/button-bid";
 import Button from "../../buttons/button";
 import Loading from "../../Loading";
 
-const ChoosingTeammatePanel = (props: {biddingPhase: BiddingPhase}) => {
-  const {biddingPhase} = props;
-  const {playerProfile, gamePlayer} = useAuth();
+const ChoosingTeammatePanel = (props: { biddingPhase: BiddingPhase }) => {
+  const { biddingPhase } = props;
+  const { playerProfile, gamePlayer } = useAuth();
 
   const [selectedSuit, setSelectedSuit] = useState<Suit | null>(null);
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
   const [isHovering, setIsHovering] = useState(false);
 
-  const {chooseTeammate, isLoading, error} = useFunctions();
+  const { chooseTeammate, isLoading, error } = useFunctions();
 
   // Check whether the player is the bid winner
   const bidWinner = biddingPhase.gameroomPlayersList.find(
@@ -64,13 +64,13 @@ const ChoosingTeammatePanel = (props: {biddingPhase: BiddingPhase}) => {
   return (
     <div
       className="h-100 d-flex flex-column align-items-center"
-      style={{backgroundColor: "rgba(0, 0, 0, 0.2)", width: "90%"}}
+      style={{ backgroundColor: "rgba(0, 0, 0, 0.2)", width: "90%" }}
     >
       <div className="h-25 d-flex justify-content-center align-items-center">
         {selectedCard && (
           <Button
             theme="yellow"
-            style={{width: "28rem", marginBottom: "1rem"}}
+            style={{ width: "28rem", marginBottom: "1rem" }}
             onMouseEnter={() => {
               setIsHovering(true);
             }}

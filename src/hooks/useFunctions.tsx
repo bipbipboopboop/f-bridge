@@ -1,11 +1,15 @@
-import {useCreateUserWithEmailAndPassword, useSignInWithEmailAndPassword, useSignOut} from "react-firebase-hooks/auth";
-import {useHttpsCallable} from "react-firebase-hooks/functions";
-import {auth, functions} from "../firebase";
-import {PlayerProfile} from "types/PlayerProfile";
-import {UserInfo} from "firebase/auth";
-import {GameState} from "types/GameState";
-import {Bid} from "types/Bid";
-import {Card} from "types/Card";
+import {
+  useCreateUserWithEmailAndPassword,
+  useSignInWithEmailAndPassword,
+  useSignOut,
+} from "react-firebase-hooks/auth";
+import { useHttpsCallable } from "react-firebase-hooks/functions";
+import { auth, functions } from "../firebase";
+import { PlayerProfile } from "types/PlayerProfile";
+import { UserInfo } from "firebase/auth";
+import { GameRoom } from "types/GameRoom";
+import { Bid } from "types/Bid";
+import { Card } from "types/Card";
 
 const useFunctions = () => {
   /**
@@ -20,7 +24,7 @@ const useFunctions = () => {
   /**
    * GAME ROOM API
    */
-  const [createGameRoom, l7, e7] = useHttpsCallable<void, GameState>(functions, "createGameRoom");
+  const [createGameRoom, l7, e7] = useHttpsCallable<void, GameRoom>(functions, "createGameRoom");
   const [joinGameRoom, l8, e8] = useHttpsCallable<string, void>(functions, "joinGameRoom");
   const [leaveGameRoom, l9, e9] = useHttpsCallable(functions, "leaveGameRoom");
 
@@ -41,7 +45,7 @@ const useFunctions = () => {
   /**
    * CHAT API
    */
-  const [sendMessage, l12, e12] = useHttpsCallable<{roomID: string; message: string}, void>(functions, "sendMessage");
+  const [sendMessage, l12, e12] = useHttpsCallable<{ roomID: string; message: string }, void>(functions, "sendMessage");
 
   const isLoading = l0 || l1 || l2 || l3 || l5 || l7 || l8 || l9 || l10 || l11 || l12 || l13 || l14;
 

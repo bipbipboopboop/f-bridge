@@ -1,9 +1,9 @@
-import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from "@tanstack/react-table";
+import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 
-import {BidSnapshot, BiddingPhase} from "types/GameState";
+import { BidSnapshot, BiddingPhase } from "types/GameRoom";
 import "./bidding-table.css";
 
-const BiddingTable = (props: {biddingPhase: BiddingPhase}) => {
+const BiddingTable = (props: { biddingPhase: BiddingPhase }) => {
   const biddingPhase = props.biddingPhase;
 
   const data = biddingPhase!.bidHistory;

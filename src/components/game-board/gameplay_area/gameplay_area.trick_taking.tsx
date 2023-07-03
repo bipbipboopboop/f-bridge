@@ -1,10 +1,10 @@
-import {TrickTakingPhase} from "types/GameState";
+import { TrickTakingPhase } from "types/GameRoom";
 import PlayingAreaCard from "./gameplay_area.trick_taking_card";
-import {useAuth} from "../../../hooks/useAuth";
+import { useAuth } from "../../../hooks/useAuth";
 
-const TrickTakingGameplayArea = (props: {trickTakingPhase: TrickTakingPhase}) => {
-  const {trickTakingPhase} = props;
-  const {playerProfile} = useAuth();
+const TrickTakingGameplayArea = (props: { trickTakingPhase: TrickTakingPhase }) => {
+  const { trickTakingPhase } = props;
+  const { playerProfile } = useAuth();
 
   const currPlayer = trickTakingPhase.gameroomPlayersList[trickTakingPhase.currentPlayerIndex];
   const myPlayer = trickTakingPhase.gameroomPlayersList.find((plyr) => plyr.id === playerProfile?.id);
@@ -33,7 +33,7 @@ const TrickTakingGameplayArea = (props: {trickTakingPhase: TrickTakingPhase}) =>
   return (
     <div
       className="h-100 w-75 d-flex flex-column align-items-center"
-      style={{backgroundColor: "rgba(0, 0, 0, 0.2)", width: "90%"}}
+      style={{ backgroundColor: "rgba(0, 0, 0, 0.2)", width: "90%" }}
     >
       {currPlayer.id === myPlayer?.id && <p>Your turn to play</p>}
       {currPlayer.id !== myPlayer?.id && <p>{currPlayer.displayName}'s turn to play</p>}

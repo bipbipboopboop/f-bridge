@@ -1,28 +1,22 @@
-import {GameState} from "types/GameState";
-import {useAuth} from "../../hooks/useAuth";
+import { GameRoom } from "types/GameRoom";
+import { useAuth } from "../../hooks/useAuth";
 import useFunctions from "../../hooks/useFunctions";
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Button from "../buttons/button";
 
-const GameRoomButtonPanel = (props: {gameState: GameState}) => {
-  const {playerProfile} = useAuth();
-  const {toggleReady, startGame} = useFunctions();
-  const {roomID} = useParams();
+const GameRoomButtonPanel = (props: { gameRoom: GameRoom }) => {
+  const { playerProfile } = useAuth();
+  const { toggleReady, startGame } = useFunctions();
+  const { roomID } = useParams();
 
-  const {gameState} = props;
+  const { gameRoom } = props;
 
-  const isRoomFull = gameState.players.length === 4;
-  const otherPlayers = gameState.players.filter(
-    (player) => player.id !== playerProfile?.id
-  );
-  const isGameReady =
-    isRoomFull && otherPlayers.every((player) => player.isReady);
-  const isPlayerAHost =
-    gameState.players.find((player) => player.isHost)?.id === playerProfile?.id;
+  const isRoomFull = gameRoom.players.length === 4;
+  const otherPlayers = gameRoom.players.filter((player) => player.id !== playerProfile?.id);
+  const isGameReady = isRoomFull && otherPlayers.every((player) => player.isReady);
+  const isPlayerAHost = gameRoom.players.find((player) => player.isHost)?.id === playerProfile?.id;
 
-  const isPlayerReady = gameState.players.find(
-    (player) => player.id === playerProfile?.id
-  )?.isReady;
+  const isPlayerReady = gameRoom.players.find((player) => player.id === playerProfile?.id)?.isReady;
 
   if (isPlayerAHost) {
     return (

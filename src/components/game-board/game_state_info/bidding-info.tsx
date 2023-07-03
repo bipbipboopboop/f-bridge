@@ -1,9 +1,9 @@
-import {GameState} from "types/GameState";
+import { GameRoom } from "types/GameRoom";
 import BiddingTable from "../../tables/bidding-table";
 
-const BiddingInfo = (props: {gameState: GameState}) => {
-  const {gameState} = props;
-  const biddingPhase = gameState.biddingPhase;
+const BiddingInfo = (props: { gameRoom: GameRoom }) => {
+  const { gameRoom } = props;
+  const biddingPhase = gameRoom.biddingPhase;
 
   if (!biddingPhase) return <></>;
 

@@ -1,7 +1,7 @@
-import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from "@tanstack/react-table";
+import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 
-import {TrickTakingPhase} from "types/GameState";
-import {GameRoomPlayer} from "types/PlayerProfile";
+import { TrickTakingPhase } from "types/GameRoom";
+import { GameRoomPlayer } from "types/PlayerProfile";
 import "./tricks-table.css";
 
 const ScoreTable = () => {
