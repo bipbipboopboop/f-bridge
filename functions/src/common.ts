@@ -1,7 +1,6 @@
 import { DocumentReference } from "firebase-admin/firestore";
 import { CallableContext, HttpsError } from "firebase-functions/v1/https";
-import { GameRoom } from "./GameType";
-import { GameRoomPlayer } from "types/PlayerProfile";
+import { GameRoom, GameRoomPlayer, GameState } from "./GameType";
 
 export function getUidOrThrow(context: CallableContext): string {
   const { auth } = context;
@@ -29,4 +28,11 @@ export async function getPlayerInRoomOrThrow(
     throw new HttpsError("failed-precondition", "No such player in the room");
   }
   return gameRoomPlayer;
+}
+
+/**
+ * Flushes all the changes into the database
+ */
+export async function updateDatabase(gameRoomRef: DocumentReference<GameRoom>, state: GameState) {
+  await gameRoomRef.update({ state });
 }

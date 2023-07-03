@@ -3,7 +3,6 @@
  * This is for ease of sending data between the backend and the frontend
  */
 import { Timestamp } from "firebase-admin/firestore";
-import { GameRoomPlayer } from "types/PlayerProfile";
 
 export type BidNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 export type BidSuit = "♣" | "♦" | "♥" | "♠" | "NT";
@@ -25,8 +24,9 @@ export type HighestBid = {
   playerID: string;
 };
 
-export type GameStatus = "Waiting" | "Bidding" | "Taking Trick" | "Picking Teammate";
+export type GameStatus = "waiting" | "bidding" | "taking trick" | "picking teammate";
 export type PlayerPosition = 0 | 1 | 2 | 3;
+export type TeamLabel = "declarer" | "defender";
 
 export type GameState = {
   status: GameStatus;
@@ -36,13 +36,16 @@ export type GameState = {
   trickTakingPhase: TrickTakingPhase | null;
 };
 
-/*
-export type GameState = {
-  status: GameStatus;
-  players: GameRoomPlayer[];
-  currentPhase: BiddingPhase | PickingTeammatePhase | TrickTakingPhase | null;
-}
-*/
+export type GameRoomPlayer = {
+  ID: string;
+  position: PlayerPosition;
+  cardsInHand: Card[];
+};
+
+export type GameRoomTeam = {
+  label: TeamLabel;
+  players: [PlayerPosition, PlayerPosition];
+};
 
 export type BiddingPhase = {
   currentPlayerIndex: PlayerPosition;
@@ -61,8 +64,8 @@ export type TrickTakingPhase = {
    */
   leadPlayerIndex: PlayerPosition;
   trumpSuit: BidSuit;
-  teams: [[PlayerPosition, PlayerPosition], [PlayerPosition, PlayerPosition]];
-  roundsWon: [number, number];
+  firstTeam: GameRoomTeam;
+  secondTeam: GameRoomTeam;
 };
 
 export type GameMetadata = {

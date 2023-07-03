@@ -3,6 +3,7 @@
   "prettier.printWidth": 120,
   "prettier.semi": true,
   "prettier.trailingComma": "es5",
+  "prettier.arrowParens": "avoid",
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "modifications",
   "editor.tabSize": 2

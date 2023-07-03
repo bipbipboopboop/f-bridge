@@ -2,9 +2,8 @@ import * as functions from "firebase-functions";
 import { Card } from "types/Card";
 import { getGameRoomOrThrow, getPlayerInRoomOrThrow, getUidOrThrow } from "./common";
 import { GAME_ROOMS_COLLECTION, gameRoomPlayersCollection } from "./colllections";
-import { GameState, TrickTakingPhase } from "./GameType";
+import { GameRoomPlayer, GameState, TrickTakingPhase } from "./GameType";
 import { HttpsError } from "firebase-functions/v1/auth";
-import { GameRoomPlayer } from "types/PlayerProfile";
 
 function getTrickTakingPhaseOrThrow(gameState: GameState): TrickTakingPhase {
   const { trickTakingPhase } = gameState;

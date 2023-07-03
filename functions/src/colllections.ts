@@ -1,7 +1,7 @@
 import { firestore as firestoreFn } from "firebase-admin";
-import { GameRoom } from "./GameType";
+import { GameRoom, GameRoomPlayer } from "./GameType";
 import { CollectionReference, DocumentReference } from "firebase-admin/firestore";
-import { GameRoomPlayer, PlayerProfile } from "types/PlayerProfile";
+import { PlayerProfile } from "types/PlayerProfile";
 
 const firestore = firestoreFn();
 

@@ -2,12 +2,11 @@ import * as functions from "firebase-functions";
 
 import { DocumentReference } from "firebase-admin/firestore";
 import { HttpsError } from "firebase-functions/v1/https";
-import { GameRoomPlayer } from "types/PlayerProfile";
 import { GAME_ROOMS_COLLECTION, gameRoomPlayersCollection } from "./colllections";
 import { BID_SUITS, NUMBER_OF_PLAYERS } from "./constants";
-import { getUidOrThrow, getGameRoomOrThrow, getPlayerInRoomOrThrow } from "./common";
+import { getUidOrThrow, getGameRoomOrThrow, getPlayerInRoomOrThrow, updateDatabase } from "./common";
 
-import type { Bid, BidRequest, BiddingPhase, GameRoom, GameState, PlayerPosition } from "./GameType";
+import type { Bid, BidRequest, BiddingPhase, GameRoom, GameState, PlayerPosition, GameRoomPlayer } from "./GameType";
 
 export type BidResultStatus = "continue" | "finish" | "restart";
 
@@ -17,11 +16,11 @@ export type BidResult = {
 };
 
 function getBiddingPhaseOrThrow(gameState: GameState): BiddingPhase {
-  const { biddingPhase } = gameState;
-  if (!biddingPhase) {
+  const { status, biddingPhase } = gameState;
+  if (status !== "bidding") {
     throw new HttpsError("failed-precondition", "The game must be in bidding phase");
   }
-  return biddingPhase;
+  return biddingPhase!;
 }
 
 function requirePlayerTurn(biddingPhase: BiddingPhase, gameRoomPlayer: GameRoomPlayer) {
@@ -34,9 +33,9 @@ function requirePlayerTurn(biddingPhase: BiddingPhase, gameRoomPlayer: GameRoomP
 
 function compareBid(first: Bid, second: Bid) {
   // compare bid number first, then compare the suit
-  const numberDiff = first.number - second.number;
-  if (numberDiff) {
-    return numberDiff;
+  const diff = first.number - second.number;
+  if (diff) {
+    return diff;
   }
   return BID_SUITS.indexOf(first.suit) - BID_SUITS.indexOf(second.suit);
 }
@@ -51,7 +50,6 @@ function requirePassOrHigherBid(biddingPhase: BiddingPhase, bidRequest: BidReque
 
 function handleLogic(biddingPhase: BiddingPhase, playerID: string, { bid }: BidRequest): BidResult {
   let { currentPlayerIndex, numberOfPasses, highestBid } = biddingPhase;
-
   if (!bid) {
     numberOfPasses++;
   } else {
@@ -59,7 +57,6 @@ function handleLogic(biddingPhase: BiddingPhase, playerID: string, { bid }: BidR
   }
 
   let status: BidResultStatus;
-
   if (numberOfPasses === 4) {
     status = "restart";
     currentPlayerIndex = 0;
@@ -71,7 +68,6 @@ function handleLogic(biddingPhase: BiddingPhase, playerID: string, { bid }: BidR
     status = "continue";
     currentPlayerIndex = ((currentPlayerIndex + 1) % NUMBER_OF_PLAYERS) as PlayerPosition;
   }
-
   return { status, next: { currentPlayerIndex, highestBid, numberOfPasses } };
 }
 
@@ -79,19 +75,15 @@ function updateGameState(gameState: GameState, bidResult: BidResult): GameState 
   const { status, next } = bidResult;
   const newGameState = { ...gameState };
   if (status === "finish") {
-    newGameState.status = "Picking Teammate";
-    newGameState.biddingPhase = null;
+    newGameState.status = "picking teammate";
+    // transition to trick traking phase
+    newGameState.pickingTeammatePhase = {
+      playerID: next.highestBid!.playerID,
+    };
   } else {
     newGameState.biddingPhase = next;
   }
   return newGameState;
-}
-
-/**
- * Flushes all the changes into the database
- */
-async function updateDatabase(gameRoomRef: DocumentReference<GameRoom>, state: GameState) {
-  await gameRoomRef.update({ state });
 }
 
 export const placeBid = functions.https.onCall(
