@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, memo, useState } from "react";
 import { useParams } from "react-router-dom";
 import Button from "../buttons/button";
-import { CollectionReference, addDoc, collection } from "firebase/firestore";
+import { CollectionReference, Timestamp, addDoc, collection } from "firebase/firestore";
 import { firestore } from "../../firebase";
 import { Message } from "types/Chat";
 import { useAuth } from "../../hooks/useAuth";
@@ -26,7 +26,7 @@ const ChatboxInput = () => {
     e.preventDefault();
     // await sendMessage({ roomID, message: inputMessage });
     await addDoc(messagesCollection, {
-      createdAt: new Date().toString(),
+      createdAt: Timestamp.now(),
       playerName: playerProfile!.displayName,
       uid: playerProfile!.id,
       text: inputMessage,

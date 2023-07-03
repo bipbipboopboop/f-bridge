@@ -1,7 +1,7 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 
-import { CollectionReference, DocumentReference } from "firebase-admin/firestore";
+import { CollectionReference, DocumentReference, Timestamp } from "firebase-admin/firestore";
 import { EndedPhase, GameRoom, TrickTakingPhaseHidden } from "types/GameRoom";
 import { GamePlayer, PlayerProfile } from "types/PlayerProfile";
 import { produce } from "immer";
@@ -120,7 +120,7 @@ export const playCard = functions.region("asia-east2").https.onCall(async (card:
 
   const messagesRef = gameRoomRef.collection("messages") as CollectionReference<Message>;
   await messagesRef.add({
-    createdAt: new Date().toString(),
+    createdAt: Timestamp.now(),
     playerName: "system",
     text: `${gamePlayer.displayName} played ${card.stringValue} of ${card.suit}`,
     uid: "system",
@@ -217,7 +217,7 @@ export const playCard = functions.region("asia-east2").https.onCall(async (card:
     }
 
     await messagesRef.add({
-      createdAt: new Date().toString(),
+      createdAt: Timestamp.now(),
       playerName: "system",
       text: `${winner.displayName} won the trick. ${winner.displayName} will lead the next trick.`,
       uid: "system",

@@ -11,7 +11,7 @@ const ScoreTable = () => {
     trumpSuit: "♠",
     gameroomPlayersList: [
       {
-        avatarID: "1",
+        avatarID: "blueDino",
         displayName: "Player 1",
         id: "1",
         numCardsOnHand: 13,
@@ -22,7 +22,7 @@ const ScoreTable = () => {
       {
         displayName: "Player 2",
         id: "2",
-        avatarID: "2",
+        avatarID: "blueDino",
         numCardsOnHand: 13,
         position: 1,
         currentCardOnTable: null,
@@ -31,7 +31,7 @@ const ScoreTable = () => {
       {
         displayName: "Player 3",
         id: "3",
-        avatarID: "3",
+        avatarID: "blueDino",
         numCardsOnHand: 13,
         position: 2,
         currentCardOnTable: null,
@@ -40,7 +40,7 @@ const ScoreTable = () => {
       {
         displayName: "Player 4",
         id: "4",
-        avatarID: "4",
+        avatarID: "blueDino",
         numCardsOnHand: 13,
         position: 3,
         currentCardOnTable: null,

@@ -4,6 +4,7 @@ import * as admin from "firebase-admin";
 import { Message } from "types/Chat";
 import { DocumentReference } from "firebase-admin/firestore";
 import { GameRoom } from "types/GameRoom";
+import { Timestamp } from "firebase/firestore";
 
 export const sendMessage = functions
   .region("asia-east2")
@@ -33,7 +34,7 @@ export const sendMessage = functions
       uid: userID,
       playerName: roomData.players.find((player) => player.id === userID)!.displayName,
       text: message,
-      createdAt: new Date().toString(),
+      createdAt: Timestamp.now(),
     };
 
     // Add the message to the messages subcollection of the room
