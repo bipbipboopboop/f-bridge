@@ -1,15 +1,23 @@
-import {ChangeEvent, FormEvent, memo, useState} from "react";
+import { ChangeEvent, FormEvent, memo, useState } from "react";
 import useFunctions from "../../hooks/useFunctions";
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Button from "../buttons/button";
+import { CollectionReference, addDoc, collection } from "firebase/firestore";
+import { firestore } from "../../firebase";
+import { Message } from "types/Chat";
+import { useAuth } from "../../hooks/useAuth";
 
 const ChatboxInput = () => {
-  const {roomID} = useParams();
-  const {sendMessage} = useFunctions();
+  const { roomID } = useParams();
+  const { playerProfile } = useAuth();
+  // const { sendMessage } = useFunctions();
   const [inputMessage, setInputMessage] = useState<string>("");
+
+  const messagesCollection = collection(firestore, `gameRooms/${roomID}/messages`) as CollectionReference<Message>;
 
   // console.log("ChatboxInput loaded");
   if (!roomID) return <></>;
+  if (!playerProfile) return <></>;
 
   const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     setInputMessage(e.target.value);
@@ -17,8 +25,13 @@ const ChatboxInput = () => {
 
   const onSendMessage = async (e: FormEvent) => {
     e.preventDefault();
-    await sendMessage({roomID, message: inputMessage});
-    // console.log("Sent");
+    // await sendMessage({ roomID, message: inputMessage });
+    await addDoc(messagesCollection, {
+      createdAt: new Date().toString(),
+      playerName: playerProfile!.displayName,
+      uid: playerProfile!.id,
+      text: inputMessage,
+    });
     setInputMessage("");
   };
 

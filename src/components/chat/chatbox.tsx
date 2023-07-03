@@ -1,17 +1,17 @@
-import {memo, useEffect, useRef} from "react";
-import {useCollectionData} from "react-firebase-hooks/firestore";
-import {useParams} from "react-router-dom";
+import { memo, useEffect, useRef } from "react";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { useParams } from "react-router-dom";
 
 import "./chat.css";
-import {Message} from "types/Chat";
+import { Message } from "types/Chat";
 import ChatMessage from "./chatbox-message";
 
-import {CollectionReference, collection, orderBy, query} from "firebase/firestore";
-import {firestore} from "../../firebase";
+import { CollectionReference, collection, orderBy, query } from "firebase/firestore";
+import { firestore } from "../../firebase";
 import ChatboxInput from "./chatbox-input";
 
 const Chatbox = () => {
-  const {roomID} = useParams();
+  const { roomID } = useParams();
   const messagesCollection = collection(firestore, `gameRooms/${roomID}/messages`) as CollectionReference<Message>;
   const messagesQuery = query(messagesCollection, orderBy("createdAt", "asc"));
 
@@ -21,7 +21,7 @@ const Chatbox = () => {
 
   useEffect(() => {
     // console.log("cursor moved");
-    focus.current.scrollIntoView({behavior: "smooth"});
+    focus.current.scrollIntoView({ behavior: "smooth" });
   }, [messageList]);
 
   // console.log("Chat loaded");
