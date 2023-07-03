@@ -3,10 +3,12 @@ import * as admin from "firebase-admin";
 
 import { uniqueNamesGenerator, Config, adjectives, colors, animals } from "unique-names-generator";
 
-import { PlayerProfile } from "types/PlayerProfile";
+import { AvatarID, PlayerProfile } from "types/PlayerProfile";
 import { DocumentReference } from "firebase-admin/firestore";
 import { UserInfo } from "firebase-admin/auth";
 import { UnauthenticatedError } from "./error/error";
+
+const AVATAR_IDS: AvatarID[] = ["blueDino", "greenDino", "redDino", "yellowDino"];
 
 export const createPlayerProfile = functions.region("asia-east2").https.onCall(async (user: UserInfo, context) => {
   try {
@@ -38,12 +40,14 @@ export const createPlayerProfile = functions.region("asia-east2").https.onCall(a
       id: user.uid,
       displayName: user.displayName || randomName,
       email: user.email,
-      avatarID: null,
+      avatarID: AVATAR_IDS[Math.floor(Math.random() * AVATAR_IDS.length)],
       country: "International",
       numOfGamesPlayed: 0,
       numOfGamesWon: 0,
       roomID: null,
     };
+
+    console.log({ playerProfile });
     // Create the player profile
     await playerProfileRef.set(playerProfile);
 

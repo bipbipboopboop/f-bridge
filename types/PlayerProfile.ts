@@ -1,11 +1,12 @@
-import {Card} from "./Card";
+import { Card } from "./Card";
+export type AvatarID = "blueDino" | "redDino" | "yellowDino" | "greenDino";
 export interface PlayerProfile {
   // Personal Info
   id: string;
   email: string | null;
   displayName: string;
   country: string | "International";
-  avatarID: string | null; // For future
+  avatarID: AvatarID;
   // status: "Online" | "Offline" | "In Lobby" | "In Game";
 
   // Game data

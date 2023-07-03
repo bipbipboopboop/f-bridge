@@ -46,7 +46,7 @@ const GameResult = () => {
       playerList: [
         {
           displayName: "John Cena",
-          avatarID: "1",
+          avatarID: "blueDino",
           cards: [],
           country: "International",
           email: "",
@@ -63,7 +63,7 @@ const GameResult = () => {
         },
         {
           displayName: "Zhong Xina",
-          avatarID: "1",
+          avatarID: "blueDino",
           cards: [],
           country: "International",
           email: "",
@@ -103,11 +103,7 @@ const GameResult = () => {
 export default GameResult;
 
 const PlayerBox = ({ player }: { player: GamePlayer }) => {
-  //   const spriteList = [dino_sprite_1, dino_sprite_2, dino_sprite_3, dino_sprite_4];
-
   if (!player) return <div className="player-box"></div>;
-  // Convert player avatarID to sprite index
-  const spriteIndex = player.avatarID === null ? 0 : parseInt(player.avatarID) - 1;
 
   return (
     <div style={{ height: "15rem", width: "15rem", backgroundColor: "rgba(0, 0, 0, 0.2)" }}>
