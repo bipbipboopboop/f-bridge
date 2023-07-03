@@ -24,7 +24,7 @@ export interface LobbyPlayerProfile extends PlayerProfile {
 export interface GameRoomPlayer {
   id: string;
   displayName: string;
-  avatarID: string | null;
+  avatarID: AvatarID;
   position: number;
   numCardsOnHand: number;
   numTricksWon: number;

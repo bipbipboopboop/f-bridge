@@ -1,7 +1,7 @@
 import { GameRoomPlayer } from "types/PlayerProfile";
-import dino_sprite_1 from "assets/player_assets/dino_sprite_1.gif";
+
 import "./player-bubble.css";
-import { useAuth } from "../../hooks/useAuth";
+import { avatarLookup } from "assets/avatar";
 
 type Props = {
   player: GameRoomPlayer;
@@ -21,7 +21,7 @@ const PlayerBubble = (props: Props) => {
           {player.displayName}
         </div>
         <div className="d-flex align-items-center">
-          <img src={dino_sprite_1} alt={":/"} />
+          <img src={avatarLookup[player.avatarID]} alt={":/"} />
           <div className="d-flex flex-column w-100 align-items-center">
             <PlayerNumCardHint numCardsOnHand={player.numCardsOnHand} />
             <PlayerNumTricksWon numCardsWon={player.numTricksWon} />
@@ -37,7 +37,7 @@ const PlayerBubble = (props: Props) => {
         {player.displayName}
       </div>
       <div className="d-flex flex-column align-items-center">
-        <img src={dino_sprite_1} alt={":/"} />
+        <img src={avatarLookup[player.avatarID]} alt={":/"} />
         <div className="d-flex w-100 justify-content-around">
           <PlayerNumCardHint numCardsOnHand={player.numCardsOnHand} />
           <PlayerNumTricksWon numCardsWon={player.numTricksWon} />
