@@ -1,19 +1,11 @@
 import * as functions from "firebase-functions";
 
-import { DocumentReference } from "firebase-admin/firestore";
 import { HttpsError } from "firebase-functions/v1/https";
 import { GAME_ROOMS_COLLECTION, gameRoomPlayersCollection } from "./colllections";
-import { BID_SUITS, NUMBER_OF_PLAYERS } from "./constants";
-import { getUidOrThrow, getGameRoomOrThrow, getPlayerInRoomOrThrow, updateDatabase } from "./common";
+import { getGameRoomOrThrow, getPlayerInRoomOrThrow, getUidOrThrow, nextPlayerPosition } from "./common";
+import { BID_SUITS } from "./constants";
 
-import type { Bid, BidRequest, BiddingPhase, GameRoom, GameState, PlayerPosition, GameRoomPlayer } from "./GameType";
-
-export type BidResultStatus = "continue" | "finish" | "restart";
-
-export type BidResult = {
-  status: BidResultStatus;
-  next: BiddingPhase;
-};
+import type { Bid, BiddingPhase, GameRoomPlayer, GameState } from "./GameType";
 
 function getBiddingPhaseOrThrow(gameState: GameState): BiddingPhase {
   const { status, biddingPhase } = gameState;
@@ -25,8 +17,8 @@ function getBiddingPhaseOrThrow(gameState: GameState): BiddingPhase {
 
 function requirePlayerTurn(biddingPhase: BiddingPhase, gameRoomPlayer: GameRoomPlayer) {
   const { position } = gameRoomPlayer;
-  const { currentPlayerIndex } = biddingPhase;
-  if (position !== currentPlayerIndex) {
+  const { currentPlayerPosition } = biddingPhase;
+  if (position !== currentPlayerPosition) {
     throw new HttpsError("failed-precondition", "It's not this player turn");
   }
 }
@@ -40,71 +32,61 @@ function compareBid(first: Bid, second: Bid) {
   return BID_SUITS.indexOf(first.suit) - BID_SUITS.indexOf(second.suit);
 }
 
-function requirePassOrHigherBid(biddingPhase: BiddingPhase, bidRequest: BidRequest) {
+function requirePassOrHigherBid(biddingPhase: BiddingPhase, bid: Bid | null) {
   const { highestBid } = biddingPhase;
-  const { bid } = bidRequest;
-  if (highestBid && bid && compareBid(highestBid.bid, bid) <= 0) {
+  if (highestBid && bid && compareBid(highestBid.bid, bid) >= 0) {
     throw new HttpsError("failed-precondition", "New bid should be greater than the highest bid");
   }
 }
 
-function handleLogic(biddingPhase: BiddingPhase, playerID: string, { bid }: BidRequest): BidResult {
-  let { currentPlayerIndex, numberOfPasses, highestBid } = biddingPhase;
+function updateGameState(gameState: GameState, player: GameRoomPlayer, bid: Bid | null): GameState {
+  const nextGameState = { ...gameState };
+  let { currentPlayerPosition, numberOfPasses, highestBid } = gameState.biddingPhase!;
   if (!bid) {
     numberOfPasses++;
   } else {
-    highestBid = { bid, playerID };
+    highestBid = { bid, playerID: player.ID, position: player.position };
   }
 
-  let status: BidResultStatus;
   if (numberOfPasses === 4) {
-    status = "restart";
-    currentPlayerIndex = 0;
+    currentPlayerPosition = 0;
     highestBid = null;
     numberOfPasses = 0;
   } else if (numberOfPasses === 3 && highestBid) {
-    status = "finish";
-  } else {
-    status = "continue";
-    currentPlayerIndex = ((currentPlayerIndex + 1) % NUMBER_OF_PLAYERS) as PlayerPosition;
-  }
-  return { status, next: { currentPlayerIndex, highestBid, numberOfPasses } };
-}
-
-function updateGameState(gameState: GameState, bidResult: BidResult): GameState {
-  const { status, next } = bidResult;
-  const newGameState = { ...gameState };
-  if (status === "finish") {
-    newGameState.status = "picking teammate";
-    // transition to trick traking phase
-    newGameState.pickingTeammatePhase = {
-      playerID: next.highestBid!.playerID,
+    const {
+      bid: { number, suit },
+      position,
+    } = highestBid;
+    nextGameState.status = "picking teammate";
+    nextGameState.pickingTeammatePhase = {
+      bidNumber: number,
+      trumpSuit: suit,
+      playerPosition: position,
     };
   } else {
-    newGameState.biddingPhase = next;
+    currentPlayerPosition = nextPlayerPosition(currentPlayerPosition);
   }
-  return newGameState;
+  nextGameState.biddingPhase = {
+    currentPlayerPosition,
+    highestBid,
+    numberOfPasses,
+  };
+  return nextGameState;
 }
 
-export const placeBid = functions.https.onCall(
-  async ({ bidRequest, roomID }: { bidRequest: BidRequest; roomID: string }, context) => {
-    const uid = getUidOrThrow(context);
+export const placeBid = functions.https.onCall(async ({ bid, roomID }: { bid: Bid | null; roomID: string }, context) => {
+  const uid = getUidOrThrow(context);
 
-    const gameRoomRef = GAME_ROOMS_COLLECTION.doc(roomID);
-    const gameRoom = await getGameRoomOrThrow(gameRoomRef);
-    const gameState = gameRoom.state;
-    const biddingPhase = getBiddingPhaseOrThrow(gameState);
+  const gameRoomRef = GAME_ROOMS_COLLECTION.doc(roomID);
+  const gameRoom = await getGameRoomOrThrow(gameRoomRef);
+  const gameState = gameRoom.state;
+  const biddingPhase = getBiddingPhaseOrThrow(gameState);
+  const gameRoomPlayerRef = gameRoomPlayersCollection(gameRoomRef).doc(uid);
+  const gameRoomPlayer = await getPlayerInRoomOrThrow(gameRoomPlayerRef);
 
-    const gameRoomPlayerRef = gameRoomPlayersCollection(gameRoomRef).doc(uid);
-    const gameRoomPlayer = await getPlayerInRoomOrThrow(gameRoomPlayerRef);
+  requirePlayerTurn(biddingPhase, gameRoomPlayer);
+  requirePassOrHigherBid(biddingPhase, bid);
 
-    requirePlayerTurn(biddingPhase, gameRoomPlayer);
-    requirePassOrHigherBid(biddingPhase, bidRequest);
-
-    const bidResult = handleLogic(biddingPhase, uid, bidRequest);
-    const newGameState = updateGameState(gameState, bidResult);
-    await updateDatabase(gameRoomRef, newGameState);
-
-    return bidResult;
-  }
-);
+  const newGameState = updateGameState(gameState, gameRoomPlayer, bid);
+  await gameRoomRef.update({ state: newGameState });
+});

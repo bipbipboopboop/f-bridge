@@ -1,16 +1,16 @@
 import * as functions from "firebase-functions";
-import { getGameRoomOrThrow, getPlayerInRoomOrThrow, getUidOrThrow, updateDatabase } from "./common";
-import { GAME_ROOMS_COLLECTION, gameRoomPlayersCollection } from "./colllections";
+import { HttpsError } from "firebase-functions/v1/auth";
 import {
   Card,
-  GameState,
-  PickingTeammatePhase,
   GameRoomPlayer,
   GameRoomTeam,
+  GameState,
+  PickingTeammatePhase,
+  PlayerPositionPair,
   TeamLabel,
-  PlayerPosition,
 } from "./GameType";
-import { HttpsError } from "firebase-functions/v1/auth";
+import { FIRESTORE, GAME_ROOMS_COLLECTION, gameRoomPlayersCollection, gameRoomTeamsCollection } from "./colllections";
+import { getAllPlayersInRoom, getGameRoomOrThrow, getUidOrThrow, isSameCard, nextPlayerPosition } from "./common";
 
 /*
  * What information do we need to pick a teammate?
@@ -26,9 +26,17 @@ import { HttpsError } from "firebase-functions/v1/auth";
  */
 
 export type PickTeammateResult = {
-  firstTeam: GameRoomTeam;
-  secondTeam: GameRoomTeam;
+  declarer: PlayerPositionPair;
+  defender: PlayerPositionPair;
 };
+
+function getPlayerFromArrayOrThrow(players: GameRoomPlayer[], uid: string) {
+  const player = players.find(p => p.ID === uid);
+  if (!player) {
+    throw new HttpsError("failed-precondition", "No such player in room");
+  }
+  return player;
+}
 
 function getPickingTeammatePhaseOrThrow(gameState: GameState): PickingTeammatePhase {
   const { status, pickingTeammatePhase } = gameState;
@@ -39,39 +47,63 @@ function getPickingTeammatePhaseOrThrow(gameState: GameState): PickingTeammatePh
 }
 
 function requireCorrectPlayer(pickingTeammatePhase: PickingTeammatePhase, gameRoomPlayer: GameRoomPlayer) {
-  const { playerID } = pickingTeammatePhase;
-  const { ID } = gameRoomPlayer;
-  if (ID !== playerID) {
+  const { playerPosition } = pickingTeammatePhase;
+  const { position } = gameRoomPlayer;
+  if (position !== playerPosition) {
     throw new HttpsError("failed-precondition", "This player cannot pick a teammate on their own");
   }
 }
 
-function isSameCards(first: Card, second: Card) {
-  return first.suit === second.suit && first.value === second.value;
+function requireCardNotOnHand({ cardsOnHand }: GameRoomPlayer, card: Card) {
+  if (cardsOnHand.find(c => isSameCard(c, card))) {
+    throw new HttpsError("failed-precondition", "Card must be on other player's hand");
+  }
 }
 
-function handleLogic(player: GameRoomPlayer, players: GameRoomPlayer[], card: Card): PickTeammateResult {
-  const { position } = players.find(p => p.cardsInHand.find(c => isSameCards(c, card)))!;
-  const first = [player.position, position];
-  const second = players.map(p => p.position).filter(p => first.indexOf(p) < 0);
+function splitTeams(player: GameRoomPlayer, players: GameRoomPlayer[], card: Card): PickTeammateResult {
+  const { position } = players.find(p => p.cardsOnHand.find(c => isSameCard(c, card)))!;
+  const declarer = [player.position, position];
+  const defender = players.map(p => p.position).filter(p => !declarer.includes(p));
   return {
-    firstTeam: { label: "declarer", players: first as [PlayerPosition, PlayerPosition] },
-    secondTeam: { label: "defender", players: second as [PlayerPosition, PlayerPosition] },
+    declarer: declarer as PlayerPositionPair,
+    defender: defender as PlayerPositionPair,
   };
 }
 
-function updateGameState(gameState: GameState, { firstTeam, secondTeam }: PickTeammateResult): GameState {
-  // update the game state to TRICK TAKING phase
-  const newGameState = { ...gameState };
-  newGameState.status = "taking trick";
-  newGameState.trickTakingPhase = {
-    currentPlayerIndex: 0,
-    leadPlayerIndex: 0,
-    trumpSuit: gameState.biddingPhase!.highestBid!.bid.suit,
-    firstTeam,
-    secondTeam,
+function updateGameState(
+  gameState: GameState,
+  { position }: GameRoomPlayer,
+  { declarer, defender }: PickTeammateResult
+): {
+  nextGameState: GameState;
+  declarer: GameRoomTeam;
+  defender: GameRoomTeam;
+} {
+  const { trumpSuit, bidNumber } = gameState.pickingTeammatePhase!;
+  const nextGameState = { ...gameState };
+
+  const leadPlayerPosition = nextPlayerPosition(position);
+  nextGameState.status = "taking trick";
+  nextGameState.takingTrickPhase = {
+    currentPlayerPosition: leadPlayerPosition,
+    trumpSuit,
+    cardsOnBoard: [],
   };
-  return newGameState;
+  return {
+    nextGameState,
+    declarer: {
+      label: "declarer",
+      players: declarer,
+      tricksWon: 0,
+      tricksNeeded: 6 + bidNumber,
+    },
+    defender: {
+      label: "defender",
+      players: defender,
+      tricksWon: 0,
+      tricksNeeded: 8 - bidNumber,
+    },
+  };
 }
 
 export const pickTeammate = functions.https.onCall(async ({ card, roomID }: { card: Card; roomID: string }, context) => {
@@ -83,15 +115,23 @@ export const pickTeammate = functions.https.onCall(async ({ card, roomID }: { ca
   const pickingTeammatePhase = getPickingTeammatePhaseOrThrow(gameState);
 
   const gameRoomPlayersCollectionRef = gameRoomPlayersCollection(gameRoomRef);
-  const gameRoomPlayersCollectionSnapshot = await gameRoomPlayersCollectionRef.get();
-  const gameRoomPlayers = gameRoomPlayersCollectionSnapshot.docs.map(ref => ref.data());
-  const gameRoomPlayer = gameRoomPlayers.find(player => player.ID === uid);
-  if (!gameRoomPlayer) {
-    throw new HttpsError("failed-precondition", "No such player in room");
-  }
+  const gameRoomPlayers = await getAllPlayersInRoom(gameRoomPlayersCollectionRef);
 
+  const gameRoomPlayer = getPlayerFromArrayOrThrow(gameRoomPlayers, uid);
   requireCorrectPlayer(pickingTeammatePhase, gameRoomPlayer);
-  const pickTeammateResult = handleLogic(gameRoomPlayer, gameRoomPlayers, card);
-  const newGameState = updateGameState(gameState, pickTeammateResult);
-  await updateDatabase(gameRoomRef, newGameState);
+  requireCardNotOnHand(gameRoomPlayer, card);
+  const pickTeammateResult = splitTeams(gameRoomPlayer, gameRoomPlayers, card);
+  const { nextGameState, declarer, defender } = updateGameState(gameState, gameRoomPlayer, pickTeammateResult);
+
+  const gameRoomTeamsCollectionRef = gameRoomTeamsCollection(gameRoomRef);
+  const batch = FIRESTORE.batch();
+  batch.update(gameRoomRef, { state: nextGameState });
+  batch.create(gameRoomTeamsCollectionRef.doc("declarer" as TeamLabel), declarer);
+  batch.create(gameRoomTeamsCollectionRef.doc("defender" as TeamLabel), defender);
+  for (const player of gameRoomPlayers) {
+    const ref = gameRoomPlayersCollectionRef.doc(player.ID);
+    const teamLabel: TeamLabel = declarer.players.includes(player.position) ? "declarer" : "defender";
+    batch.update(ref, { teamLabel });
+  }
+  await batch.commit();
 });

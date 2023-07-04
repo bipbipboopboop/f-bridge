@@ -12,60 +12,67 @@ export type Bid = {
   suit: BidSuit;
 };
 
-export type BidRequest = {
-  bid: Bid | null;
-};
-
 export type HighestBid = {
   bid: Bid;
   /**
    * Who made this bid?
    */
   playerID: string;
+  position: PlayerPosition;
 };
 
-export type GameStatus = "waiting" | "bidding" | "taking trick" | "picking teammate";
+export type PlayedCard = {
+  card: Card;
+  /**
+   * Who played this card?
+   */
+  playerID: string;
+  position: PlayerPosition;
+};
+
+export type GameStatus = "waiting" | "bidding" | "picking teammate" | "taking trick" | "game over";
 export type PlayerPosition = 0 | 1 | 2 | 3;
+export type PlayerPositionPair = [PlayerPosition, PlayerPosition];
 export type TeamLabel = "declarer" | "defender";
 
 export type GameState = {
   status: GameStatus;
-  players: GameRoomPlayer[];
   biddingPhase: BiddingPhase | null;
   pickingTeammatePhase: PickingTeammatePhase | null;
-  trickTakingPhase: TrickTakingPhase | null;
+  takingTrickPhase: TakingTrickPhase | null;
+  winners: PlayerPositionPair | null;
 };
 
 export type GameRoomPlayer = {
   ID: string;
   position: PlayerPosition;
-  cardsInHand: Card[];
+  cardsOnHand: Card[];
+  teamLabel: TeamLabel | null;
 };
 
 export type GameRoomTeam = {
   label: TeamLabel;
-  players: [PlayerPosition, PlayerPosition];
+  players: PlayerPositionPair;
+  tricksWon: number;
+  tricksNeeded: number;
 };
 
 export type BiddingPhase = {
-  currentPlayerIndex: PlayerPosition;
+  currentPlayerPosition: PlayerPosition;
   highestBid: HighestBid | null;
   numberOfPasses: number;
 };
 
 export type PickingTeammatePhase = {
-  playerID: string;
+  trumpSuit: BidSuit;
+  bidNumber: BidNumber;
+  playerPosition: PlayerPosition;
 };
 
-export type TrickTakingPhase = {
-  currentPlayerIndex: PlayerPosition;
-  /**
-   * Who is the first player to start this round
-   */
-  leadPlayerIndex: PlayerPosition;
+export type TakingTrickPhase = {
+  currentPlayerPosition: PlayerPosition;
   trumpSuit: BidSuit;
-  firstTeam: GameRoomTeam;
-  secondTeam: GameRoomTeam;
+  cardsOnBoard: PlayedCard[];
 };
 
 export type GameMetadata = {

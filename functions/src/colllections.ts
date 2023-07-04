@@ -1,19 +1,16 @@
 import { firestore as firestoreFn } from "firebase-admin";
-import { GameRoom, GameRoomPlayer } from "./GameType";
+import { GameRoom, GameRoomPlayer, GameRoomTeam } from "./GameType";
 import { CollectionReference, DocumentReference } from "firebase-admin/firestore";
 import { PlayerProfile } from "types/PlayerProfile";
 
-const firestore = firestoreFn();
+export const FIRESTORE = firestoreFn();
+export const PLAYERS_COLLECTION = FIRESTORE.collection("playerProfiles") as CollectionReference<PlayerProfile>;
+export const GAME_ROOMS_COLLECTION = FIRESTORE.collection("gameRooms") as CollectionReference<GameRoom>;
 
-export const PLAYERS_COLLECTION = firestore.collection("playerProfiles") as CollectionReference<PlayerProfile>;
-
-/**
- * Inside this, there is another subcollection named "players"
- */
-export const GAME_ROOMS_COLLECTION = firestore.collection("gameRooms") as CollectionReference<GameRoom>;
-
-export function gameRoomPlayersCollection(
-  gameRoomRef: DocumentReference<GameRoom>
-): CollectionReference<GameRoomPlayer> {
+export function gameRoomPlayersCollection(gameRoomRef: DocumentReference<GameRoom>) {
   return gameRoomRef.collection("players") as CollectionReference<GameRoomPlayer>;
+}
+
+export function gameRoomTeamsCollection(gameRoomRef: DocumentReference<GameRoom>) {
+  return gameRoomRef.collection("teams") as CollectionReference<GameRoomTeam>;
 }
