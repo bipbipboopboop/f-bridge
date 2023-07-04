@@ -3,6 +3,8 @@ import { CallableContext, HttpsError } from "firebase-functions/v1/https";
 import { BidSuit, Card, CardSuit, GameRoom, GameRoomPlayer, GameState, PlayerPosition } from "./GameType";
 import { CARD_VALUES, NUMBER_OF_PLAYERS } from "./constants";
 
+// TODO: split this file to multiple, smaller utlity files.
+
 export function getUidOrThrow(context: CallableContext): string {
   const { auth } = context;
   if (!auth) {

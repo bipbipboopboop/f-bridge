@@ -7,7 +7,13 @@ import {
   isSameCard,
   nextPlayerPosition,
 } from "./common";
-import { FIRESTORE, GAME_ROOMS_COLLECTION, gameRoomPlayersCollection, gameRoomTeamsCollection } from "./colllections";
+import {
+  FIRESTORE,
+  GAME_ROOMS_COLLECTION,
+  gameRoomPlayersCollection,
+  gameRoomTeamsCollection,
+  unwrap,
+} from "./colllections";
 import {
   BidSuit,
   Card,
@@ -85,17 +91,16 @@ async function updateGameState(
 
   const nextGameState = { ...gameState };
   if (cardsOnBoard.length === 4) {
-    const { playerID: winnerID, position } = findWinner(cardsOnBoard, trumpSuit);
-    let { label, players, tricksWon, tricksNeeded } = await teamSupplier(winnerID);
-    tricksWon++;
-    if (tricksWon === tricksNeeded) {
+    const { playerID, position } = findWinner(cardsOnBoard, trumpSuit);
+    const { tricksWon, tricksNeeded, label, players } = await teamSupplier(playerID);
+    nextTeamState = { label, tricksWon: tricksWon + 1, tricksNeeded, players };
+    if (nextTeamState.tricksWon === tricksNeeded) {
       nextGameState.status = "game over";
       nextGameState.winners = players;
     } else {
       cardsOnBoard = [];
       currentPlayerPosition = nextPlayerPosition(position);
     }
-    nextTeamState = { label, tricksWon, tricksNeeded, players };
   } else {
     currentPlayerPosition = nextPlayerPosition(currentPlayerPosition);
   }
@@ -135,10 +140,10 @@ export const playCard = functions.https.onCall(async ({ card, roomID }: { card: 
       gameState,
       gameRoomPlayer,
       async winnerID => {
-        const winnerSnapshot = await t.get(gameRoomPlayersCollectionRef.doc(winnerID));
-        const { teamLabel } = winnerSnapshot.data()!;
-        const teamSnappshot = await t.get(gameRoomTeamsCollectionRef.doc(teamLabel!));
-        return teamSnappshot.data()!;
+        const winnerRef = gameRoomPlayersCollectionRef.doc(winnerID);
+        const { teamLabel } = await unwrap(t.get(winnerRef));
+        const teamRef = gameRoomTeamsCollectionRef.doc(teamLabel!);
+        return await unwrap(t.get(teamRef));
       },
       card
     );

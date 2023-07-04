@@ -108,22 +108,20 @@ function updateGameState(
 
 export const pickTeammate = functions.https.onCall(async ({ card, roomID }: { card: Card; roomID: string }, context) => {
   const uid = getUidOrThrow(context);
-
   const gameRoomRef = GAME_ROOMS_COLLECTION.doc(roomID);
   const gameRoom = await getGameRoomOrThrow(gameRoomRef);
   const gameState = gameRoom.state;
   const pickingTeammatePhase = getPickingTeammatePhaseOrThrow(gameState);
-
   const gameRoomPlayersCollectionRef = gameRoomPlayersCollection(gameRoomRef);
+  const gameRoomTeamsCollectionRef = gameRoomTeamsCollection(gameRoomRef);
   const gameRoomPlayers = await getAllPlayersInRoom(gameRoomPlayersCollectionRef);
-
   const gameRoomPlayer = getPlayerFromArrayOrThrow(gameRoomPlayers, uid);
+
   requireCorrectPlayer(pickingTeammatePhase, gameRoomPlayer);
   requireCardNotOnHand(gameRoomPlayer, card);
   const pickTeammateResult = splitTeams(gameRoomPlayer, gameRoomPlayers, card);
   const { nextGameState, declarer, defender } = updateGameState(gameState, gameRoomPlayer, pickTeammateResult);
 
-  const gameRoomTeamsCollectionRef = gameRoomTeamsCollection(gameRoomRef);
   const batch = FIRESTORE.batch();
   batch.update(gameRoomRef, { state: nextGameState });
   batch.create(gameRoomTeamsCollectionRef.doc("declarer" as TeamLabel), declarer);
