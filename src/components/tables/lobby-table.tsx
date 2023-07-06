@@ -18,6 +18,10 @@ const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
       header: () => <span>Room ID</span>,
       cell: (info) => info.getValue(),
     }),
+    columnHelper.accessor("settings.isInviteOnly", {
+      header: () => <span>Type</span>,
+      cell: (info) => (info.getValue() ? "Invite Only" : "Open"),
+    }),
     columnHelper.accessor("players", {
       header: () => <span>Host</span>,
       cell: (info) => info.getValue().find((plyr) => plyr.isHost)?.displayName,
@@ -76,6 +80,7 @@ const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
           <tr
             key={index}
             onClick={async () => {
+              if (row.original.settings.isInviteOnly) return;
               if (!playerProfile.roomID) {
                 const roomID = row.original.roomID;
                 const success = await joinGameRoom(roomID);

@@ -1,4 +1,5 @@
 import "./lobby-rooms.css";
+import { memo } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import RoomTable from "../tables/lobby-table";
 import { GameRoom } from "types/GameRoom";
@@ -47,4 +48,4 @@ const LobbyRooms = () => {
   );
 };
 
-export default LobbyRooms;
+export default memo(LobbyRooms);

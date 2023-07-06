@@ -14,6 +14,7 @@ import Leaderboard from "./pages/leaderboard";
 import Test from "./pages/Test";
 import Tutorial from "./pages/tutorial";
 import GameResult from "./pages/game-result";
+import NotFound from "./pages/not-founds";
 
 function App() {
   const { isLoading } = useFunctions();
@@ -32,7 +33,7 @@ function App() {
         <Route path="/gameboard/:roomID" element={<GameBoard />} />
         <Route path="/result/:roomID" element={<GameResult />} />
         <Route path="/test" element={<Test />} />
-        <Route path="*" element={<div>404</div>} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );

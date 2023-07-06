@@ -1,7 +1,7 @@
 import "./game-party.css";
 
 import { toast } from "react-toastify";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 
 import { firestore } from "../firebase";
@@ -19,7 +19,6 @@ import { useAuth } from "../hooks/useAuth";
 const GameParty = () => {
   const { roomID } = useParams();
   const { playerProfile } = useAuth();
-  const navigate = useNavigate();
 
   const roomRef = doc(firestore, "gameRooms", roomID || "ERROR") as DocumentReference<GameRoom>;
   const [gameRoom, isLoading, error] = useDocumentData<GameRoom>(roomRef);
@@ -27,19 +26,18 @@ const GameParty = () => {
   if (isLoading) return <Loading />;
   if (!gameRoom) {
     toast.error("You are not allowed in this room!");
-    navigate("/lobby");
-    return <></>;
+    return <Navigate to="/lobby" />;
   }
 
   const isPlayerAllowedIn =
     gameRoom.players.some((player) => player.id === playerProfile?.id) || gameRoom.settings.isSpectatorAllowed;
   if (!isPlayerAllowedIn || error) {
     toast.error("You are not allowed in this room");
-    navigate("/lobby");
+    return <Navigate to="/lobby" />;
   }
 
   if (gameRoom.status === "Bidding" || gameRoom.status === "Taking Trick") {
-    navigate(`/gameboard/${roomID}`);
+    return <Navigate to={`/gameboard/${roomID}`} />;
   }
 
   return (

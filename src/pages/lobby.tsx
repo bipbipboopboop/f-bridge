@@ -1,11 +1,19 @@
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
+/**
+ * HOOKS
+ */
+import { useAuth } from "../hooks/useAuth";
+import useFunctions from "../hooks/useFunctions";
+
+/**
+ * COMPONENTS
+ */
 import GreenButton from "../components/buttons/button-green";
 import LobbyRooms from "../components/lobby/lobby-rooms";
 import LobbyPlayerCard from "../components/lobby/lobby-player-card";
 
-import { useAuth } from "../hooks/useAuth";
-import useFunctions from "../hooks/useFunctions";
-import { toast } from "react-toastify";
 import Loading from "../components/Loading";
 import Button from "../components/buttons/button";
 
