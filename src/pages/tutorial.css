@@ -1,6 +1,10 @@
 .tutorial-container {
   padding: 20px;
   background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  height: 80%;
 }
 
 .tutorial-title {
@@ -11,7 +15,7 @@
 
 .section-title {
   font-size: 20px;
-  margin-top: 30px;
+  margin-top: 3rem;
 }
 
 .section-description {
