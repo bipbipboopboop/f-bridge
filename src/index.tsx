@@ -13,6 +13,7 @@ import { AuthProvider } from "./context/AuthProvider";
 
 import App from "./App";
 import { ProfileProvider } from "./context/ProfileProvider";
+import { GamePlayerProvider } from "./context/GamePlayerProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
@@ -20,10 +21,12 @@ root.render(
     <React.StrictMode>
       <AuthProvider>
         <ProfileProvider>
-          <BrowserRouter>
-            <App />
-            <ToastContainer limit={2} autoClose={1000} />
-          </BrowserRouter>
+          <GamePlayerProvider>
+            <BrowserRouter>
+              <App />
+              <ToastContainer limit={2} autoClose={1000} />
+            </BrowserRouter>
+          </GamePlayerProvider>
         </ProfileProvider>
       </AuthProvider>
     </React.StrictMode>
