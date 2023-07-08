@@ -56,7 +56,26 @@ const Navbar = () => {
           <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <a className="dropdown-item">Edit Profile</a>
             <a className="dropdown-item">Settings</a>
-            <a className="dropdown-item">{user?.isAnonymous ? "Login" : "Logout"}</a>
+            {user?.isAnonymous && (
+              <a
+                className="dropdown-item"
+                onClick={async () => {
+                  await signInWithGoogle();
+                }}
+              >
+                Login
+              </a>
+            )}
+            {!user?.isAnonymous && (
+              <a
+                className="dropdown-item"
+                onClick={async () => {
+                  await signOut(auth);
+                }}
+              >
+                Logout
+              </a>
+            )}
           </div>
         </li>
       </ul>

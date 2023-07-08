@@ -17,7 +17,7 @@ export const AuthContext = createContext<AuthContextValue>({
   gamePlayer: null,
 });
 
-export const AuthProvider = ({ children }: AuthProviderProps) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   /**
    * HOOKS
    */
@@ -41,34 +41,37 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!(isLoadingFirebaseUser || isLoadingPlayerProfile || isCreatingPlayer) && playerProfile) {
-      setIsLoading(false);
+    if (!isLoadingFirebaseUser) return;
+    if (!firebaseUser) {
+      (async () => {
+        await signInAnonymously(auth);
+      })();
     }
-  }, [isCreatingPlayer, isLoadingFirebaseUser, isLoadingPlayerProfile, playerProfile]);
+  }, [firebaseUser, isLoadingFirebaseUser]);
 
   useEffect(() => {
-    if (isLoadingFirebaseUser) return;
     if (isLoadingPlayerProfile) return;
 
-    if (!firebaseUser && !playerProfile) {
-      console.log("Creating player profile");
+    if (firebaseUser && !playerProfile) {
       (async () => {
-        const userCred = await signInAnonymously(auth);
-        const user = userCred.user;
         const newUserInfo = {
-          displayName: user.displayName,
-          email: user.email,
-          phoneNumber: user.phoneNumber,
-          photoURL: user.photoURL,
-          uid: user.uid,
-          providerId: user.providerId,
+          displayName: firebaseUser.displayName,
+          email: firebaseUser.email,
+          phoneNumber: firebaseUser.phoneNumber,
+          photoURL: firebaseUser.photoURL,
+          uid: firebaseUser.uid,
+          providerId: firebaseUser.providerId,
         };
         await createPlayerProfile(newUserInfo);
       })();
     }
+  }, [isLoadingPlayerProfile, playerProfile]);
 
-    return () => {};
-  }, [playerProfile, firebaseUser, isLoadingFirebaseUser, isLoadingPlayerProfile]);
+  useEffect(() => {
+    if (!(isLoadingFirebaseUser || isLoadingPlayerProfile || isCreatingPlayer) && playerProfile) {
+      setIsLoading(false);
+    }
+  }, [isCreatingPlayer, isLoadingFirebaseUser, isLoadingPlayerProfile, playerProfile]);
 
   const authContextValue: AuthContextValue = {
     user: firebaseUser || null,
@@ -88,10 +91,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   return <AuthContext.Provider value={authContextValue}>{children}</AuthContext.Provider>;
 };
-
-interface AuthProviderProps {
-  children: ReactNode;
-}
 
 interface AuthContextValue {
   user: User | null;
