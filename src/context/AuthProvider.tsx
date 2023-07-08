@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
+import { createContext, ReactNode, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useAuthState } from "react-firebase-hooks/auth";
 
@@ -18,15 +18,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [firebaseUser, isLoadingFirebaseUser, firebaseUserError] = useAuthState(auth);
 
   // console.log({ firebaseUser, playerProfile, gamePlayer, isLoadingFirebaseUser, isLoadingPlayerProfile });
+  const isLoggedIn = useRef<boolean>(false);
 
   useEffect(() => {
     if (!isLoadingFirebaseUser) return;
-    if (!firebaseUser) {
+    if (!firebaseUser && !isLoggedIn.current) {
       (async () => {
+        isLoggedIn.current = true;
         await signInAnonymously(auth);
       })();
     }
-  }, [firebaseUser, isLoadingFirebaseUser]);
+    return () => {};
+  }, [firebaseUser?.uid, isLoadingFirebaseUser]);
 
   const authContextValue: AuthContextValue = {
     user: firebaseUser || null,

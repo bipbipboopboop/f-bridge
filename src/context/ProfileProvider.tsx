@@ -10,6 +10,7 @@ import Loading from "../components/Loading";
 import useFunctions from "../hooks/useFunctions";
 import { doc, DocumentReference } from "firebase/firestore";
 import AuthContext from "./AuthProvider";
+import { toast } from "react-toastify";
 
 export const ProfileContext = createContext<ProfileContextValue>({
   user: null,
@@ -21,25 +22,33 @@ export const ProfileProvider = ({ children }: { children: ReactNode }) => {
    * HOOKS
    */
   const { user: firebaseUser } = useContext(AuthContext);
-  const { createPlayerProfile, isLoading: isCreatingPlayer } = useFunctions();
+  const { createPlayerProfile, isLoading: isCreatingPlayer, error } = useFunctions();
   const playerProfileRef = (firebaseUser && doc(firestore, `playerProfiles/${firebaseUser.uid}`)) || null;
   const [playerProfile, isLoadingPlayerProfile] = useDocumentData<PlayerProfile>(
     playerProfileRef as DocumentReference<PlayerProfile>
   );
-  const [isDone, setIsDone] = useState(false);
-  console.log({ firebaseUser, playerProfile });
+
+  console.log({ playerProfile, firebaseUser });
+
+  console.log("hi");
   useEffect(() => {
+    if (isLoadingPlayerProfile) return;
+
     if (firebaseUser && !playerProfile) {
       (async () => {
-        console.log("hi");
-        await createPlayerProfile(firebaseUser);
-        setIsDone(true);
+        const result = await createPlayerProfile({
+          displayName: firebaseUser.displayName,
+          email: firebaseUser.email,
+          phoneNumber: firebaseUser.phoneNumber,
+          photoURL: firebaseUser.photoURL,
+          uid: firebaseUser.uid,
+          providerId: firebaseUser.providerId,
+        });
+        console.log({ result });
       })();
     }
-  }, [firebaseUser]);
+  }, [firebaseUser?.uid, playerProfile]);
 
-  console.log({ isDone });
-  if (!isDone) return <Loading />;
   if (!firebaseUser) return <Loading />;
   if (isLoadingPlayerProfile) return <Loading />;
   if (isCreatingPlayer) return <Loading />;
@@ -48,6 +57,11 @@ export const ProfileProvider = ({ children }: { children: ReactNode }) => {
     user: firebaseUser || null,
     playerProfile: playerProfile || null,
   };
+
+  if (error) {
+    toast.error(error.message);
+    console.log({ error });
+  }
 
   return <ProfileContext.Provider value={profileContextValue}>{children}</ProfileContext.Provider>;
 };

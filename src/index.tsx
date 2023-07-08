@@ -17,16 +17,16 @@ import { ProfileProvider } from "./context/ProfileProvider";
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <>
-    {/* <React.StrictMode> */}
-    <AuthProvider>
-      <ProfileProvider>
-        <BrowserRouter>
-          <App />
-          <ToastContainer limit={2} autoClose={1000} />
-        </BrowserRouter>
-      </ProfileProvider>
-    </AuthProvider>
-    {/* </React.StrictMode> */}
+    <React.StrictMode>
+      <AuthProvider>
+        <ProfileProvider>
+          <BrowserRouter>
+            <App />
+            <ToastContainer limit={2} autoClose={1000} />
+          </BrowserRouter>
+        </ProfileProvider>
+      </AuthProvider>
+    </React.StrictMode>
   </>
 );
 
