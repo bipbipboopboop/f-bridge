@@ -17,13 +17,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
    */
   const [firebaseUser, isLoadingFirebaseUser, firebaseUserError] = useAuthState(auth);
 
-  const isLoggedIn = useRef<boolean>(false);
+  console.log({ isLoadingFirebaseUser, firebaseUser });
 
   useEffect(() => {
-    if (!isLoadingFirebaseUser) return;
-    if (!firebaseUser && !isLoggedIn.current) {
+    if (isLoadingFirebaseUser) return;
+    if (!firebaseUser) {
       (async () => {
-        isLoggedIn.current = true;
+        console.log("Creating anonymous user");
         await signInAnonymously(auth);
       })();
     }

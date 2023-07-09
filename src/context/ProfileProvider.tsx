@@ -30,20 +30,24 @@ export const ProfileProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (isLoadingPlayerProfile) return;
+    if (!firebaseUser) return; // If no user, do nothing
+    if (playerProfile) return; // If player profile already exists, do nothing
+    if (isCreatingPlayer) return;
 
-    if (firebaseUser && !playerProfile) {
-      (async () => {
-        await createPlayerProfile({
-          displayName: firebaseUser.displayName,
-          email: firebaseUser.email,
-          phoneNumber: firebaseUser.phoneNumber,
-          photoURL: firebaseUser.photoURL,
-          uid: firebaseUser.uid,
-          providerId: firebaseUser.providerId,
-        });
-      })();
-    }
-  }, [firebaseUser?.uid, playerProfile]);
+    (async () => {
+      console.log("Creating player profile");
+      await createPlayerProfile({
+        displayName: firebaseUser.displayName,
+        email: firebaseUser.email,
+        phoneNumber: firebaseUser.phoneNumber,
+        photoURL: firebaseUser.photoURL,
+        uid: firebaseUser.uid,
+        providerId: firebaseUser.providerId,
+      });
+    })();
+
+    return () => {};
+  }, [firebaseUser?.uid, playerProfile?.id, isLoadingPlayerProfile, isCreatingPlayer]);
 
   if (!firebaseUser) return <Loading />;
   if (isLoadingPlayerProfile) return <Loading />;

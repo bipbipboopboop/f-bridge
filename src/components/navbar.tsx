@@ -5,8 +5,6 @@ import { Link } from "react-router-dom";
 import { useSignInWithGoogle } from "react-firebase-hooks/auth";
 import { useAuth } from "../hooks/useAuth";
 
-import spinning from "../assets/spinning.gif";
-
 const Navbar = () => {
   const { playerProfile, user } = useAuth();
   const [signInWithGoogle] = useSignInWithGoogle(auth);
