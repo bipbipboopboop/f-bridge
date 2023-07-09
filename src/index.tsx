@@ -18,18 +18,18 @@ import { GamePlayerProvider } from "./context/GamePlayerProvider";
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <>
-    <React.StrictMode>
-      <AuthProvider>
-        <ProfileProvider>
-          <GamePlayerProvider>
-            <BrowserRouter>
-              <App />
-              <ToastContainer limit={2} autoClose={1000} />
-            </BrowserRouter>
-          </GamePlayerProvider>
-        </ProfileProvider>
-      </AuthProvider>
-    </React.StrictMode>
+    {/* <React.StrictMode> */}
+    <AuthProvider>
+      <ProfileProvider>
+        <GamePlayerProvider>
+          <BrowserRouter>
+            <App />
+            <ToastContainer limit={2} autoClose={1000} />
+          </BrowserRouter>
+        </GamePlayerProvider>
+      </ProfileProvider>
+    </AuthProvider>
+    {/* </React.StrictMode> */}
   </>
 );
 
