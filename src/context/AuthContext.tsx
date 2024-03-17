@@ -3,6 +3,7 @@ import { auth, firestore } from "../firebase";
 import { User, signInAnonymously } from "firebase/auth";
 import { doc, onSnapshot } from "firebase/firestore";
 import { PlayerProfile } from "types/PlayerProfile";
+import Loading from "../components/Loading";
 
 interface AuthContextProps {
   user: User | null;
@@ -68,6 +69,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const loading = playerProfile === null;
+
+  if (loading) return <Loading text="Loading" />;
 
   return <AuthContext.Provider value={{ user, loading, playerProfile }}>{children}</AuthContext.Provider>;
 };

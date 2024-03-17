@@ -1,13 +1,17 @@
-import {PacmanLoader} from "react-spinners";
+import React from "react";
+import { PacmanLoader } from "react-spinners";
+import { LoaderSizeMarginProps } from "react-spinners/helpers/props";
 
-const Loading = (props: {text?: string}) => {
-  const {text} = props;
+interface LoadingProps {
+  text?: string;
+  loaderProps?: LoaderSizeMarginProps;
+}
+
+const Loading: React.FC<LoadingProps> = ({ text, loaderProps }) => {
   return (
-    <div className="h-100 d-flex justify-content-center align-items-center">
-      <div>
-        {text ?? <h2>Loading</h2>}
-        <PacmanLoader color={"#98FB98"} />
-      </div>
+    <div className="h-100 w-100 d-flex flex-column justify-content-center align-items-center">
+      <PacmanLoader color="#98FB98" {...loaderProps} />
+      <p className="my-4">{text}</p>
     </div>
   );
 };
