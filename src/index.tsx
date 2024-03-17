@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -9,27 +8,19 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./assets/fonts/font.ttf";
 
 import reportWebVitals from "./reportWebVitals";
-import { AuthProvider } from "./context/AuthProvider";
 
 import App from "./App";
-import { ProfileProvider } from "./context/ProfileProvider";
-import { GamePlayerProvider } from "./context/GamePlayerProvider";
+import { AuthProvider } from "./context/AuthContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <>
-    {/* <React.StrictMode> */}
     <AuthProvider>
-      <ProfileProvider>
-        <GamePlayerProvider>
-          <BrowserRouter>
-            <App />
-            <ToastContainer limit={2} autoClose={1000} />
-          </BrowserRouter>
-        </GamePlayerProvider>
-      </ProfileProvider>
+      <BrowserRouter>
+        <App />
+        <ToastContainer limit={2} autoClose={1000} />
+      </BrowserRouter>
     </AuthProvider>
-    {/* </React.StrictMode> */}
   </>
 );
 

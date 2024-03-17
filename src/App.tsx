@@ -15,12 +15,13 @@ import Test from "./pages/Test";
 import Tutorial from "./pages/tutorial";
 import GameResult from "./pages/game-result";
 import NotFound from "./pages/not-founds";
+import { useAuth } from "./context/AuthContext";
 
 function App() {
-  const { isLoading } = useFunctions();
+  const { loading, profile, user } = useAuth();
+  if (loading) return <Loading />;
 
-  if (isLoading) return <Loading />;
-
+  console.log({ profile, user });
   return (
     <div className="App">
       <Navbar />
