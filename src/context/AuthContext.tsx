@@ -24,7 +24,6 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
   const [playerProfile, setPlayerProfile] = useState<PlayerProfile | null>(null);
 
   useEffect(() => {
@@ -43,7 +42,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           console.error("Error signing in anonymously:", error);
         }
       }
-      setLoading(false);
     });
 
     return () => unsubscribe();
@@ -52,16 +50,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const subscribeToProfileChanges = async (user: User) => {
     const profileRef = doc(firestore, "playerProfiles", user.uid);
 
-    const unsubscribe = onSnapshot(profileRef, (snapshot) => {
-      if (snapshot.exists()) {
-        setPlayerProfile(snapshot.data() as PlayerProfile);
-      } else {
-        setPlayerProfile(null);
+    const unsubscribe = onSnapshot(
+      profileRef,
+      (snapshot) => {
+        if (snapshot.exists()) {
+          setPlayerProfile(snapshot.data() as PlayerProfile);
+        } else {
+          setPlayerProfile(null);
+        }
+      },
+      (error) => {
+        console.error("Error fetching player profile:", error);
       }
-    });
+    );
 
     return () => unsubscribe();
   };
+
+  const loading = playerProfile === null;
 
   return <AuthContext.Provider value={{ user, loading, playerProfile }}>{children}</AuthContext.Provider>;
 };

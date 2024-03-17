@@ -21,7 +21,7 @@ function App() {
   const { loading, playerProfile, user } = useAuth();
   if (loading) return <Loading />;
 
-  console.log({ playerProfile, user });
+  console.log({ playerProfile, user, loading });
   return (
     <div className="App">
       <Navbar />
