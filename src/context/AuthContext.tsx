@@ -9,13 +9,13 @@ import { PlayerProfile } from "types/PlayerProfile";
 interface AuthContextProps {
   user: User | null;
   loading: boolean;
-  profile: PlayerProfile | null;
+  playerProfile: PlayerProfile | null;
 }
 
 const AuthContext = createContext<AuthContextProps>({
   user: null,
   loading: true,
-  profile: null,
+  playerProfile: null,
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -27,7 +27,7 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [profile, setProfile] = useState<PlayerProfile | null>(null);
+  const [playerProfile, setPlayerProfile] = useState<PlayerProfile | null>(null);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -57,11 +57,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const profileDoc = await getDoc(profileRef);
 
     if (profileDoc.exists()) {
-      setProfile(profileDoc.data() as PlayerProfile);
+      setPlayerProfile(profileDoc.data() as PlayerProfile);
     } else {
-      setProfile(null);
+      setPlayerProfile(null);
     }
   };
 
-  return <AuthContext.Provider value={{ user, loading, profile }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, loading, playerProfile }}>{children}</AuthContext.Provider>;
 };

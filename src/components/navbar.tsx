@@ -1,13 +1,20 @@
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { Link } from "react-router-dom";
-
 import { useSignInWithGoogle } from "react-firebase-hooks/auth";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
   const { playerProfile, user } = useAuth();
   const [signInWithGoogle] = useSignInWithGoogle(auth);
+
+  const handleSignInWithGoogle = async () => {
+    await signInWithGoogle();
+  };
+
+  const handleSignOut = async () => {
+    await signOut(auth);
+  };
 
   return (
     <nav className="w-100 navbar navbar-expand-lg navbar-dark px-3">
@@ -22,28 +29,22 @@ const Navbar = () => {
       >
         <span className="navbar-toggler-icon"></span>
       </button>
+
       <div className="collapse navbar-collapse" id="navbarNavDropdown">
-        {/* <Link className="navbar-brand" to="/">
-          <img src={spinning} style={{height: "2rem"}} />
-          Floating Bridge
-        </Link> */}
         <ul className="navbar-nav">
           <li className="nav-item active">
             <Link className="nav-link" to="/lobby">
               Lobby
             </Link>
           </li>
-          {/* <li className="nav-item">
-            <Link className="nav-link" to="/leaderboard">
-              Leaderboard
-            </Link>
-          </li> */}
         </ul>
       </div>
+
       <ul className="navbar-nav">
         <li className="nav-item dropdown">
           <a
             className="nav-link dropdown-toggle"
+            href="#"
             id="navbarDropdownMenuLink"
             data-toggle="dropdown"
             aria-haspopup="true"
@@ -52,25 +53,18 @@ const Navbar = () => {
             {playerProfile?.displayName}
           </a>
           <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a className="dropdown-item">Edit Profile</a>
-            <a className="dropdown-item">Settings</a>
-            {user?.isAnonymous && (
-              <a
-                className="dropdown-item"
-                onClick={async () => {
-                  await signInWithGoogle();
-                }}
-              >
+            <a className="dropdown-item" href="#">
+              Edit Profile
+            </a>
+            <a className="dropdown-item" href="#">
+              Settings
+            </a>
+            {user?.isAnonymous ? (
+              <a className="dropdown-item" onClick={handleSignInWithGoogle}>
                 Login
               </a>
-            )}
-            {!user?.isAnonymous && (
-              <a
-                className="dropdown-item"
-                onClick={async () => {
-                  await signOut(auth);
-                }}
-              >
+            ) : (
+              <a className="dropdown-item" onClick={handleSignOut}>
                 Logout
               </a>
             )}

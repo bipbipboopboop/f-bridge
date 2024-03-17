@@ -18,10 +18,10 @@ import NotFound from "./pages/not-founds";
 import { useAuth } from "./context/AuthContext";
 
 function App() {
-  const { loading, profile, user } = useAuth();
+  const { loading, playerProfile, user } = useAuth();
   if (loading) return <Loading />;
 
-  console.log({ profile, user });
+  console.log({ playerProfile, user });
   return (
     <div className="App">
       <Navbar />
