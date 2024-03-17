@@ -1,9 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { auth, firestore } from "../firebase";
-
 import { User, signInAnonymously } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-
+import { doc, onSnapshot } from "firebase/firestore";
 import { PlayerProfile } from "types/PlayerProfile";
 
 interface AuthContextProps {
@@ -34,33 +32,35 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (user) {
         // User is logged in
         setUser(user);
-        await fetchOrCreateProfile(user);
+        await subscribeToProfileChanges(user);
       } else {
         // User is not logged in, log in anonymously
         try {
           const userCredential = await signInAnonymously(auth);
           setUser(userCredential.user);
-          await fetchOrCreateProfile(userCredential.user);
+          await subscribeToProfileChanges(userCredential.user);
         } catch (error) {
           console.error("Error signing in anonymously:", error);
         }
       }
-
       setLoading(false);
     });
 
     return () => unsubscribe();
   }, []);
 
-  const fetchOrCreateProfile = async (user: User) => {
+  const subscribeToProfileChanges = async (user: User) => {
     const profileRef = doc(firestore, "playerProfiles", user.uid);
-    const profileDoc = await getDoc(profileRef);
 
-    if (profileDoc.exists()) {
-      setPlayerProfile(profileDoc.data() as PlayerProfile);
-    } else {
-      setPlayerProfile(null);
-    }
+    const unsubscribe = onSnapshot(profileRef, (snapshot) => {
+      if (snapshot.exists()) {
+        setPlayerProfile(snapshot.data() as PlayerProfile);
+      } else {
+        setPlayerProfile(null);
+      }
+    });
+
+    return () => unsubscribe();
   };
 
   return <AuthContext.Provider value={{ user, loading, playerProfile }}>{children}</AuthContext.Provider>;
