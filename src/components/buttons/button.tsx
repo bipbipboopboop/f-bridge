@@ -22,7 +22,7 @@ const Button: React.FC<ButtonProps> = ({ theme = "green", size = 3, disabled, ch
     orange: "bg-orange-500 text-white hover:bg-orange-600 disabled:bg-orange-400 disabled:cursor-not-allowed",
     green: "bg-green-500 text-white hover:bg-green-600 disabled:bg-green-400 disabled:cursor-not-allowed",
     yellow:
-      "bg-yellow-400 text-gray-800 border-2 border-gray-800 rounded-lg hover:bg-yellow-300 disabled:bg-yellow-400 disabled:cursor-not-allowed",
+      "bg-yellow-400 text-gray-800 border-2 border-gray-800 rounded-lg hover:bg-white hover:text-gray-800 disabled:bg-yellow-400 disabled:cursor-not-allowed",
     brown:
       "bg-brown-400 text-white border-4 border-brown-600 hover:bg-brown-500 disabled:bg-brown-300 disabled:cursor-not-allowed",
   };
