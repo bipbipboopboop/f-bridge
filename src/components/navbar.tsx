@@ -3,8 +3,9 @@ import { auth } from "../firebase";
 import { Link } from "react-router-dom";
 import { useSignInWithGoogle } from "react-firebase-hooks/auth";
 import { useAuth } from "../context/AuthContext";
+import { User } from "firebase/auth";
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
   const { playerProfile, user } = useAuth();
   const [signInWithGoogle] = useSignInWithGoogle(auth);
 
@@ -29,7 +30,6 @@ const Navbar = () => {
       >
         <span className="navbar-toggler-icon"></span>
       </button>
-
       <div className="collapse navbar-collapse" id="navbarNavDropdown">
         <ul className="navbar-nav">
           <li className="nav-item active">
@@ -39,7 +39,6 @@ const Navbar = () => {
           </li>
         </ul>
       </div>
-
       <ul className="navbar-nav">
         <li className="nav-item dropdown">
           <a
@@ -59,7 +58,7 @@ const Navbar = () => {
             <a className="dropdown-item" href="#">
               Settings
             </a>
-            {user?.isAnonymous ? (
+            {(user as User | null)?.isAnonymous ? (
               <a className="dropdown-item" onClick={handleSignInWithGoogle}>
                 Login
               </a>

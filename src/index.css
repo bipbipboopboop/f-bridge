@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @font-face {
   font-family: "BridgeFont";
   src: url("./assets/fonts/font.ttf");
