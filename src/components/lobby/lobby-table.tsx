@@ -1,20 +1,20 @@
 import { toast } from "react-toastify";
+import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { useNavigate } from "react-router-dom";
+
 import PlayerSVG from "../../assets/player_assets/player.svg";
 
-import "./lobby-table.css";
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-
 import { GameRoom } from "types/Room";
-import Loading from "../Loading";
-import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../hooks/useAuth";
 import { useFunctions } from "../../hooks/useFunctions";
 
-const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
+const LobbyRoomTable = (props: { gameRoomList: GameRoom[] }) => {
   const { playerAccount } = useAuth();
   const navigate = useNavigate();
+
   const columnHelper = createColumnHelper<GameRoom>();
+
   const columns = [
     columnHelper.accessor("roomID", {
       header: () => <span>Room ID</span>,
@@ -28,17 +28,16 @@ const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
       header: () => <span>Host</span>,
       cell: (info) => info.getValue().find((plyr) => plyr.isHost)?.displayName,
     }),
-
     columnHelper.accessor("players", {
       header: () => <span>Players</span>,
       cell: (info) => {
         const plyrList = info.cell.getValue();
         return (
-          <div>
+          <div className="flex">
             {[0, 1, 2, 3].map((index) => (
               <img
                 key={index}
-                className={`lobby_table_data_players-${plyrList[index] ? "occupied" : "vacant"}`}
+                className={`h-5 ${plyrList[index] ? "opacity-100" : "opacity-50"}`}
                 src={PlayerSVG}
                 alt={PlayerSVG}
               />
@@ -50,7 +49,7 @@ const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
   ];
 
   const { gameRoomList } = props;
-  const { joinGameRoom, isLoading, error } = useFunctions();
+  const { joinGameRoom, error } = useFunctions();
 
   const table = useReactTable({
     data: gameRoomList,
@@ -61,16 +60,16 @@ const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
   if (error) {
     toast.error(error.message);
   }
-  if (isLoading) return <Loading />;
+
   if (!playerAccount) return <></>;
 
   return (
-    <table className="lobby-table">
+    <table className="w-full border-separate border-spacing-0">
       <thead>
         {table.getHeaderGroups().map((headerGroup, index) => (
           <tr key={index}>
             {headerGroup.headers.map((header, index) => (
-              <th key={index}>
+              <th key={index} className="px-4 py-2">
                 {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
               </th>
             ))}
@@ -81,6 +80,7 @@ const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
         {table.getRowModel().rows.map((row, index) => (
           <tr
             key={index}
+            className="cursor-pointer bg-gray-100 hover:bg-blue-500 h-12 text-sm"
             onClick={async () => {
               if (row.original.settings.isInviteOnly) return;
               if (!playerAccount.roomID) {
@@ -91,12 +91,10 @@ const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
                   navigate(`/party/${roomID}`);
                 }
               }
-
               if (playerAccount.roomID === row.original.roomID) {
                 navigate(`/party/${playerAccount.roomID}`);
                 return;
               }
-
               if (row.original.playerCount >= 4) {
                 toast.error("Room is full");
                 return;
@@ -104,7 +102,9 @@ const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
             }}
           >
             {row.getVisibleCells().map((cell, index) => (
-              <td key={index}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+              <td key={index} className="px-4 py-2 align-middle">
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </td>
             ))}
           </tr>
         ))}
@@ -113,4 +113,4 @@ const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
   );
 };
 
-export default RoomTable;
+export default LobbyRoomTable;

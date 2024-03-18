@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
  * HOOKS
  */
 import { useAuth } from "../hooks/useAuth";
-import useFunctions from "../hooks/useFunctions";
+import { useFunctions } from "../hooks/useFunctions";
 
 /**
  * COMPONENTS

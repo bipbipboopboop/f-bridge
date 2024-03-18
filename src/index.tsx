@@ -11,15 +11,18 @@ import reportWebVitals from "./reportWebVitals";
 
 import App from "./App";
 import { AuthProvider } from "./context/AuthContext";
+import { FunctionProvider } from "./context/FunctionContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <>
     <AuthProvider>
-      <BrowserRouter>
-        <App />
-        <ToastContainer limit={2} autoClose={1000} />
-      </BrowserRouter>
+      <FunctionProvider>
+        <BrowserRouter>
+          <App />
+          <ToastContainer limit={2} autoClose={1000} />
+        </BrowserRouter>
+      </FunctionProvider>
     </AuthProvider>
   </>
 );
