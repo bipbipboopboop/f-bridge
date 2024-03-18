@@ -1,4 +1,3 @@
-// LobbyRooms.tsx
 import { memo } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { useCollectionData } from "react-firebase-hooks/firestore";
@@ -9,7 +8,7 @@ import Loading from "../Loading";
 import RoomTable from "./RoomTable";
 import { GameRoom } from "types/Room";
 
-const LobbyRooms = () => {
+const RoomList = () => {
   const gameRoomsCollection = collection(firestore, `gameRooms`) as CollectionReference<GameRoom>;
   const gameRoomsQuery = query(gameRoomsCollection, orderBy("createdAt", "desc"));
   const [gameRoomList, isLoading, error] = useCollectionData(gameRoomsQuery);
@@ -51,4 +50,4 @@ const LobbyRooms = () => {
   );
 };
 
-export default memo(LobbyRooms);
+export default memo(RoomList);

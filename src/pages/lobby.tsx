@@ -11,7 +11,7 @@ import { useFunctions } from "../hooks/useFunctions";
  * COMPONENTS
  */
 import Button from "../components/buttons/button";
-import LobbyRoom from "../components/new_lobby/LobbyRoom";
+import RoomList from "../components/new_lobby/RoomList";
 
 import LobbyPlayerCard from "../components/lobby/lobby-player-card";
 
@@ -34,7 +34,7 @@ const Lobby = () => {
     <div className="flex h-screen">
       <div className="w-1/2">
         <div className="flex justify-center">
-          <LobbyRoom />
+          <RoomList />
         </div>
       </div>
       <div className="w-1/4 p-3 flex flex-col justify-between">

@@ -53,7 +53,7 @@ const LobbyRoomTable = (props: { gameRoomList: GameRoom[] }) => {
 
   const table = useReactTable({
     data: gameRoomList,
-    columns,
+    rowColumns: columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
