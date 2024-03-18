@@ -24,6 +24,7 @@ export type PublicEndedPhase = {
 };
 
 export interface RestrictedPlayerData {
+  id: string;
   cards: Card[];
 }
 

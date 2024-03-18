@@ -57,7 +57,7 @@ export const createGameRoom = functions.region("asia-east2").https.onCall(async 
   const gameRoomData: GameRoom = {
     roomID,
     hostID: context.auth.uid,
-    createdAt: admin.firestore.Timestamp.now().toDate(),
+    createdAt: new Date(),
     invitedPlayerIDs: [],
     settings: {
       isInviteOnly: false,
@@ -69,10 +69,7 @@ export const createGameRoom = functions.region("asia-east2").https.onCall(async 
   };
 
   const gameRoomRef = admin.firestore().collection("gameRooms").doc(roomID);
-  const publicPlayersRef = gameRoomRef.collection("publicPlayers").doc(context.auth.uid);
-
   await gameRoomRef.set(gameRoomData);
-  await publicPlayersRef.set(publicPlayerData);
   await playerAccountRef.update({ roomID });
 
   return { roomID };
@@ -107,7 +104,7 @@ export const joinGameRoom = functions.region("asia-east2").https.onCall(async (r
     throw new functions.https.HttpsError("already-exists", "You're already in a room! Leave it first to join.");
   }
 
-  const gameRoomRef = admin.firestore().collection("gameRooms").doc(roomID);
+  const gameRoomRef = admin.firestore().collection("gameRooms").doc(roomID) as DocumentReference<GameRoom>;
   const gameRoomSnapshot = await gameRoomRef.get();
   const gameRoomData = gameRoomSnapshot.data() as GameRoom;
 
@@ -142,10 +139,12 @@ export const joinGameRoom = functions.region("asia-east2").https.onCall(async (r
     currentCardOnTable: null,
   };
 
-  const publicPlayersRef = gameRoomRef.collection("publicPlayers").doc(context.auth.uid);
+  console.log(gameRoomData, gameRoomSnapshot.exists);
 
-  await gameRoomRef.update({ playerCount: admin.firestore.FieldValue.increment(1) });
-  await publicPlayersRef.set(publicPlayerData);
+  await gameRoomRef.update({
+    playerCount: gameRoomData.playerCount + 1,
+    players: gameRoomData.players.concat(publicPlayerData),
+  });
   await playerAccountRef.update({ roomID });
 
   return { success: true };
@@ -205,11 +204,17 @@ export const leaveGameRoom = functions.region("asia-east2").https.onCall(async (
     await publicPlayersRef.doc(newHostId).update({ isHost: true });
   }
 
-  await Promise.all([
-    gameRoomRef.update({ playerCount: admin.firestore.FieldValue.increment(-1) }),
-    publicPlayersRef.doc(context.auth.uid).delete(),
-    playerAccountRef.update({ roomID: null }),
-  ]);
+  const uid = context.auth.uid;
+  const playerIndex = gameRoomData.players.findIndex((player) => player.id === uid);
+  if (playerIndex !== -1) {
+    const updatedPlayers = gameRoomData.players.filter((player) => player.id !== uid);
+    await gameRoomRef.update({
+      playerCount: gameRoomData.playerCount - 1,
+      players: updatedPlayers,
+    });
+  }
+
+  await Promise.all([publicPlayersRef.doc(context.auth.uid).delete(), playerAccountRef.update({ roomID: null })]);
 
   return { success: true };
 });
@@ -320,6 +325,7 @@ export const startGame = functions.region("asia-east2").https.onCall(async (data
   for (const playerDoc of publicPlayersSnapshot.docs) {
     const playerCards = deck.splice(0, 13);
     const restrictedPlayerData: RestrictedPlayerData = {
+      id: playerDoc.id,
       cards: playerCards,
     };
     await restrictedPlayersRef.doc(playerDoc.id).set(restrictedPlayerData);

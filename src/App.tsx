@@ -1,13 +1,9 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 
-import useFunctions from "./hooks/useFunctions";
-
-import Loading from "./components/Loading";
 import Navbar from "./components/navbar";
 
 import Lobby from "./pages/lobby";
-
 import Home from "./pages/home";
 
 import NotFound from "./pages/not-founds";
