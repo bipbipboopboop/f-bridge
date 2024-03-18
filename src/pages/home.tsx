@@ -6,20 +6,21 @@ import { useAuth } from "../hooks/useAuth";
 const Home = () => {
   const { playerAccount } = useAuth();
   const navigate = useNavigate();
-
   const isPlayerInRoom = !!playerAccount?.roomID;
 
   return (
-    <div className="w-100 h-100 d-flex flex-column align-items-center">
-      <div className="w-100 d-flex justify-content-center">
-        <img src={spinning} style={{ height: "4rem" }} />
-        <p style={{ fontSize: "4rem" }}>Floating Bridge</p>
-        <img src={spinning} style={{ height: "4rem" }} />
+    <div className="flex flex-col items-center justify-center h-screen">
+      <div className="flex items-center justify-center mb-12">
+        <img src={spinning} className="h-12 md:h-16 lg:h-20" alt="Spinning" />
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mx-4">Floating Bridge</h1>
+        <img src={spinning} className="h-12 md:h-16 lg:h-20" alt="Spinning" />
       </div>
-      <div className="w-100 h-100 d-flex flex-column justify-content-center align-items-center">
+
+      <div className="flex flex-col items-center">
         <Button
           theme="orange"
           style={{ marginBottom: "1rem" }}
+          size={4}
           onClick={() => {
             if (isPlayerInRoom) {
               navigate(`party/${playerAccount.roomID}`);
@@ -31,11 +32,7 @@ const Home = () => {
           {`${isPlayerInRoom ? "Return to game room" : "Create game room"}`}
         </Button>
 
-        <Button
-          theme="yellow"
-          style={{ marginBottom: "1rem", width: "300px", height: "90px" }}
-          onClick={() => navigate("/tutorial")}
-        >
+        <Button theme="yellow" size={4} onClick={() => navigate("/tutorial")}>
           Tutorial
         </Button>
       </div>
