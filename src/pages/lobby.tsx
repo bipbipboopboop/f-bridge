@@ -11,23 +11,17 @@ import { useFunctions } from "../hooks/useFunctions";
  * COMPONENTS
  */
 import GreenButton from "../components/buttons/button-green";
-import LobbyRooms from "../components/lobby/lobby-rooms";
+import LobbyRooms from "../components/new_lobby/lobby-rooms";
 import LobbyPlayerCard from "../components/lobby/lobby-player-card";
 
-import Loading from "../components/Loading";
 import Button from "../components/buttons/button";
 
 const Lobby = () => {
   const { playerAccount } = useAuth();
-  const { createGameRoom, error, isLoading } = useFunctions();
+  const { createGameRoom } = useFunctions();
   const navigate = useNavigate();
 
   if (!playerAccount) return <></>;
-  if (isLoading) return <Loading />;
-
-  if (error) {
-    toast.error(error.message);
-  }
 
   return (
     <div className="w-100 h-100 d-flex">

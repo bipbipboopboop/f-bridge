@@ -1,15 +1,14 @@
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import "./lobby-table.css";
+
 import PlayerSVG from "../../assets/player_assets/player.svg";
 
-import "./lobby-table.css";
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-
-import { GameRoom } from "types/Room";
-import Loading from "../Loading";
-import { useNavigate } from "react-router-dom";
-
-import { useAuth } from "../../hooks/useAuth";
 import { useFunctions } from "../../hooks/useFunctions";
+import { useAuth } from "../../hooks/useAuth";
+
+import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { GameRoom } from "types/Room";
 
 const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
   const { playerAccount } = useAuth();
@@ -58,10 +57,6 @@ const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  if (error) {
-    toast.error(error.message);
-  }
-  if (isLoading) return <Loading />;
   if (!playerAccount) return <></>;
 
   return (
@@ -88,16 +83,16 @@ const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
                 const success = await joinGameRoom(roomID);
                 if (success) {
                   toast.success("Successfully joined room");
-                  navigate(`/party/${roomID}`);
+                  navigate(`/room/${roomID}`);
                 }
               }
 
               if (playerAccount.roomID === row.original.roomID) {
-                navigate(`/party/${playerAccount.roomID}`);
+                navigate(`/room/${playerAccount.roomID}`);
                 return;
               }
 
-              if (row.original.playerCount >= 4) {
+              if (row.original.players.length >= 4) {
                 toast.error("Room is full");
                 return;
               }

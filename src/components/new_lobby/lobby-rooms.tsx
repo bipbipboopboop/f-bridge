@@ -1,7 +1,7 @@
-import "./lobby-rooms.css";
+import "./lobby-table.css";
 import { memo } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import RoomTable from "../tables/lobby-table";
+import RoomTable from "./lobby-table";
 import { GameRoom } from "types/Room";
 
 import { useCollectionData } from "react-firebase-hooks/firestore";
@@ -18,7 +18,6 @@ const LobbyRooms = () => {
 
   if (isLoading) return <Loading />;
   if (!gameRoomList) return <Loading />;
-  if (error) toast.error(error.message);
 
   const openRoomList: GameRoom[] = gameRoomList.filter((room) => !room.settings.isInviteOnly);
 
