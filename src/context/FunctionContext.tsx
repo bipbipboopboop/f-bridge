@@ -11,6 +11,7 @@ import { GameRoom } from "types/Room";
 import { Bid } from "types/Bid";
 import { Card } from "types/Card";
 import Loading from "../components/Loading";
+import { toast } from "react-toastify";
 
 interface FunctionContextProps {
   isLoading: boolean;
@@ -75,6 +76,10 @@ export const FunctionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     chooseTeammate,
     playCard,
   };
+
+  if (error) {
+    toast.error(error.message);
+  }
 
   return <FunctionContext.Provider value={contextValue}>{isLoading ? <Loading /> : children}</FunctionContext.Provider>;
 };
