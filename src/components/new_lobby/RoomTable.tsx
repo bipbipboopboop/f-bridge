@@ -1,14 +1,12 @@
+// RoomTable.tsx
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import "./lobby-table.css";
-
 import PlayerSVG from "../../assets/player_assets/player.svg";
-
-import { useFunctions } from "../../hooks/useFunctions";
-import { useAuth } from "../../hooks/useAuth";
-
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { GameRoom } from "types/Room";
+import Loading from "../Loading";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
+import { useFunctions } from "../../hooks/useFunctions";
 
 const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
   const { playerAccount } = useAuth();
@@ -27,17 +25,16 @@ const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
       header: () => <span>Host</span>,
       cell: (info) => info.getValue().find((plyr) => plyr.isHost)?.displayName,
     }),
-
     columnHelper.accessor("players", {
       header: () => <span>Players</span>,
       cell: (info) => {
         const plyrList = info.cell.getValue();
         return (
-          <div>
+          <div className="flex">
             {[0, 1, 2, 3].map((index) => (
               <img
                 key={index}
-                className={`lobby_table_data_players-${plyrList[index] ? "occupied" : "vacant"}`}
+                className={`h-5 ${plyrList[index] ? "opacity-100" : "opacity-50"}`}
                 src={PlayerSVG}
                 alt={PlayerSVG}
               />
@@ -57,15 +54,22 @@ const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
     getCoreRowModel: getCoreRowModel(),
   });
 
+  if (error) {
+    toast.error(error.message);
+  }
+
+  if (isLoading) return <Loading />;
+
   if (!playerAccount) return <></>;
 
   return (
-    <table className="lobby-table">
+    // border-spacing: 0 4px;
+    <table className="w-full border-separate border-spacing-y-2">
       <thead>
         {table.getHeaderGroups().map((headerGroup, index) => (
-          <tr key={index}>
+          <tr key={index} className="text-white">
             {headerGroup.headers.map((header, index) => (
-              <th key={index}>
+              <th key={index} className="py-2 px-4 text-left">
                 {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
               </th>
             ))}
@@ -76,6 +80,9 @@ const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
         {table.getRowModel().rows.map((row, index) => (
           <tr
             key={index}
+            className={`bg-black/5 text-white hover:bg-[#006cb1] cursor-pointer ${
+              row.original.settings.isInviteOnly || row.original.players.length >= 4 ? "opacity-50 cursor-default" : ""
+            }`}
             onClick={async () => {
               if (row.original.settings.isInviteOnly) return;
               if (!playerAccount.roomID) {
@@ -83,15 +90,13 @@ const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
                 const success = await joinGameRoom(roomID);
                 if (success) {
                   toast.success("Successfully joined room");
-                  navigate(`/room/${roomID}`);
+                  navigate(`/party/${roomID}`);
                 }
               }
-
               if (playerAccount.roomID === row.original.roomID) {
-                navigate(`/room/${playerAccount.roomID}`);
+                navigate(`/party/${playerAccount.roomID}`);
                 return;
               }
-
               if (row.original.players.length >= 4) {
                 toast.error("Room is full");
                 return;
@@ -99,7 +104,9 @@ const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
             }}
           >
             {row.getVisibleCells().map((cell, index) => (
-              <td key={index}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+              <td key={index} className="py-2 px-4">
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </td>
             ))}
           </tr>
         ))}

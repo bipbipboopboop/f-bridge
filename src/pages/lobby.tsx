@@ -10,11 +10,10 @@ import { useFunctions } from "../hooks/useFunctions";
 /**
  * COMPONENTS
  */
-import GreenButton from "../components/buttons/button-green";
-import LobbyRooms from "../components/new_lobby/lobby-rooms";
-import LobbyPlayerCard from "../components/lobby/lobby-player-card";
-
 import Button from "../components/buttons/button";
+import LobbyRoom from "../components/new_lobby/LobbyRoom";
+
+import LobbyPlayerCard from "../components/lobby/lobby-player-card";
 
 const Lobby = () => {
   const { playerAccount } = useAuth();
@@ -23,43 +22,38 @@ const Lobby = () => {
 
   if (!playerAccount) return <></>;
 
+  const handleCreateRoom = async () => {
+    const gameRoom = (await createGameRoom())?.data;
+    if (gameRoom) {
+      toast.success("Room created!");
+      navigate(`/room/${gameRoom.roomID}`);
+    }
+  };
+
   return (
-    <div className="w-100 h-100 d-flex">
-      <div className="w-75 p-3">
-        <div className="d-flex justify-content-center">
-          <LobbyRooms />
+    <div className="flex h-screen">
+      <div className="w-1/2">
+        <div className="flex justify-center">
+          <LobbyRoom />
         </div>
       </div>
-      <div className="w-50 h-100 p-3 d-flex flex-column justify-content-between">
+      <div className="w-1/4 p-3 flex flex-col justify-between">
         <LobbyPlayerCard playerAccount={playerAccount} />
-        <div className="p-3 py-5" style={{ backgroundColor: "rgba(0, 0, 0, 0.1)" }}>
+        <div className="p-3 py-5 bg-gray-100">
           <p>Join A Room! (Coming Soon)</p>
-          <input type="text" style={{ height: "52px" }} />
-          <GreenButton style={{ marginRight: "0.5rem" }}>Join Room</GreenButton>
+          <input type="text" className="h-12 w-full" />
+          <Button theme="green" className="mr-2">
+            Join Room
+          </Button>
         </div>
-        <div className="d-flex flex-column p-3" style={{ gap: "20px" }}>
-          <div className="d-flex justify-content-center">
-            {playerAccount.roomID && (
-              <Button
-                theme="orange"
-                onClick={() => {
-                  navigate(`/party/${playerAccount.roomID}`);
-                }}
-              >
+        <div className="flex flex-col p-3 space-y-5">
+          <div className="flex justify-center">
+            {playerAccount.roomID ? (
+              <Button theme="orange" onClick={() => navigate(`/party/${playerAccount.roomID}`)}>
                 Back to room
               </Button>
-            )}
-            {!playerAccount.roomID && (
-              <Button
-                theme="orange"
-                onClick={async () => {
-                  const gameRoom = (await createGameRoom())?.data;
-                  if (gameRoom) {
-                    toast.success("Room created!");
-                    navigate(`/party/${gameRoom.roomID}`);
-                  }
-                }}
-              >
+            ) : (
+              <Button theme="orange" onClick={handleCreateRoom}>
                 Create Room
               </Button>
             )}
