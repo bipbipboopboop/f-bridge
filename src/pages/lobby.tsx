@@ -18,11 +18,11 @@ import Loading from "../components/Loading";
 import Button from "../components/buttons/button";
 
 const Lobby = () => {
-  const { playerProfile } = useAuth();
+  const { playerAccount } = useAuth();
   const { createGameRoom, error, isLoading } = useFunctions();
   const navigate = useNavigate();
 
-  if (!playerProfile) return <></>;
+  if (!playerAccount) return <></>;
   if (isLoading) return <Loading />;
 
   if (error) {
@@ -37,7 +37,7 @@ const Lobby = () => {
         </div>
       </div>
       <div className="w-50 h-100 p-3 d-flex flex-column justify-content-between">
-        <LobbyPlayerCard playerProfile={playerProfile} />
+        <LobbyPlayerCard playerAccount={playerAccount} />
         <div className="p-3 py-5" style={{ backgroundColor: "rgba(0, 0, 0, 0.1)" }}>
           <p>Join A Room! (Coming Soon)</p>
           <input type="text" style={{ height: "52px" }} />
@@ -45,17 +45,17 @@ const Lobby = () => {
         </div>
         <div className="d-flex flex-column p-3" style={{ gap: "20px" }}>
           <div className="d-flex justify-content-center">
-            {playerProfile.roomID && (
+            {playerAccount.roomID && (
               <Button
                 theme="orange"
                 onClick={() => {
-                  navigate(`/party/${playerProfile.roomID}`);
+                  navigate(`/party/${playerAccount.roomID}`);
                 }}
               >
                 Back to room
               </Button>
             )}
-            {!playerProfile.roomID && (
+            {!playerAccount.roomID && (
               <Button
                 theme="orange"
                 onClick={async () => {

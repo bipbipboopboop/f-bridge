@@ -6,6 +6,8 @@ export interface PublicPlayer {
   id: string;
   displayName: string;
   avatarID: AvatarID;
+  country: string;
+  numOfGamesPlayed: number;
 
   roomID: string;
   isReady: boolean;

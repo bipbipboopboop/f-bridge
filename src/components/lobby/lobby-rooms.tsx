@@ -2,7 +2,7 @@ import "./lobby-rooms.css";
 import { memo } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import RoomTable from "../tables/lobby-table";
-import { GameRoom } from "types/GameRoom";
+import { GameRoom } from "types/Room";
 
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { CollectionReference, collection, orderBy, query } from "firebase/firestore";

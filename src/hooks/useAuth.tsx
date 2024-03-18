@@ -1,13 +1,13 @@
 import { useContext } from "react";
-
-import GamePlayerContext from "../context/GamePlayerProvider";
+import { AuthContext } from "../context/AuthContext";
 
 export const useAuth = () => {
-  const { playerProfile, user, gamePlayer } = useContext(GamePlayerContext);
+  // const { playerAccount, user, gamePlayer } = useContext(GamePlayerContext);
+  const { user, playerAccount, loading } = useContext(AuthContext);
 
   return {
     user,
-    gamePlayer,
-    playerProfile,
+    playerAccount,
+    loading,
   };
 };

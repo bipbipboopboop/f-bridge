@@ -1,23 +1,24 @@
-import { PlayerProfile } from "types/PlayerProfile";
+import { PublicPlayer } from "types/Player";
 import "./lobby-player-card.css";
 
 import { avatarLookup } from "assets/avatar";
+import { RestrictedAccountInfo } from "types/Account";
 
-const LobbyPlayerCard = (props: { playerProfile: PlayerProfile }) => {
-  const { playerProfile } = props;
+const LobbyPlayerCard = (props: { playerAccount: RestrictedAccountInfo }) => {
+  const { playerAccount } = props;
 
   return (
     <div className="lobby-player-card">
       <div className="mx-2">
-        <img src={avatarLookup[playerProfile.avatarID as "redDino"]} alt={":/"} />
+        <img src={avatarLookup[playerAccount.avatarID as "redDino"]} alt={":/"} />
       </div>
       <div className="player-info" style={{ width: "100%" }}>
         Name:
         <div>
-          {playerProfile.displayName} ({playerProfile.country})
+          {playerAccount.displayName} ({playerAccount.country})
         </div>
         Games Played:
-        <div>{playerProfile.numOfGamesPlayed}</div>
+        <div>{playerAccount.numOfGamesPlayed}</div>
       </div>
     </div>
   );

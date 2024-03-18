@@ -1,4 +1,4 @@
-import {Card, CardStringValue, CardValue, Suit} from "types/Card";
+import { Card, Suit, Rank, RankValue } from "types/Card";
 
 /**
  * Utils for shuffling a deck of cards.
@@ -15,10 +15,10 @@ const suitLookup: SuitLookup = {
 };
 
 type StringValueLookup = {
-  [key: number]: CardStringValue;
+  [key: number]: Rank;
 };
 
-const stringValueLookup: StringValueLookup = {
+const rankValueLookup: StringValueLookup = {
   14: "A",
   13: "K",
   12: "Q",
@@ -40,12 +40,12 @@ export const shuffleCards = () => {
   for (let suit = 0; suit < 4; suit++) {
     for (let rank = 2; rank < 15; rank++) {
       const suitString = suitLookup[suit];
-      const stringValue = stringValueLookup[rank];
+      const rankValue = rankValueLookup[rank];
 
       deck.push({
         suit: suitString,
-        value: rank as CardValue,
-        stringValue: stringValue,
+        value: rank as RankValue,
+        rank: rankValue,
       });
     }
   }

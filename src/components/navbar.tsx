@@ -2,11 +2,12 @@ import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { Link } from "react-router-dom";
 import { useSignInWithGoogle } from "react-firebase-hooks/auth";
-import { useAuth } from "../context/AuthContext";
 import { User } from "firebase/auth";
 
+import { useAuth } from "../hooks/useAuth";
+
 const Navbar: React.FC = () => {
-  const { playerProfile, user } = useAuth();
+  const { playerAccount, user } = useAuth();
   const [signInWithGoogle] = useSignInWithGoogle(auth);
 
   const handleSignInWithGoogle = async () => {
@@ -49,11 +50,11 @@ const Navbar: React.FC = () => {
             aria-haspopup="true"
             aria-expanded="false"
           >
-            {playerProfile?.displayName}
+            {playerAccount?.displayName}
           </a>
           <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <a className="dropdown-item" href="#">
-              Edit Profile
+              Edit Account
             </a>
             <a className="dropdown-item" href="#">
               Settings

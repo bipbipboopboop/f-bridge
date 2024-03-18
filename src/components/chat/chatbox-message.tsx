@@ -1,8 +1,8 @@
-import {Message} from "types/Chat";
+import { Message } from "types/Message";
 import "./chat.css";
 
-const ChatMessage = (props: {message: Message}) => {
-  const {message} = props;
+const ChatMessage = (props: { message: Message }) => {
+  const { message } = props;
 
   if (message.playerName === "system") {
     return (

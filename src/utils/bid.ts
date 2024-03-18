@@ -1,4 +1,4 @@
-import {Bid, BidNumber, BidSuit} from "types/Bid";
+import { Bid, BidLevel, BidSuit } from "types/Bid";
 
 export const BID_SUITS: BidSuit[] = ["♣", "♦", "♥", "♠", "NT"];
 
@@ -35,7 +35,7 @@ const ALL_BIDS: string[] = [
   "6NT",
 ];
 export const getPossibleBids = (highestBid: Bid | null) => {
-  const possibleBids: Record<BidNumber, BidSuit[]> = {
+  const possibleBids: Record<BidLevel, BidSuit[]> = {
     1: [],
     2: [],
     3: [],
@@ -46,7 +46,7 @@ export const getPossibleBids = (highestBid: Bid | null) => {
 
   if (!highestBid) {
     // If there is no highest bid, all bids from 1 to 7 in each suit are possible
-    for (let number = 1 as BidNumber; number <= 6; number++) {
+    for (let number = 1 as BidLevel; number <= 6; number++) {
       BID_SUITS.forEach((suit) => {
         possibleBids[number].push(suit);
       });
@@ -54,13 +54,13 @@ export const getPossibleBids = (highestBid: Bid | null) => {
     return possibleBids;
   }
 
-  const {suit, number} = highestBid;
-  const bidString = `${number}${suit}`;
+  const { suit, level } = highestBid;
+  const bidString = `${level}${suit}`;
   const bidIndex = ALL_BIDS.indexOf(bidString);
 
   const possibleBidsStrings = ALL_BIDS.slice(bidIndex + 1);
   possibleBidsStrings.forEach((bidString) => {
-    const bidNum = parseInt(bidString[0]) as BidNumber;
+    const bidNum = parseInt(bidString[0]) as BidLevel;
     const suit = bidString.slice(1) as BidSuit;
     possibleBids[bidNum].push(suit);
   });

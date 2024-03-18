@@ -4,13 +4,13 @@ import useFunctions from "../../hooks/useFunctions";
 import "./lobby-table.css";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 
-import { GameRoom } from "types/GameRoom";
+import { GameRoom } from "types/Room";
 import Loading from "../Loading";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 
 const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
-  const { playerProfile } = useAuth();
+  const { playerAccount } = useAuth();
   const navigate = useNavigate();
   const columnHelper = createColumnHelper<GameRoom>();
   const columns = [
@@ -60,7 +60,7 @@ const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
     toast.error(error.message);
   }
   if (isLoading) return <Loading />;
-  if (!playerProfile) return <></>;
+  if (!playerAccount) return <></>;
 
   return (
     <table className="lobby-table">
@@ -81,7 +81,7 @@ const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
             key={index}
             onClick={async () => {
               if (row.original.settings.isInviteOnly) return;
-              if (!playerProfile.roomID) {
+              if (!playerAccount.roomID) {
                 const roomID = row.original.roomID;
                 const success = await joinGameRoom(roomID);
                 if (success) {
@@ -90,12 +90,12 @@ const RoomTable = (props: { gameRoomList: GameRoom[] }) => {
                 }
               }
 
-              if (playerProfile.roomID === row.original.roomID) {
-                navigate(`/party/${playerProfile.roomID}`);
+              if (playerAccount.roomID === row.original.roomID) {
+                navigate(`/party/${playerAccount.roomID}`);
                 return;
               }
 
-              if (row.original.players.length >= 4) {
+              if (row.original.playerCount >= 4) {
                 toast.error("Room is full");
                 return;
               }

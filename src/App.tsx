@@ -11,13 +11,12 @@ import Lobby from "./pages/lobby";
 import Home from "./pages/home";
 
 import NotFound from "./pages/not-founds";
-import { useAuth } from "./context/AuthContext";
+import { useAuth } from "./hooks/useAuth";
 
 function App() {
-  const { loading, playerProfile, user } = useAuth();
-  if (loading) return <Loading />;
+  const { loading, playerAccount, user } = useAuth();
+  console.log({ playerAccount, user, loading });
 
-  console.log({ playerProfile, user, loading });
   return (
     <div className="App">
       <Navbar />

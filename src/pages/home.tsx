@@ -4,10 +4,10 @@ import Button from "../components/buttons/button";
 import { useAuth } from "../hooks/useAuth";
 
 const Home = () => {
-  const { playerProfile } = useAuth();
+  const { playerAccount } = useAuth();
   const navigate = useNavigate();
 
-  const isPlayerInRoom = !!playerProfile?.roomID;
+  const isPlayerInRoom = !!playerAccount?.roomID;
 
   return (
     <div className="w-100 h-100 d-flex flex-column align-items-center">
@@ -22,7 +22,7 @@ const Home = () => {
           style={{ marginBottom: "1rem" }}
           onClick={() => {
             if (isPlayerInRoom) {
-              navigate(`party/${playerProfile.roomID}`);
+              navigate(`party/${playerAccount.roomID}`);
               return;
             }
             navigate("/lobby");

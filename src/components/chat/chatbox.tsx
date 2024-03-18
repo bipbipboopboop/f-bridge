@@ -3,7 +3,7 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import { useParams } from "react-router-dom";
 
 import "./chat.css";
-import { Message } from "types/Chat";
+import { Message } from "types/Message";
 import ChatMessage from "./chatbox-message";
 
 import { CollectionReference, collection, orderBy, query } from "firebase/firestore";

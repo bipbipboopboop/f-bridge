@@ -1,4 +1,4 @@
-import {Card, CardStringValue, CardValue, Suit} from "types/Card";
+import { Card, Rank, RankValue, Suit } from "types/Card";
 
 type SuitLookup = {
   [key: number]: Suit;
@@ -12,10 +12,10 @@ const suitLookup: SuitLookup = {
 };
 
 type StringValueLookup = {
-  [key: number]: CardStringValue;
+  [key: number]: Rank;
 };
 
-const stringValueLookup: StringValueLookup = {
+const rankValueLookup: StringValueLookup = {
   14: "A",
   13: "K",
   12: "Q",
@@ -33,17 +33,17 @@ const stringValueLookup: StringValueLookup = {
 
 export const deck: Card[] = [];
 for (let suit = 0; suit < 4; suit++) {
-  for (let rank = 2; rank < 15; rank++) {
+  for (let value = 2; value < 15; value++) {
     let suitString: Suit;
-    let stringValue: CardStringValue;
+    let rank: Rank;
 
     suitString = suitLookup[suit];
-    stringValue = stringValueLookup[rank];
+    rank = rankValueLookup[value];
 
     deck.push({
       suit: suitString,
-      value: rank as CardValue,
-      stringValue: stringValue,
+      value: value as RankValue,
+      rank: rank,
     });
   }
 }

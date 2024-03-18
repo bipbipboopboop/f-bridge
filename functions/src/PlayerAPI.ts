@@ -1,21 +1,22 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import { uniqueNamesGenerator, Config, adjectives, colors, animals } from "unique-names-generator";
-import { AvatarID, PlayerProfile } from "types/PlayerProfile";
+import { AvatarID } from "types/Avatar";
+import { RestrictedAccountInfo } from "types/Account";
 
 const AVATAR_IDS: AvatarID[] = ["blueDino", "greenDino", "redDino", "yellowDino"];
 
-export const createPlayerProfile = functions
+export const createAccount = functions
   .region("asia-east2")
   .auth.user()
   .onCreate(async (user) => {
     try {
-      // Check if the player profile already exists
-      const playerProfileRef = admin.firestore().collection("playerProfiles").doc(user.uid);
+      // Check if the player account already exists
+      const playerAccountRef = admin.firestore().collection("accounts").doc(user.uid);
 
-      const playerProfileSnapshot = await playerProfileRef.get();
-      if (playerProfileSnapshot.exists) {
-        console.log("Player profile already exists.");
+      const playerAccountSnapshot = await playerAccountRef.get();
+      if (playerAccountSnapshot.exists) {
+        console.log("Player account already exists.");
         return;
       }
 
@@ -27,7 +28,7 @@ export const createPlayerProfile = functions
 
       const randomName = uniqueNamesGenerator(nameConfig);
 
-      const playerProfile: PlayerProfile = {
+      const playerAccount: RestrictedAccountInfo = {
         id: user.uid,
         displayName: user.displayName || randomName,
         email: user.email || null,
@@ -38,13 +39,13 @@ export const createPlayerProfile = functions
         roomID: null,
       };
 
-      console.log({ playerProfile });
+      console.log({ playerAccount });
 
-      // Create the player profile
-      await playerProfileRef.set(playerProfile);
+      // Create the player account
+      await playerAccountRef.set(playerAccount);
 
-      console.log("Player profile created successfully.");
+      console.log("Player account created successfully.");
     } catch (error) {
-      console.error("Error creating player profile:", error);
+      console.error("Error creating player account:", error);
     }
   });

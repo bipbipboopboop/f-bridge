@@ -1,12 +1,12 @@
 import * as admin from "firebase-admin";
 admin.initializeApp();
 
-import { createPlayerProfile } from "./PlayerAPI";
+import { createAccount } from "./PlayerAPI";
 
-import { createGameRoom, joinGameRoom, leaveGameRoom, startGame, toggleReady } from "./GameRoomAPI";
+import { createGameRoom, joinGameRoom, leaveGameRoom, startGame, toggleReady } from "./RoomAPI";
 
-import { placeBid, chooseTeammate } from "./BidAPI";
-import { playCard } from "./TrickTakingAPI";
+// import { placeBid, chooseTeammate } from "./BidAPI";
+// import { playCard } from "./TrickTakingAPI";
 
 // import {sendMessage} from "./ChatAPI";
 
@@ -15,7 +15,7 @@ export {
    * PLAYER API
    */
 
-  createPlayerProfile,
+  createAccount,
 
   /**
    * GAME ROOM API
@@ -26,16 +26,16 @@ export {
   startGame,
   toggleReady,
 
-  /**
-   * BID API
-   */
-  placeBid,
-  chooseTeammate,
+  // /**
+  //  * BID API
+  //  */
+  // placeBid,
+  // chooseTeammate,
 
-  /**
-   * TRICK TAKING API
-   */
-  playCard,
+  // /**
+  //  * TRICK TAKING API
+  //  */
+  // playCard,
 
   /**
    * CHAT API
