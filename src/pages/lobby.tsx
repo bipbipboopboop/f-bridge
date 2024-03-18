@@ -13,7 +13,7 @@ import { useFunctions } from "../hooks/useFunctions";
 import Button from "../components/buttons/button";
 import RoomList from "../components/new_lobby/RoomList";
 
-import LobbyPlayerCard from "../components/lobby/lobby-player-card";
+import LobbyPlayerCard from "../components/new_lobby/lobby-player-card";
 
 const Lobby = () => {
   const { playerAccount } = useAuth();

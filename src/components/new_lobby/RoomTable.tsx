@@ -20,7 +20,7 @@ const RoomTable: React.FC<RoomTableProps> = ({ gameRoomList }) => {
 
   const table = useReactTable({
     data: gameRoomList,
-    rowColumns,
+    columns: rowColumns,
     getCoreRowModel: getCoreRowModel(),
   });
 

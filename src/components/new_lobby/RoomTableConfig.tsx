@@ -1,6 +1,6 @@
 import PlayerSVG from "../../assets/player_assets/player.svg";
 
-import { Row, createColumnHelper } from "@tanstack/react-table";
+import { createColumnHelper } from "@tanstack/react-table";
 import { GameRoom } from "types/Room";
 
 const roomColHelper = createColumnHelper<GameRoom>();

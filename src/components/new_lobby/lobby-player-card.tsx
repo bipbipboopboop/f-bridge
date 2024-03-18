@@ -1,6 +1,4 @@
-import { PublicPlayer } from "types/Player";
 import "./lobby-player-card.css";
-
 import { avatarLookup } from "assets/avatar";
 import { RestrictedAccountInfo } from "types/Account";
 
