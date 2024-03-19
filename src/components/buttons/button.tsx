@@ -6,7 +6,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   disabled?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({ theme = "green", size = 3, disabled, children, ...props }) => {
+const Button: React.FC<ButtonProps> = ({ theme = "green", size = 3, disabled, children, className, ...props }) => {
   const baseStyles =
     "inline-flex items-center justify-center font-semibold rounded shadow-md transition-colors duration-300";
 
@@ -27,7 +27,7 @@ const Button: React.FC<ButtonProps> = ({ theme = "green", size = 3, disabled, ch
       "bg-brown-400 text-white border-4 border-brown-600 hover:bg-brown-500 disabled:bg-brown-300 disabled:cursor-not-allowed",
   };
 
-  const styles = `${baseStyles} ${sizeStyles[size]} ${colorStyles[theme]}`;
+  const styles = `${baseStyles} ${sizeStyles[size]} ${colorStyles[theme]} ${className}`;
 
   return (
     <button {...props} disabled={disabled} className={styles}>

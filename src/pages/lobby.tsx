@@ -1,41 +1,34 @@
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-
-/**
- * HOOKS
- */
-import { useAuth } from "../hooks/useAuth";
-import { useFunctions } from "../hooks/useFunctions";
-
 /**
  * COMPONENTS
  */
+import Navbar from "../components/navbar";
 import RoomList from "../components/lobby/RoomList";
+import Button from "../components/buttons/button";
+
+/**
+ * CONTEXT
+ */
+import { LobbyProvider } from "../context/LobbyContext";
+import LobbyButtons from "../components/lobby/LobbyButtons";
 
 const Lobby = () => {
-  const { playerAccount } = useAuth();
-  const { createGameRoom } = useFunctions();
-  const navigate = useNavigate();
-
-  if (!playerAccount) return <></>;
-
-  const handleCreateRoom = async () => {
-    const gameRoom = (await createGameRoom())?.data;
-    if (gameRoom) {
-      toast.success("Room created!");
-      navigate(`/room/${gameRoom.roomID}`);
-    }
-  };
-
   return (
-    <div className="flex w-full h-full px-1 pt-3">
-      <div className="w-3/5 h-[95%] p-3 mx-3 flex justify-center bg-black/5">
-        <RoomList />
+    <LobbyProvider>
+      <Navbar />
+      <div className="flex w-full h-full px-1 pt-3">
+        <div className="w-3/5 h-[95%] p-3 mx-3 flex justify-center bg-black/5">
+          <RoomList />
+        </div>
+        <div className="w-2/5 h-[95%] flex flex-col items-center">
+          <div className="h-full">
+            <div className="h-2/3">Hi</div>
+            <div className="h-1/3">
+              <LobbyButtons />
+            </div>
+          </div>
+        </div>
       </div>
-      <div className="w-2/5 flex flex-col items-center">
-        <div>hi</div>
-      </div>
-    </div>
+    </LobbyProvider>
   );
 };
 

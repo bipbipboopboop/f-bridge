@@ -1,27 +1,15 @@
 // RoomList.tsx
 import { memo } from "react";
 import { Tab, TabList, Tabs, TabPanel } from "../tabs/tabs";
-import { useCollectionData } from "react-firebase-hooks/firestore";
-import { CollectionReference, collection, orderBy, query } from "firebase/firestore";
-import { firestore } from "../../firebase";
-import { toast } from "react-toastify";
-import Loading from "../Loading";
 import RoomTable from "./RoomTable";
 import { GameRoom } from "types/Room";
+import { useRoomList } from "../../context/LobbyContext";
 
 const RoomList = () => {
-  const gameRoomsCollection = collection(firestore, `gameRooms`) as CollectionReference<GameRoom>;
-  const gameRoomsQuery = query(gameRoomsCollection, orderBy("createdAt", "desc"));
-  const [gameRoomList, isLoading, error] = useCollectionData(gameRoomsQuery);
+  const { roomList } = useRoomList();
 
-  if (isLoading) return <Loading />;
-  if (!gameRoomList) return <Loading />;
-  if (error) toast.error(error.message);
-
-  const openRoomList: GameRoom[] = gameRoomList.filter((room) => !room.settings.isInviteOnly);
-  const spectateRoomList: GameRoom[] = gameRoomList.filter(
-    (room) => room.settings.isSpectatorAllowed && !(room.status === "Waiting")
-  );
+  const openRoomList = roomList.filter((room) => !room.settings.isInviteOnly);
+  const spectateRoomList = roomList.filter((room) => room.settings.isSpectatorAllowed && !(room.status === "Waiting"));
 
   return (
     <Tabs className="w-full h-full bg-black/5 p-3 rounded">
