@@ -31,8 +31,8 @@ const Lobby = () => {
   };
 
   return (
-    <div className="flex w-100 px-1 pt-3">
-      <div className="w-3/5 px-5 flex justify-center">
+    <div className="flex w-100 h-100 px-1 pt-3">
+      <div className="w-3/5 h-[95%] p-3 mx-3 flex justify-center bg-black/5">
         <RoomList />
       </div>
       <div className="w-2/5 flex flex-col items-center">

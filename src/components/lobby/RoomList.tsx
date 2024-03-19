@@ -24,7 +24,7 @@ const RoomList = () => {
   );
 
   return (
-    <div className="w-full">
+    <div className="w-full h-full">
       <Tabs>
         <TabList className="flex p-0">
           <Tab
