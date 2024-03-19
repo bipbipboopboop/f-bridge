@@ -39,7 +39,7 @@ const Lobby = () => {
       </div>
       <div className="w-1/4 p-3 flex flex-col justify-between">
         <LobbyPlayerCard playerAccount={playerAccount} />
-        <div className="p-3 py-5 bg-gray-100">
+        <div className="p-3 py-5">
           <p>Join A Room! (Coming Soon)</p>
           <input type="text" className="h-12 w-full" />
           <Button theme="green" className="mr-2">
