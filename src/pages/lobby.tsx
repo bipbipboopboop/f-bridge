@@ -38,29 +38,6 @@ const Lobby = () => {
       <div className="w-2/5 flex flex-col items-center">
         <div>hi</div>
       </div>
-      {/* <div className="w-1/4 p-3 flex flex-col justify-between">
-        <LobbyPlayerCard playerAccount={playerAccount} />
-        <div className="p-3 py-5">
-          <p>Join A Room! (Coming Soon)</p>
-          <input type="text" className="h-12 w-full" />
-          <Button theme="green" className="mr-2">
-            Join Room
-          </Button>
-        </div>
-        <div className="flex flex-col p-3 space-y-5">
-          <div className="flex justify-center">
-            {playerAccount.roomID ? (
-              <Button theme="orange" onClick={() => navigate(`/party/${playerAccount.roomID}`)}>
-                Back to room
-              </Button>
-            ) : (
-              <Button theme="orange" onClick={handleCreateRoom}>
-                Create Room
-              </Button>
-            )}
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 };

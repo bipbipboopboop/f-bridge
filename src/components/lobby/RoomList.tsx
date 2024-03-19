@@ -1,3 +1,4 @@
+// RoomList.tsx
 import { memo } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { useCollectionData } from "react-firebase-hooks/firestore";
@@ -7,7 +8,6 @@ import { toast } from "react-toastify";
 import Loading from "../Loading";
 import RoomTable from "./RoomTable";
 import { GameRoom } from "types/Room";
-import Button from "../buttons/button";
 
 const RoomList = () => {
   const gameRoomsCollection = collection(firestore, `gameRooms`) as CollectionReference<GameRoom>;
@@ -24,26 +24,26 @@ const RoomList = () => {
   );
 
   return (
-    <div className="w-full h-full">
-      <Tabs>
+    <div className="w-full h-full bg-black/5 p-3 rounded">
+      <Tabs className="h-full flex flex-col">
         <TabList className="flex p-0">
           <Tab
-            className="w-100 flex-grow py-2 text-center rounded-tl-lg text-white hover:bg-[#006cb1]"
+            className="w-100 flex-grow py-2 text-center rounded-tl-lg text-white bg-[#006cb1] hover:bg-[#006cb1]"
             selectedClassName="bg-[#0567a6]"
           >
             Rooms
           </Tab>
           <Tab
-            className="w-100 flex-grow py-2 text-center rounded-tr-lg text-white hover:bg-[#006cb1]"
+            className="w-100 flex-grow py-2 text-center rounded-tr-lg text-white bg-[#006cb1] hover:bg-[#006cb1]"
             selectedClassName="bg-[#0567a6]"
           >
             Spectate
           </Tab>
         </TabList>
-        <TabPanel>
+        <TabPanel className="flex-grow rounded overflow-hidden">
           <RoomTable gameRoomList={openRoomList} />
         </TabPanel>
-        <TabPanel>
+        <TabPanel className="flex-grow rounded overflow-hidden">
           <RoomTable gameRoomList={spectateRoomList} />
         </TabPanel>
       </Tabs>
