@@ -1,10 +1,12 @@
-import Modal from "react-modal";
-import { toast } from "react-toastify";
-import Button from "../buttons/button";
-import { useFunctions } from "../../hooks/useFunctions";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
 import { useState } from "react";
+import { toast } from "react-toastify";
+import Modal from "react-modal";
+
+import { useNavigate } from "react-router-dom";
+import { useFunctions } from "../../hooks/useFunctions";
+import { useAuth } from "../../hooks/useAuth";
+
+import Button from "../buttons/button";
 
 const LobbyButtons = () => {
   const { createGameRoom, joinGameRoom } = useFunctions();
@@ -24,29 +26,42 @@ const LobbyButtons = () => {
   const handleJoinRoom = async () => {
     if (roomIdInput.trim() !== "") {
       await joinGameRoom(roomIdInput);
-      setIsModalOpen(false);
-      setRoomIdInput("");
+      closeModal();
+    }
+  };
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setRoomIdInput("");
+  };
+
+  const renderRoomButton = () => {
+    if (playerAccount?.roomID) {
+      return (
+        <Button theme="orange" className="mb-4" onClick={() => navigate(`/room/${playerAccount.roomID}`)}>
+          Return to Room
+        </Button>
+      );
+    } else {
+      return (
+        <Button theme="orange" className="mb-4" onClick={handleCreateRoom}>
+          Create Room
+        </Button>
+      );
     }
   };
 
   return (
     <div className="h-full flex flex-col justify-end">
-      {playerAccount?.roomID ? (
-        <Button theme="orange" className="mb-4" onClick={() => navigate(`/room/${playerAccount.roomID}`)}>
-          Return to Room
-        </Button>
-      ) : (
-        <Button theme="orange" className="mb-4" onClick={handleCreateRoom}>
-          Create Room
-        </Button>
-      )}
-      <Button theme="green" onClick={() => setIsModalOpen(true)}>
+      {renderRoomButton()}
+      <Button theme="green" onClick={openModal}>
         Join Room
       </Button>
 
       <Modal
         isOpen={isModalOpen}
-        onRequestClose={() => setIsModalOpen(false)}
+        onRequestClose={closeModal}
         contentLabel="Join Room Modal"
         className="bg-white rounded shadow p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50"
