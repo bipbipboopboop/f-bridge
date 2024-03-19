@@ -24,7 +24,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="w-100 py-3">
+    <nav className="w-full py-3">
       <div className="container mx-auto flex justify-between items-center">
         <div>
           {/* No decoration for link */}

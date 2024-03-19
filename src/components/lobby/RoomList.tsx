@@ -27,13 +27,13 @@ const RoomList = () => {
     <Tabs className="w-full h-full bg-black/5 p-3 rounded">
       <TabList className="flex">
         <Tab
-          className="w-100 py-2 text-center rounded-tl-lg text-white hover:bg-[#006cb1]"
+          className="w-1/2 py-2 text-center rounded-tl-lg text-white hover:bg-[#006cb1]"
           selectedClassName="bg-[#0567a6]"
         >
           Rooms
         </Tab>
         <Tab
-          className="w-100 py-2 text-center rounded-tr-lg text-white hover:bg-[#006cb1]"
+          className="w-1/2 py-2 text-center rounded-tr-lg text-white hover:bg-[#006cb1]"
           selectedClassName="bg-[#0567a6]"
         >
           Spectate

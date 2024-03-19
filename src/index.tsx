@@ -4,7 +4,6 @@ import { ToastContainer } from "react-toastify";
 
 import "./index.css";
 import "react-toastify/dist/ReactToastify.css";
-import "bootstrap/dist/css/bootstrap.css";
 import "./assets/fonts/font.ttf";
 
 import reportWebVitals from "./reportWebVitals";

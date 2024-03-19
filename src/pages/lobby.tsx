@@ -13,8 +13,6 @@ import { useFunctions } from "../hooks/useFunctions";
 import Button from "../components/buttons/button";
 import RoomList from "../components/lobby/RoomList";
 
-import LobbyPlayerCard from "../components/lobby/lobby-player-card";
-
 const Lobby = () => {
   const { playerAccount } = useAuth();
   const { createGameRoom } = useFunctions();
@@ -31,7 +29,7 @@ const Lobby = () => {
   };
 
   return (
-    <div className="flex w-100 h-100 px-1 pt-3">
+    <div className="flex w-full h-full px-1 pt-3">
       <div className="w-3/5 h-[95%] p-3 mx-3 flex justify-center bg-black/5">
         <RoomList />
       </div>
