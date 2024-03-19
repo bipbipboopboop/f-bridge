@@ -14,12 +14,15 @@ const LobbyButtons = () => {
       navigate(`/room/${gameRoom.roomID}`);
     }
   };
+
   return (
     <div className="h-full flex flex-col justify-end">
-      <Button theme="orange" className="mb-4">
+      <Button theme="orange" className="mb-4" onClick={handleCreateRoom}>
         Create Room
       </Button>
-      <Button theme="green">Join Room</Button>
+      <Button theme="green" disabled={true}>
+        Join Room
+      </Button>
     </div>
   );
 };
