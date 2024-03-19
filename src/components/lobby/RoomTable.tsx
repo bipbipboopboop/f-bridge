@@ -44,8 +44,8 @@ const RoomTable: React.FC<RoomTableProps> = ({ gameRoomList }) => {
   };
 
   return (
-    <div className="h-full overflow-y-auto">
-      <table className="w-full border-separate border-spacing-y-2">
+    <div className="h-[95%] overflow-auto">
+      <table className="min-w-full divide-y w-full border-separate border-spacing-y-2">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id} className="bg-[#006cb1] text-white">
@@ -57,7 +57,7 @@ const RoomTable: React.FC<RoomTableProps> = ({ gameRoomList }) => {
             </tr>
           ))}
         </thead>
-        <tbody>
+        <tbody className="divide-y">
           {table.getRowModel().rows.map((row) => (
             <tr
               key={row.id}

@@ -8,6 +8,7 @@ import Home from "./pages/home";
 
 import NotFound from "./pages/not-founds";
 import { useAuth } from "./hooks/useAuth";
+import Dummy from "./components/tabs/dummy";
 
 function App() {
   const { loading, playerAccount, user } = useAuth();
@@ -20,6 +21,7 @@ function App() {
         <Route path="/" element={<Home />} />
 
         <Route path="/lobby" element={<Lobby />} />
+        <Route path="/test" element={<Dummy />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
