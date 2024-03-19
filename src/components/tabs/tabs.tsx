@@ -1,30 +1,32 @@
-import React, { useState, ReactNode, createContext, useContext, HTMLAttributes } from "react";
+import React, { createContext, useContext, useState, ReactNode, HTMLAttributes, FunctionComponent } from "react";
 
-interface TabsProps extends HTMLAttributes<HTMLDivElement> {
-  children: ReactNode;
-}
+// Tabs Context
+const TabsContext = createContext<TabsContextType | undefined>(undefined);
 
-interface TabListProps extends HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode;
-}
+const useTabs = () => {
+  const context = useContext(TabsContext);
+  if (!context) throw new Error("useTabs must be used within a TabsProvider");
+  return context;
+};
 
-interface TabPanelProps extends HTMLAttributes<HTMLDivElement> {
-  tabId: string;
-  children: React.ReactNode;
+const TabsProvider: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
+  const [activeTabIndex, setActiveTabIndex] = useState<number>(0);
+  return <TabsContext.Provider value={{ activeTabIndex, setActiveTabIndex }}>{children}</TabsContext.Provider>;
+};
+
+interface TabsContextType {
+  activeTabIndex: number;
+  setActiveTabIndex: (index: number) => void;
 }
 
 interface TabProps extends HTMLAttributes<HTMLButtonElement> {
-  tabId: string;
-  children: React.ReactNode;
+  children: ReactNode;
+  index?: number;
   selectedClassName?: string;
 }
 
-interface TabsContextType {
-  activeTab: string;
-  setActiveTab: (tabId: string) => void;
-}
-
-const Tabs: React.FC<TabsProps> = ({ className, children }) => {
+// Tabs Component
+const Tabs: FunctionComponent<TabsProps & HTMLAttributes<HTMLDivElement>> = ({ children, className }) => {
   return (
     <TabsProvider>
       <div className={className}>{children}</div>
@@ -32,44 +34,46 @@ const Tabs: React.FC<TabsProps> = ({ className, children }) => {
   );
 };
 
-const TabList: React.FC<TabListProps> = ({ children, ...rest }) => {
-  return <div {...rest}>{children}</div>;
+// TabList Component
+const TabList: FunctionComponent<TabListProps & HTMLAttributes<HTMLDivElement>> = ({ children, ...rest }) => {
+  return (
+    <div {...rest}>
+      {React.Children.map(children, (child, index) => React.cloneElement(child as React.ReactElement<any>, { index }))}
+    </div>
+  );
 };
 
-const Tab: React.FC<TabProps> = ({ tabId, children, selectedClassName, className, ...rest }) => {
-  const { activeTab, setActiveTab } = useTabs();
-  const isActive = activeTab === tabId;
-
-  // Combine common classes with conditionally applied selectedClassName
-  const tabClasses = `${className || ""} ${isActive ? selectedClassName : ""}`.trim();
+// Tab Component
+const Tab: FunctionComponent<TabProps> = ({ children, index, selectedClassName, className = "", ...rest }) => {
+  const { activeTabIndex, setActiveTabIndex } = useTabs();
+  const isActive = index === activeTabIndex;
+  const tabClassName = isActive ? `${className} ${selectedClassName}` : className;
 
   return (
-    <button {...rest} onClick={() => setActiveTab(tabId)} className={tabClasses}>
+    <button {...rest} onClick={() => setActiveTabIndex(index ?? 0)} className={tabClassName}>
       {children}
     </button>
   );
 };
 
-const TabPanel: React.FC<TabPanelProps> = ({ tabId, children, ...rest }) => {
-  const { activeTab } = useTabs(); // Use the context to get the current active tab
+// TabPanel Component
+interface TabPanelProps extends HTMLAttributes<HTMLDivElement> {
+  index: number;
+  children: ReactNode;
+}
 
-  return activeTab === tabId ? <div {...rest}>{children}</div> : null;
+const TabPanel: FunctionComponent<TabPanelProps> = ({ index, children, ...rest }) => {
+  const { activeTabIndex } = useTabs();
+  return activeTabIndex === index ? <div {...rest}>{children}</div> : null;
 };
 
-const TabsContext = createContext<TabsContextType | undefined>(undefined);
+// Props Interfaces
+interface TabsProps {
+  children: ReactNode;
+}
 
-export const TabsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [activeTab, setActiveTab] = useState<string>("");
-
-  return <TabsContext.Provider value={{ activeTab, setActiveTab }}>{children}</TabsContext.Provider>;
-};
-
-export const useTabs = () => {
-  const context = useContext(TabsContext);
-  if (context === undefined) {
-    throw new Error("useTabs must be used within a TabsProvider");
-  }
-  return context;
-};
+interface TabListProps {
+  children: ReactNode;
+}
 
 export { Tabs, TabList, Tab, TabPanel };
