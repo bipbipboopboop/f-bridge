@@ -26,7 +26,7 @@ const Home = () => {
             size={4}
             onClick={() => {
               if (isPlayerInRoom) {
-                navigate(`party/${playerAccount.roomID}`);
+                navigate(`rooms/${playerAccount.roomID}`);
                 return;
               }
               navigate("/lobby");

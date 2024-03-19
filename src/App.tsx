@@ -1,8 +1,6 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 
-import Navbar from "./components/navbar";
-
 import Lobby from "./pages/lobby";
 import Home from "./pages/home";
 
@@ -19,6 +17,7 @@ function App() {
         <Route path="/" element={<Home />} />
 
         <Route path="/lobby" element={<Lobby />} />
+        <Route path="/room/:roomId" element={<Lobby />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

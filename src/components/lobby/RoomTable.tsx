@@ -30,12 +30,12 @@ const RoomTable: React.FC<RoomTableProps> = ({ gameRoomList }) => {
       const success = await joinGameRoom(roomID);
       if (success) {
         toast.success("Successfully joined room");
-        navigate(`/party/${roomID}`);
+        navigate(`/rooms/${roomID}`);
       }
       return;
     }
     if (playerAccount.roomID === row.original.roomID) {
-      navigate(`/party/${playerAccount.roomID}`);
+      navigate(`/rooms/${playerAccount.roomID}`);
       return;
     }
     if (row.original.players.length >= 4) {
