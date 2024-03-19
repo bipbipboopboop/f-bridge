@@ -28,13 +28,13 @@ const RoomList = () => {
       <Tabs className="h-full flex flex-col">
         <TabList className="flex p-0">
           <Tab
-            className="w-100 flex-grow py-2 text-center rounded-tl-lg text-white bg-[#006cb1] hover:bg-[#006cb1]"
+            className="w-100 flex-grow py-2 text-center rounded-tl-lg text-white hover:bg-[#006cb1]"
             selectedClassName="bg-[#0567a6]"
           >
             Rooms
           </Tab>
           <Tab
-            className="w-100 flex-grow py-2 text-center rounded-tr-lg text-white bg-[#006cb1] hover:bg-[#006cb1]"
+            className="w-100 flex-grow py-2 text-center rounded-tr-lg text-white hover:bg-[#006cb1]"
             selectedClassName="bg-[#0567a6]"
           >
             Spectate
