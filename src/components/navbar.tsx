@@ -44,20 +44,20 @@ const Navbar = () => {
             </svg>
           </button>
           <div className={`absolute right-0 mt-2 py-2 bg-white rounded-md shadow-lg ${isDropdownOpen ? "" : "hidden"}`}>
-            <a href="#" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+            <a href="/profile" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
               Edit Profile
             </a>
-            <a href="#" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+            <a href="/settings" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
               Settings
             </a>
             {user?.isAnonymous ? (
-              <a href="#" onClick={handleSignInWithGoogle} className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+              <div onClick={handleSignInWithGoogle} className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
                 Login
-              </a>
+              </div>
             ) : (
-              <a href="#" onClick={handleSignOut} className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+              <div onClick={handleSignOut} className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
                 Logout
-              </a>
+              </div>
             )}
           </div>
         </div>

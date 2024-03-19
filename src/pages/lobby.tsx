@@ -10,7 +10,6 @@ import { useFunctions } from "../hooks/useFunctions";
 /**
  * COMPONENTS
  */
-import Button from "../components/buttons/button";
 import RoomList from "../components/lobby/RoomList";
 
 const Lobby = () => {
