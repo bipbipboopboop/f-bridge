@@ -1,3 +1,4 @@
+// ChatboxInput.tsx
 import { ChangeEvent, FormEvent, memo, useState } from "react";
 import { useParams } from "react-router-dom";
 import Button from "../buttons/button";
@@ -9,14 +10,10 @@ import { useAuth } from "../../hooks/useAuth";
 const ChatboxInput = () => {
   const { roomID } = useParams();
   const { playerAccount } = useAuth();
-  // const { sendMessage } = useFunctions();
   const [inputMessage, setInputMessage] = useState<string>("");
-
   const messagesCollection = collection(firestore, `gameRooms/${roomID}/messages`) as CollectionReference<Message>;
 
-  // console.log("ChatboxInput loaded");
-  if (!roomID) return <></>;
-  if (!playerAccount) return <></>;
+  if (!roomID || !playerAccount) return null;
 
   const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     setInputMessage(e.target.value);
@@ -24,20 +21,24 @@ const ChatboxInput = () => {
 
   const onSendMessage = async (e: FormEvent) => {
     e.preventDefault();
-    // await sendMessage({ roomID, message: inputMessage });
     await addDoc(messagesCollection, {
       createdAt: Timestamp.now(),
-      playerName: playerAccount!.displayName,
-      uid: playerAccount!.id,
+      playerName: playerAccount.displayName,
+      uid: playerAccount.id,
       text: inputMessage,
     });
     setInputMessage("");
   };
 
   return (
-    <form className="chatbox-bottom" onSubmit={onSendMessage}>
-      <input type="text" className="textbox" value={inputMessage} onChange={onChangeInput} />
-      <Button theme="green" type="submit" disabled={!inputMessage}>
+    <form onSubmit={onSendMessage} className="flex items-center">
+      <input
+        type="text"
+        value={inputMessage}
+        onChange={onChangeInput}
+        className="flex-grow mr-2 h-full rounded border border-gray-300 text-black"
+      />
+      <Button theme="green" size={2} type="submit" disabled={!inputMessage}>
         Send
       </Button>
     </form>
