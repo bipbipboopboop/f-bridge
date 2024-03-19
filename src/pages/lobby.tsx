@@ -3,13 +3,13 @@
  */
 import Navbar from "../components/navbar";
 import RoomList from "../components/lobby/RoomList";
-import Button from "../components/buttons/button";
 
 /**
  * CONTEXT
  */
 import { LobbyProvider } from "../context/LobbyContext";
 import LobbyButtons from "../components/lobby/LobbyButtons";
+import LobbyAvatar from "../components/lobby/LobbyAvatar";
 
 const Lobby = () => {
   return (
@@ -21,7 +21,9 @@ const Lobby = () => {
         </div>
         <div className="w-2/5 h-[95%] flex flex-col items-center">
           <div className="h-full">
-            <div className="h-2/3">Hi</div>
+            <div className="h-2/3">
+              <LobbyAvatar />
+            </div>
             <div className="h-1/3">
               <LobbyButtons />
             </div>
