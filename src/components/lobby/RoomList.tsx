@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import Loading from "../Loading";
 import RoomTable from "./RoomTable";
 import { GameRoom } from "types/Room";
+import Button from "../buttons/button";
 
 const RoomList = () => {
   const gameRoomsCollection = collection(firestore, `gameRooms`) as CollectionReference<GameRoom>;
@@ -23,7 +24,7 @@ const RoomList = () => {
   );
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
+    <div className="w-full">
       <Tabs>
         <TabList className="flex p-0">
           <Tab

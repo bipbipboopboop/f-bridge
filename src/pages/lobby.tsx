@@ -31,13 +31,14 @@ const Lobby = () => {
   };
 
   return (
-    <div className="flex w-100 px-5 pt-3">
-      <div className="w-1/2">
-        <div className="flex justify-center">
-          <RoomList />
-        </div>
+    <div className="flex w-100 px-1 pt-3">
+      <div className="w-3/5 px-5 flex justify-center">
+        <RoomList />
       </div>
-      <div className="w-1/4 p-3 flex flex-col justify-between">
+      <div className="w-2/5 flex flex-col items-center">
+        <div>hi</div>
+      </div>
+      {/* <div className="w-1/4 p-3 flex flex-col justify-between">
         <LobbyPlayerCard playerAccount={playerAccount} />
         <div className="p-3 py-5">
           <p>Join A Room! (Coming Soon)</p>
@@ -59,7 +60,7 @@ const Lobby = () => {
             )}
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
