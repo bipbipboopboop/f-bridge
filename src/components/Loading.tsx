@@ -9,7 +9,7 @@ interface LoadingProps {
 
 const Loading: React.FC<LoadingProps> = ({ text, loaderProps }) => {
   return (
-    <div className="h-full w-full flex flex-col justify-content-center items-center">
+    <div className="h-full w-full flex flex-col justify-center items-center">
       <PacmanLoader color="#98FB98" {...loaderProps} />
       <p className="my-4">{text}</p>
     </div>
