@@ -25,7 +25,7 @@ const Chatbox = () => {
     <div className="bg-black/10 p-4 rounded-lg h-full w-full flex flex-col text-sm">
       <div className="h-5/6 pt-5">
         <h4 className="text-lg font-bold mb-2">Chat</h4>
-        <div ref={messageListRef} className="flex flex-col max-h-[95%] overflow-y-scroll">
+        <div ref={messageListRef} className="flex flex-col max-h-full overflow-y-scroll">
           {messageList?.map((message, index) => (
             <ChatMessage message={message} key={index} />
           ))}

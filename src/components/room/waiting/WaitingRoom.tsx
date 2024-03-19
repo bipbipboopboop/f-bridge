@@ -5,8 +5,8 @@ import Navbar from "../../navbar";
 
 const WaitingRoom = ({ room }: { room: GameRoom }) => {
   return (
-    <div className="h-full">
-      <div className="h-[5%]">
+    <div className="h-full w-full">
+      <div className="h-[5%] w-full">
         <Navbar />
       </div>
       <div className="flex w-full h-[95%] px-10">
