@@ -31,7 +31,7 @@ const Lobby = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex w-100 px-5 pt-3">
       <div className="w-1/2">
         <div className="flex justify-center">
           <RoomList />
