@@ -19,7 +19,7 @@ const LobbyButtons = () => {
     const gameRoom = (await createGameRoom())?.data;
     if (gameRoom) {
       toast.success("Room created!");
-      navigate(`/room/${gameRoom.roomID}`);
+      navigate(`/rooms/${gameRoom.roomID}`);
     }
   };
 
@@ -39,7 +39,7 @@ const LobbyButtons = () => {
   const renderRoomButton = () => {
     if (playerAccount?.roomID) {
       return (
-        <Button theme="orange" className="mb-4" onClick={() => navigate(`/room/${playerAccount.roomID}`)}>
+        <Button theme="orange" className="mb-4" onClick={() => navigate(`/rooms/${playerAccount.roomID}`)}>
           Return to Room
         </Button>
       );

@@ -21,7 +21,7 @@ interface FunctionContextProps {
   signOut: ReturnType<typeof useSignOut>[0];
   joinGameRoom: (data?: string | undefined) => Promise<HttpsCallableResult<void> | undefined>;
   createGameRoom: () => Promise<HttpsCallableResult<GameRoom> | undefined>;
-  leaveGameRoom: () => Promise<HttpsCallableResult<void> | undefined>;
+  leaveGameRoom: (data: string) => Promise<HttpsCallableResult<void> | undefined>;
   toggleReady: (roomId: string) => Promise<HttpsCallableResult<void> | undefined>;
   startGame: () => Promise<HttpsCallableResult<void> | undefined>;
   placeBid: (bid: Bid) => Promise<HttpsCallableResult<void> | undefined>;
@@ -51,7 +51,7 @@ export const FunctionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [signOut, l2, e2] = useSignOut(auth);
   const [createGameRoom, l3, e3] = useHttpsCallable<void, GameRoom>(functions, "createGameRoom");
   const [joinGameRoom, l4, e4] = useHttpsCallable<string, void>(functions, "joinGameRoom");
-  const [leaveGameRoom, l5, e5] = useHttpsCallable<void, void>(functions, "leaveGameRoom");
+  const [leaveGameRoom, l5, e5] = useHttpsCallable<string, void>(functions, "leaveGameRoom");
   const [toggleReady, l6, e6] = useHttpsCallable<string, void>(functions, "toggleReady");
   const [startGame, l7, e7] = useHttpsCallable<void, void>(functions, "startGame");
   const [placeBid, l8, e8] = useHttpsCallable<Bid, void>(functions, "placeBid");
