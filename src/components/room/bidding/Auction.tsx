@@ -43,6 +43,7 @@ const Auction: React.FC = () => {
                 className={`bg-transparent w-[34px] h-[34px] rounded-[34px] text-base overflow-hidden border-none ${
                   highestBid?.level === level ? "text-white bg-[#4A90E2]" : ""
                 }`}
+                onClick={() => console.log(`Bid ${level}`)}
               >
                 {level}
               </button>
