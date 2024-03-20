@@ -2,6 +2,7 @@ import { useAuth } from "../../../hooks/useAuth";
 import { useBiddingPhase } from "../../../context/BiddingContext";
 import { useRestrictedPlayerData } from "../../../context/RestrictedPlayerContext";
 import PlayingCard from "../../PlayingCard";
+import MatchAvatar from "../MatchAvatar";
 
 const Hands: React.FC = () => {
   const { playerAccount } = useAuth();
@@ -37,6 +38,12 @@ const Hands: React.FC = () => {
           ))}
         </div>
       </div>
+
+      <MatchAvatar position={westPlayerPosition} className="absolute top-1/4 left-10" />
+      <MatchAvatar position={northPlayerPosition} className="absolute top-5 left-28" />
+      <MatchAvatar position={eastPlayerPosition} className="absolute top-1/4 right-10" />
+      <MatchAvatar position={currentPlayerPosition} className="absolute bottom-[16%] right-10" />
+
       {/* West Player */}
       <div className="absolute top-1/3 left-[22%]">
         <div className="flex relative">
@@ -57,8 +64,8 @@ const Hands: React.FC = () => {
         </div>
       </div>
       {/* North Player */}
-      <div className="absolute top-4 left-1/2 transform -translate-x-1/2">
-        <div className="flex justify-center -space-x-[12%]">
+      <div className="absolute top-5 left-1/2 transform -translate-x-1/2">
+        <div className="flex justify-center -space-x-[5%]">
           {Array.from({
             length: biddingPhase.players.find((player) => player.position === northPlayerPosition)?.numCardsOnHand || 0,
           }).map((_, index) => (
