@@ -25,7 +25,6 @@ const RoomButtonPanel = ({ room }: { room: GameRoom }) => {
           theme="orange"
           size={2}
           onClick={async () => {
-            await toggleReady(roomID);
             await startGame();
           }}
           disabled={!isGameReady}

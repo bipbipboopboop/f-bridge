@@ -25,8 +25,16 @@ const LobbyButtons = () => {
 
   const handleJoinRoom = async () => {
     if (roomIdInput.trim() !== "") {
-      await joinGameRoom(roomIdInput);
+      const success = await joinGameRoom(roomIdInput);
+      if (success) {
+        toast.success("Successfully joined room");
+        navigate(`/rooms/${roomIdInput}`);
+      }
+      if (!success) {
+        toast.error("Opps, your room dissapeared :(");
+      }
       closeModal();
+      return;
     }
   };
 

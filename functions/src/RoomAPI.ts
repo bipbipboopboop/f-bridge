@@ -6,7 +6,7 @@ import { nanoid } from "nanoid";
 import { GameRoom } from "types/Room";
 import { PublicPlayer } from "types/Player";
 import { RestrictedAccountInfo } from "types/Account";
-import { PublicBiddingPhase, RestrictedPlayerData } from "types/GameState";
+import { PublicBiddingPhase } from "types/GameState";
 
 import { UnauthenticatedError } from "./error/error";
 import { shuffleCards } from "./utils/shuffle_cards";
@@ -165,58 +165,73 @@ export const joinGameRoom = functions.region("asia-east2").https.onCall(async (r
  *
  */
 export const leaveGameRoom = functions.region("asia-east2").https.onCall(async (roomID: string, context) => {
+  // Check if the user is authenticated
   if (!context.auth) {
-    throw UnauthenticatedError;
+    throw new functions.https.HttpsError("unauthenticated", "User is not authenticated.");
   }
 
   const playerAccountRef = admin
     .firestore()
     .collection("accounts")
     .doc(context.auth.uid) as DocumentReference<RestrictedAccountInfo>;
-  const gameRoomRef = admin.firestore().collection("gameRooms").doc(roomID);
+
+  const gameRoomRef = admin.firestore().collection("gameRooms").doc(roomID) as DocumentReference<GameRoom>;
 
   const [playerAccountSnapshot, gameRoomSnapshot] = await Promise.all([playerAccountRef.get(), gameRoomRef.get()]);
 
   const playerAccountData = playerAccountSnapshot.data();
-  const gameRoomData = gameRoomSnapshot.data() as GameRoom;
+  const gameRoomData = gameRoomSnapshot.data();
 
+  // Check if the player exists and is in this room
   if (!playerAccountData || playerAccountData.roomID !== roomID) {
-    throw new functions.https.HttpsError("failed-precondition", "You can't leave a room you don't belong to.");
+    throw new functions.https.HttpsError("failed-precondition", "You can't leave a room you don't belong to");
   }
 
-  if (!gameRoomSnapshot.exists) {
-    throw new functions.https.HttpsError("not-found", "This game no longer exists.");
+  // Check if the game room exists
+  if (!gameRoomData) {
+    throw new functions.https.HttpsError("not-found", "This game no longer exists");
   }
 
+  // Check if the player is the only one in the room
   if (gameRoomData.playerCount === 1) {
-    await Promise.all([gameRoomRef.delete(), playerAccountRef.update({ roomID: null })]);
-    return { success: true };
+    await Promise.all([
+      gameRoomRef.delete(),
+      playerAccountRef.update({
+        roomID: null,
+      }),
+    ]);
+    return;
   }
 
   const isPlayerHost = gameRoomData.hostID === context.auth.uid;
-  const publicPlayersRef = gameRoomRef.collection("publicPlayers");
+  const updatedPlayers = gameRoomData.players.filter((player) => player.id !== context.auth!.uid);
 
   if (isPlayerHost) {
-    const remainingPlayersSnapshot = await publicPlayersRef.where("id", "!=", context.auth.uid).limit(1).get();
-    const newHostId = remainingPlayersSnapshot.docs[0].id;
-
-    await gameRoomRef.update({ hostID: newHostId });
-    await publicPlayersRef.doc(newHostId).update({ isHost: true });
-  }
-
-  const uid = context.auth.uid;
-  const playerIndex = gameRoomData.players.findIndex((player) => player.id === uid);
-  if (playerIndex !== -1) {
-    const updatedPlayers = gameRoomData.players.filter((player) => player.id !== uid);
+    const newHostPlayer = updatedPlayers[0];
     await gameRoomRef.update({
-      playerCount: gameRoomData.playerCount - 1,
-      players: updatedPlayers,
+      hostID: newHostPlayer.id,
+      players: updatedPlayers.map((player, index) => ({
+        ...player,
+        isHost: player.id === newHostPlayer.id,
+        position: index as 0 | 1 | 2 | 3,
+        isReady: false, // Set all players to "Not Ready"
+      })),
+      playerCount: updatedPlayers.length,
+    });
+  } else {
+    await gameRoomRef.update({
+      players: updatedPlayers.map((player, index) => ({
+        ...player,
+        position: index as 0 | 1 | 2 | 3,
+        isReady: false, // Set all players to "Not Ready"
+      })),
+      playerCount: updatedPlayers.length,
     });
   }
 
-  await Promise.all([publicPlayersRef.doc(context.auth.uid).delete(), playerAccountRef.update({ roomID: null })]);
-
-  return { success: true };
+  await playerAccountRef.update({
+    roomID: null,
+  });
 });
 
 /**
@@ -239,6 +254,7 @@ export const toggleReady = functions.region("asia-east2").https.onCall(async (ro
     .firestore()
     .collection("accounts")
     .doc(context.auth.uid) as DocumentReference<RestrictedAccountInfo>;
+
   const playerAccountSnapshot = await playerAccountRef.get();
   const playerAccountData = playerAccountSnapshot.data() as RestrictedAccountInfo;
 
@@ -258,11 +274,18 @@ export const toggleReady = functions.region("asia-east2").https.onCall(async (ro
     throw new functions.https.HttpsError("failed-precondition", "Player is not in the specified room.");
   }
 
-  const publicPlayersRef = gameRoomRef.collection("publicPlayers").doc(context.auth.uid);
-  const publicPlayerSnapshot = await publicPlayersRef.get();
-  const publicPlayerData = publicPlayerSnapshot.data() as PublicPlayer;
+  const uid = context.auth.uid;
 
-  await publicPlayersRef.update({ isReady: !publicPlayerData.isReady });
+  const playerIndex = gameRoomData.players.findIndex((player) => player.id === uid);
+
+  if (playerIndex === -1) {
+    throw new functions.https.HttpsError("not-found", "Player not found in the game room.");
+  }
+
+  const updatedPlayers = [...gameRoomData.players];
+  updatedPlayers[playerIndex].isReady = !updatedPlayers[playerIndex].isReady;
+
+  await gameRoomRef.update({ players: updatedPlayers });
 
   return { success: true };
 });
@@ -283,7 +306,7 @@ export const toggleReady = functions.region("asia-east2").https.onCall(async (ro
  */
 export const startGame = functions.region("asia-east2").https.onCall(async (data: void, context) => {
   if (!context.auth) {
-    throw UnauthenticatedError;
+    throw new functions.https.HttpsError("unauthenticated", "User is not authenticated.");
   }
 
   const playerAccountRef = admin
@@ -313,22 +336,20 @@ export const startGame = functions.region("asia-east2").https.onCall(async (data
     throw new functions.https.HttpsError("already-exists", "Game has already started or ended.");
   }
 
-  const publicPlayersSnapshot = await gameRoomRef.collection("publicPlayers").get();
-  const readyPlayers = publicPlayersSnapshot.docs.filter((doc) => doc.data().isReady);
-  if (readyPlayers.length !== gameRoomData.playerCount) {
+  const uid = context.auth.uid;
+  const otherPlayers = gameRoomData.players.filter((player) => player.id !== uid);
+  const allOtherPlayersReady = otherPlayers.every((player) => player.isReady);
+
+  if (!allOtherPlayersReady) {
     throw new functions.https.HttpsError("failed-precondition", "Not all players are ready.");
   }
 
   const deck = shuffleCards();
-  const restrictedPlayersRef = gameRoomRef.collection("restrictedPlayers");
+  const restrictedPlayersRef = gameRoomRef.collection("restrictedPlayerCards");
 
-  for (const playerDoc of publicPlayersSnapshot.docs) {
+  for (const player of gameRoomData.players) {
     const playerCards = deck.splice(0, 13);
-    const restrictedPlayerData: RestrictedPlayerData = {
-      id: playerDoc.id,
-      cards: playerCards,
-    };
-    await restrictedPlayersRef.doc(playerDoc.id).set(restrictedPlayerData);
+    await restrictedPlayersRef.doc(player.id).set({ cards: playerCards });
   }
 
   const publicBiddingPhaseData: PublicBiddingPhase = {
@@ -336,11 +357,13 @@ export const startGame = functions.region("asia-east2").https.onCall(async (data
     numPasses: 0,
     highestBid: null,
     bidHistory: [],
-    players: publicPlayersSnapshot.docs.map((doc) => doc.data() as PublicPlayer),
+    players: gameRoomData.players,
   };
 
   await gameRoomRef.collection("publicGameState").doc("biddingPhase").set(publicBiddingPhaseData);
-  await gameRoomRef.update({ status: "Bidding" });
+  await gameRoomRef.update({
+    status: "Bidding",
+  });
 
   return { success: true };
 });
