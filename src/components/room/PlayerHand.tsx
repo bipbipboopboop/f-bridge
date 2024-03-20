@@ -5,12 +5,11 @@ import PlayingCard from "../PlayingCard";
 import Button from "../buttons/button";
 
 interface PlayerHandProps {
-  position: number;
   restrictedPlayer: RestrictedPlayerData;
   isCurrentPlayer: boolean;
 }
 
-const PlayerHand: React.FC<PlayerHandProps> = ({ position, restrictedPlayer, isCurrentPlayer }) => {
+const PlayerHand: React.FC<PlayerHandProps> = ({ restrictedPlayer, isCurrentPlayer }) => {
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
   const { room } = useRoom();
   //   const { trickTakingPhase } = useTrickTakingPhase();

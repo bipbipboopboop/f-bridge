@@ -7,6 +7,7 @@ import { BiddingProvider } from "../../../context/BiddingContext";
 import { RestrictedPlayerProvider } from "../../../context/RestrictedPlayerContext";
 
 import { useAuth } from "../../../hooks/useAuth";
+import Match from "../Match";
 
 const BiddingRoom: React.FC = () => {
   const { playerAccount } = useAuth();
@@ -23,7 +24,8 @@ const BiddingRoom: React.FC = () => {
         <div className="flex w-full h-full">
           <div className="relative h-full w-3/4 pt-4">
             <Auction />
-            <MatchPeripheral />
+            {/* <MatchPeripheral /> */}
+            <Match />
           </div>
           <div className="h-full w-1/4 p-4">
             <Chatbox />

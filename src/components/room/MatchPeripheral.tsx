@@ -3,6 +3,7 @@ import { useBiddingPhase } from "../../context/BiddingContext";
 import { useRestrictedPlayerData } from "../../context/RestrictedPlayerContext";
 import PlayingCard from "../PlayingCard";
 import MatchAvatar from "./MatchAvatar";
+import PlayerHand from "./PlayerHand";
 
 const MatchPeripheral: React.FC = () => {
   const { playerAccount } = useAuth();
@@ -23,21 +24,7 @@ const MatchPeripheral: React.FC = () => {
 
   return (
     <div className="top-0 left-0 w-full h-full">
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-        <div className="flex justify-center -space-x-[12%]">
-          {restrictedPlayer.cards.map((card, index) => (
-            <PlayingCard
-              key={index}
-              card={card}
-              style={{ zIndex: 40 - index * 2 }}
-              className="cursor-pointer transition-transform duration-300 ease-in-out hover:transform hover:-translate-y-8"
-              onClick={() => {
-                alert(card.rank + card.suit);
-              }}
-            />
-          ))}
-        </div>
-      </div>
+      <PlayerHand restrictedPlayer={restrictedPlayer} isCurrentPlayer={currentPlayerId === playerAccount?.id} />
 
       <MatchAvatar position={westPlayerPosition} className="absolute top-1/4 left-10" />
       <MatchAvatar position={northPlayerPosition} className="absolute top-5 left-28" />

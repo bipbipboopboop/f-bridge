@@ -37,11 +37,7 @@ const Match: React.FC = () => {
 
   return (
     <div className="top-0 left-0 w-full h-full">
-      <PlayerHand
-        position={southPlayerPosition}
-        restrictedPlayer={restrictedPlayer}
-        isCurrentPlayer={currentPlayerId === playerAccount.id}
-      />
+      <PlayerHand restrictedPlayer={restrictedPlayer} isCurrentPlayer={currentPlayerId === playerAccount.id} />
 
       <MatchAvatar position={westPlayerPosition} className="absolute top-1/4 left-10" />
       <MatchAvatar position={northPlayerPosition} className="absolute top-5 left-28" />
