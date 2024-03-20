@@ -28,8 +28,6 @@ export const RoomProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const [room, isRoomLoading, error] = useDocumentData(gameRoomRef);
 
-  console.log("room", room);
-
   if (error) {
     toast.error(error.message);
   }

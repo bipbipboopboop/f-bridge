@@ -2,12 +2,12 @@
 import React from "react";
 import Chatbox from "../../chat/Chatbox";
 import Auction from "./Auction";
-import MatchPeripheral from "../MatchPeripheral";
+
 import { BiddingProvider } from "../../../context/BiddingContext";
 import { RestrictedPlayerProvider } from "../../../context/RestrictedPlayerContext";
 
 import { useAuth } from "../../../hooks/useAuth";
-import Match from "../Match";
+import MatchPeripheral from "../MatchPeripheral";
 
 const BiddingRoom: React.FC = () => {
   const { playerAccount } = useAuth();
@@ -24,8 +24,7 @@ const BiddingRoom: React.FC = () => {
         <div className="flex w-full h-full">
           <div className="relative h-full w-3/4 pt-4">
             <Auction />
-            {/* <MatchPeripheral /> */}
-            <Match />
+            <MatchPeripheral />
           </div>
           <div className="h-full w-1/4 p-4">
             <Chatbox />
