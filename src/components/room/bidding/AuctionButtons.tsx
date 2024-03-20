@@ -56,7 +56,7 @@ const AuctionButtons = () => {
           Pass
         </Button>
         {selectedNumber && selectedSuit && (
-          <Button size={1} theme="green" className="py-1.5 px-3.5 text-white text-xs" onClick={handleConfirmClick}>
+          <Button size={1} theme="yellow" className="py-1.5 px-3.5 text-xs" onClick={handleConfirmClick}>
             Confirm
           </Button>
         )}
@@ -70,13 +70,13 @@ const AuctionButtons = () => {
             } ${selectedNumber === level ? "bg-black/20 text-white" : ""}`}
             onClick={() => handleNumberClick(level as BidLevel)}
           >
-            {level}
+            <div className="flex justify-center relative top-1">{level}</div>
           </button>
         ))}
       </div>
       {selectedNumber && (
         <div className="bg-black/5 border border-[#62626226] rounded-md grid grid-cols-7 justify-items-center py-1 px-5 mt-2.5">
-          {["♣", "♦", "♥", "♠", , "NT"].map((suit) => {
+          {["♣", "♦", "♥", "♠", "NT"].map((suit) => {
             const isRedSuit = suit === "♥" || suit === "♦";
             return (
               <button
@@ -87,7 +87,11 @@ const AuctionButtons = () => {
                 style={{ color: isRedSuit ? "#FF525D" : "#222222" }}
                 onClick={() => handleBidSuitClick(suit as BidSuit)}
               >
-                {suit}
+                <div
+                  className={`flex justify-center relative ${suit === "NT" ? "text-sm top-1" : "text-4xl bottom-1"}`}
+                >
+                  {suit}
+                </div>
               </button>
             );
           })}
