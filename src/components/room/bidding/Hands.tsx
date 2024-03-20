@@ -25,7 +25,15 @@ const Hands: React.FC = () => {
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
         <div className="flex justify-center -space-x-[12%]">
           {restrictedPlayer.cards.map((card, index) => (
-            <PlayingCard key={index} card={card} style={{ zIndex: 40 - index * 2 }} />
+            <PlayingCard
+              key={index}
+              card={card}
+              style={{ zIndex: 40 - index * 2 }}
+              className="cursor-pointer transition-transform duration-300 ease-in-out hover:transform hover:-translate-y-8"
+              onClick={() => {
+                alert(card.rank + card.suit);
+              }}
+            />
           ))}
         </div>
       </div>
