@@ -65,7 +65,7 @@ const RoomTable: React.FC<RoomTableProps> = ({ gameRoomList }) => {
                 key={row.id}
                 onClick={() => handleRowClick(row)}
                 className={`bg-black/5 text-white hover:bg-[#006cb1] cursor-pointer ${
-                  isRoomAvailable ? "hover:bg-gray-200" : "pointer-events-none"
+                  isRoomAvailable ? "hover:bg-black/10" : "pointer-events-none"
                 }`}
               >
                 {row.getVisibleCells().map((cell) => (
