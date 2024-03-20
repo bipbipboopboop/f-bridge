@@ -7,6 +7,7 @@ import Home from "./pages/home";
 import NotFound from "./pages/not-found";
 import { useAuth } from "./hooks/useAuth";
 import Room from "./pages/room";
+import { RoomProvider } from "./context/RoomContext";
 
 function App() {
   const { loading, playerAccount, user } = useAuth();
@@ -17,7 +18,14 @@ function App() {
         <Route path="/" element={<Home />} />
 
         <Route path="/lobby" element={<Lobby />} />
-        <Route path="/rooms/:roomID" element={<Room />} />
+        <Route
+          path="/rooms/:roomID"
+          element={
+            <RoomProvider>
+              <Room />
+            </RoomProvider>
+          }
+        />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
