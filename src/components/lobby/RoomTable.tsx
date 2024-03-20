@@ -58,23 +58,24 @@ const RoomTable: React.FC<RoomTableProps> = ({ gameRoomList }) => {
           ))}
         </thead>
         <tbody className="divide-y">
-          {table.getRowModel().rows.map((row) => (
-            <tr
-              key={row.id}
-              className={`bg-black/5 text-white hover:bg-[#006cb1] cursor-pointer ${
-                row.original.settings.isInviteOnly || row.original.players.length >= 4
-                  ? "opacity-50 cursor-default"
-                  : ""
-              }`}
-              onClick={() => handleRowClick(row)}
-            >
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className="py-2 px-4">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
+          {table.getRowModel().rows.map((row) => {
+            const isRoomAvailable = !(row.original.players.length >= 4 || row.original.settings.isInviteOnly);
+            return (
+              <tr
+                key={row.id}
+                onClick={() => handleRowClick(row)}
+                className={`bg-black/5 text-white hover:bg-[#006cb1] cursor-pointer ${
+                  isRoomAvailable ? "hover:bg-gray-200" : "pointer-events-none"
+                }`}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id} className="py-2 px-4">
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
