@@ -5,9 +5,10 @@ import PlayingCard from "../../PlayingCard";
 
 const Hands: React.FC = () => {
   const { playerAccount } = useAuth();
-  const currentPlayerId = playerAccount?.id;
   const { restrictedPlayer } = useRestrictedPlayerData();
   const { biddingPhase } = useBiddingPhase();
+
+  const currentPlayerId = playerAccount?.id;
 
   if (!biddingPhase || !restrictedPlayer) {
     return null;
@@ -18,8 +19,6 @@ const Hands: React.FC = () => {
   const westPlayerPosition = (currentPlayerPosition + 3) % 4;
   const northPlayerPosition = (currentPlayerPosition + 2) % 4;
   const eastPlayerPosition = (currentPlayerPosition + 1) % 4;
-
-  console.log({ currentPlayerPosition, westPlayerPosition, northPlayerPosition, eastPlayerPosition });
 
   return (
     <div className="top-0 left-0 w-full h-full">

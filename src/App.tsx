@@ -10,7 +10,6 @@ import Room from "./pages/room";
 
 function App() {
   const { loading, playerAccount, user } = useAuth();
-  console.log({ playerAccount, user, loading });
 
   return (
     <div className="App">
