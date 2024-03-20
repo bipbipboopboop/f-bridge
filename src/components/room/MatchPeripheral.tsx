@@ -1,10 +1,10 @@
-import { useAuth } from "../../../hooks/useAuth";
-import { useBiddingPhase } from "../../../context/BiddingContext";
-import { useRestrictedPlayerData } from "../../../context/RestrictedPlayerContext";
-import PlayingCard from "../../PlayingCard";
-import MatchAvatar from "../MatchAvatar";
+import { useAuth } from "../../hooks/useAuth";
+import { useBiddingPhase } from "../../context/BiddingContext";
+import { useRestrictedPlayerData } from "../../context/RestrictedPlayerContext";
+import PlayingCard from "../PlayingCard";
+import MatchAvatar from "./MatchAvatar";
 
-const Hands: React.FC = () => {
+const MatchPeripheral: React.FC = () => {
   const { playerAccount } = useAuth();
   const { restrictedPlayer } = useRestrictedPlayerData();
   const { biddingPhase } = useBiddingPhase();
@@ -95,4 +95,4 @@ const Hands: React.FC = () => {
   );
 };
 
-export default Hands;
+export default MatchPeripheral;

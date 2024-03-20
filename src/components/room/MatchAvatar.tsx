@@ -19,9 +19,7 @@ const MatchAvatar: React.FC<MatchAvatarProps> = ({ position, className }) => {
   if (!playerAccount || !biddingPhase || !room) {
     return null;
   }
-
   let phase: PublicBiddingPhase | PublicTrickTakingPhase;
-
   if (room.status === "Bidding") {
     phase = biddingPhase!;
   } else {
@@ -30,12 +28,7 @@ const MatchAvatar: React.FC<MatchAvatarProps> = ({ position, className }) => {
 
   const player = phase?.players.find((player) => player.position === position);
   const avatar = player ? avatarLookup[player.avatarID] : null;
-
-  let isCurrentTurn = false;
-  if (room.status === "Bidding" && biddingPhase) {
-    isCurrentTurn = player?.id === biddingPhase.players[biddingPhase.currentPlayerIndex].id;
-  }
-
+  const isCurrentTurn = player?.position === phase.currentPlayerIndex;
   const isSouthPlayer = player?.id === playerAccount.id;
 
   return (

@@ -2,7 +2,7 @@
 import React from "react";
 import Chatbox from "../../chat/Chatbox";
 import Auction from "./Auction";
-import Hands from "./Hands";
+import MatchPeripheral from "../MatchPeripheral";
 import { BiddingProvider } from "../../../context/BiddingContext";
 import { RestrictedPlayerProvider } from "../../../context/RestrictedPlayerContext";
 
@@ -23,7 +23,7 @@ const BiddingRoom: React.FC = () => {
         <div className="flex w-full h-full">
           <div className="relative h-full w-3/4 pt-4">
             <Auction />
-            <Hands />
+            <MatchPeripheral />
           </div>
           <div className="h-full w-1/4 p-4">
             <Chatbox />
