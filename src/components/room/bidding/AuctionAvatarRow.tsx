@@ -5,9 +5,11 @@ import { useAuth } from "../../../hooks/useAuth";
 const AuctionAvatarRow = () => {
   const { playerAccount } = useAuth();
   const { biddingPhase } = useBiddingPhase();
+
   if (!biddingPhase) {
     return null;
   }
+
   const { players, currentPlayerIndex } = biddingPhase;
   return (
     <div className="grid-cols-4 gap-y-1 grid justify-items-center items-center">
