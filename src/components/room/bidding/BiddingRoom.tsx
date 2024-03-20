@@ -1,7 +1,8 @@
 // BiddingRoom.tsx
 import React from "react";
 import Chatbox from "../../chat/Chatbox";
-import { Auction, Hands } from "./Auction";
+import Auction from "./Auction";
+import Hands from "./Hands";
 import { BiddingProvider } from "../../../context/BiddingContext";
 import { RestrictedPlayerProvider } from "../../../context/RestrictedPlayerContext";
 
