@@ -38,7 +38,7 @@ const Room = () => {
     case "Waiting":
       return <WaitingRoom room={room} />;
     case "Bidding":
-      return <BiddingRoom room={room} />;
+      return <BiddingRoom />;
     case "Taking Trick":
     //   return <TakingTrickRoom room={room} />;
     case "Ended":

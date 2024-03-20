@@ -1,12 +1,12 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import { DocumentReference } from "firebase-admin/firestore";
+import { CollectionReference, DocumentReference } from "firebase-admin/firestore";
 import { nanoid } from "nanoid";
 
 import { GameRoom } from "types/Room";
 import { PublicPlayer } from "types/Player";
 import { RestrictedAccountInfo } from "types/Account";
-import { PublicBiddingPhase } from "types/GameState";
+import { PublicBiddingPhase, RestrictedPlayerData } from "types/GameState";
 
 import { UnauthenticatedError } from "./error/error";
 import { shuffleCards } from "./utils/shuffle_cards";
@@ -313,6 +313,7 @@ export const startGame = functions.region("asia-east2").https.onCall(async (data
     .firestore()
     .collection("accounts")
     .doc(context.auth.uid) as DocumentReference<RestrictedAccountInfo>;
+
   const playerAccountSnapshot = await playerAccountRef.get();
   const playerAccountData = playerAccountSnapshot.data() as RestrictedAccountInfo;
 
@@ -320,7 +321,10 @@ export const startGame = functions.region("asia-east2").https.onCall(async (data
     throw new functions.https.HttpsError("failed-precondition", "Player is not in a game.");
   }
 
-  const gameRoomRef = admin.firestore().collection("gameRooms").doc(playerAccountData.roomID);
+  const gameRoomRef = admin
+    .firestore()
+    .collection("gameRooms")
+    .doc(playerAccountData.roomID) as DocumentReference<GameRoom>;
   const gameRoomSnapshot = await gameRoomRef.get();
   const gameRoomData = gameRoomSnapshot.data() as GameRoom;
 
@@ -345,11 +349,21 @@ export const startGame = functions.region("asia-east2").https.onCall(async (data
   }
 
   const deck = shuffleCards();
-  const restrictedPlayersRef = gameRoomRef.collection("restrictedPlayerCards");
+  const restrictedPlayersRef = gameRoomRef.collection(
+    "restrictedPlayerCards"
+  ) as CollectionReference<RestrictedPlayerData>;
 
-  for (const player of gameRoomData.players) {
+  const updatedPlayers: PublicPlayer[] = gameRoomData.players.map((player, index) => {
+    return {
+      ...player,
+      numCardsOnHand: 13,
+      position: index as 0 | 1 | 2 | 3,
+    };
+  });
+
+  for (const player of updatedPlayers) {
     const playerCards = deck.splice(0, 13);
-    await restrictedPlayersRef.doc(player.id).set({ cards: playerCards });
+    await restrictedPlayersRef.doc(player.id).set({ cards: playerCards, id: player.id });
   }
 
   const publicBiddingPhaseData: PublicBiddingPhase = {
@@ -357,17 +371,17 @@ export const startGame = functions.region("asia-east2").https.onCall(async (data
     numPasses: 0,
     highestBid: null,
     bidHistory: [],
-    players: gameRoomData.players,
+    players: updatedPlayers,
   };
 
   await gameRoomRef.collection("publicGameState").doc("biddingPhase").set(publicBiddingPhaseData);
+
   await gameRoomRef.update({
     status: "Bidding",
   });
 
   return { success: true };
 });
-
 /**
  * Invite a player to a game
  * @param data
