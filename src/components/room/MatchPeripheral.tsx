@@ -24,7 +24,7 @@ const MatchPeripheral: React.FC = () => {
 
   return (
     <div className="top-0 left-0 w-full h-full">
-      <PlayerHand restrictedPlayer={restrictedPlayer} isCurrentPlayer={currentPlayerId === playerAccount?.id} />
+      <PlayerHand />
 
       <MatchAvatar position={westPlayerPosition} className="absolute top-1/4 left-10" />
       <MatchAvatar position={northPlayerPosition} className="absolute top-5 left-28" />

@@ -1,24 +1,28 @@
 import { useState } from "react";
 import { useRoom } from "../../context/RoomContext";
-import { RestrictedPlayerData } from "types/GameState";
+import { PublicBiddingPhase, PublicTrickTakingPhase, RestrictedPlayerData } from "types/GameState";
 import PlayingCard from "../PlayingCard";
 import Button from "../buttons/button";
+import { useRestrictedPlayerData } from "../../context/RestrictedPlayerContext";
+import { useBiddingPhase } from "../../context/BiddingContext";
 
-interface PlayerHandProps {
-  restrictedPlayer: RestrictedPlayerData;
-  isCurrentPlayer: boolean;
-}
-
-const PlayerHand: React.FC<PlayerHandProps> = ({ restrictedPlayer, isCurrentPlayer }) => {
+const PlayerHand = () => {
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
+  const { restrictedPlayer } = useRestrictedPlayerData();
   const { room } = useRoom();
   //   const { trickTakingPhase } = useTrickTakingPhase();
+  const { biddingPhase } = useBiddingPhase();
 
   if (!room) {
     return null;
   }
 
+  let phase: PublicBiddingPhase | PublicTrickTakingPhase;
+  phase = room.status === "Bidding" ? biddingPhase! : null!;
+
   const isTrickTakingPhase = room.status === "Taking Trick";
+  const southPlayer = room.players.find((player) => player.id === restrictedPlayer?.id)!;
+  const isCurrentPlayer = southPlayer.position === phase!.currentPlayerIndex;
 
   const handleCardClick = (index: number) => {
     if (isTrickTakingPhase && isCurrentPlayer) {
@@ -29,7 +33,7 @@ const PlayerHand: React.FC<PlayerHandProps> = ({ restrictedPlayer, isCurrentPlay
   const handlePlayClick = () => {
     if (selectedCard !== null && isCurrentPlayer) {
       // Perform the play action with the selected card
-      console.log("Playing card:", restrictedPlayer.cards[selectedCard]);
+      console.log("Playing card:", restrictedPlayer?.cards[selectedCard]);
       setSelectedCard(null);
     }
   };
@@ -38,7 +42,7 @@ const PlayerHand: React.FC<PlayerHandProps> = ({ restrictedPlayer, isCurrentPlay
     <>
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
         <div className="flex justify-center -space-x-[12%]">
-          {restrictedPlayer.cards.map((card, index) => (
+          {restrictedPlayer?.cards.map((card, index) => (
             <PlayingCard
               key={index}
               card={card}
