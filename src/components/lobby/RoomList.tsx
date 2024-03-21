@@ -2,7 +2,7 @@
 import { memo } from "react";
 import { Tab, TabList, Tabs, TabPanel } from "../tabs/tabs";
 import RoomTable from "./RoomTable";
-import { GameRoom } from "types/Room";
+
 import { useRoomList } from "../../context/LobbyContext";
 
 const RoomList = () => {

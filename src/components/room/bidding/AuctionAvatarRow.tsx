@@ -25,7 +25,7 @@ const AuctionAvatarRow = () => {
             <div className="text-xs text-center select-none">
               {player.id === playerAccount?.id ? "You" : `P${player.position}`}
             </div>
-            <img src={avatar} className="h-10" />
+            <img src={avatar} className="h-10" alt="avatar" />
           </div>
         );
       })}
