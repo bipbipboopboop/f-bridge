@@ -27,8 +27,6 @@ const OpponentHand: React.FC<OpponentHandProps> = ({ direction, className }) => 
   const position = positionMap[direction];
   const numCards = room.players.find((player) => player.position === position)?.numCardsOnHand || 0;
 
-  console.log({ numCards });
-
   return (
     <div className={className}>
       <div className={`flex ${direction === "north" ? "justify-center -space-x-[5%]" : "relative"}`}>

@@ -97,13 +97,17 @@ const PlayerHand = () => {
           ))}
         </div>
       </div>
-      <div className="w-1/12 flex flex-col absolute right-5 bottom-4 gap-y-2">
-        {isTrickTakingPhase && isCurrentPlayer && (
-          <Button size={1} theme="orange" onClick={handlePlayClick} disabled={!selectedCard}>
-            Play
-          </Button>
-        )}
-        <Button size={1} theme="yellow" onClick={handleSortClick}>
+      <div className="w-full flex absolute left-[44%] bottom-[22%] gap-x-2">
+        <Button
+          size={1}
+          theme="green"
+          onClick={handlePlayClick}
+          disabled={!isTrickTakingPhase || !isCurrentPlayer || !selectedCard}
+        >
+          Play
+        </Button>
+
+        <Button size={1} theme="orange" onClick={handleSortClick}>
           Sort
         </Button>
       </div>

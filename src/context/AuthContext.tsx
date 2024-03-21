@@ -67,7 +67,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const loading = playerAccount === null;
-  console.log({ user, loading, playerAccount });
 
   if (loading) return <Loading text="Loading" />;
 
