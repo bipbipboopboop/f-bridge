@@ -21,7 +21,7 @@ const AuctionButtons = () => {
   const isYourTurn = players[currentPlayerIndex].id === playerAccount?.id;
 
   const handleNumberClick = (level: BidLevel) => {
-    if (isYourTurn) {
+    if (isYourTurn && isNumberSelectable(level)) {
       setSelectedNumber(level);
       setSelectedSuit(null);
     }
@@ -47,6 +47,25 @@ const AuctionButtons = () => {
     }
   };
 
+  const isNumberSelectable = (level: BidLevel) => {
+    if (!highestBid) return true;
+    const isHighestPossibleBid = highestBid.level === 6 && highestBid.suit === "NT";
+    const isHighestBidNoTrumpOfSameLevel = highestBid.level === level && highestBid.suit === "NT";
+    if (isHighestPossibleBid || isHighestBidNoTrumpOfSameLevel) return false;
+    return level >= highestBid.level;
+  };
+
+  const isSuitSelectable = (suit: BidSuit) => {
+    if (!selectedNumber || !highestBid) return true;
+    if (highestBid.level === 6 && highestBid.suit === "NT") return false;
+    if (selectedNumber > highestBid.level) return true;
+    if (selectedNumber === highestBid.level) {
+      const suitOrder: BidSuit[] = ["♣", "♦", "♥", "♠", "NT"];
+      return suitOrder.indexOf(suit) > suitOrder.indexOf(highestBid.suit);
+    }
+    return false;
+  };
+
   if (!isYourTurn) return null;
 
   return (
@@ -61,34 +80,46 @@ const AuctionButtons = () => {
           </Button>
         )}
       </div>
-      <div className="bg-black/5 border border-[#62626226] rounded-md grid grid-cols-7 justify-items-center py-1 px-5">
-        {[1, 2, 3, 4, 5, 6, 7].map((level) => (
+      <div className="bg-black/5 border border-[#62626226] rounded-md grid grid-cols-6 justify-items-center py-1 px-5">
+        {[1, 2, 3, 4, 5, 6].map((level) => (
           <button
             key={level}
-            className={`w-[34px] h-[34px] rounded-[5px] text-base overflow-hidden border-none ${
-              highestBid?.level === level ? "text-white bg-[#4A90E2]" : ""
-            } ${selectedNumber === level ? "bg-black/20 text-white" : ""}`}
+            className={`w-[34px] h-[34px] rounded-[5px] text-base overflow-hidden border-none
+             ${selectedNumber === level ? "bg-black/20 text-white" : ""} ${
+              !isNumberSelectable(level as BidLevel) ? "text-gray-400 cursor-not-allowed" : ""
+            }`}
             onClick={() => handleNumberClick(level as BidLevel)}
+            disabled={!isNumberSelectable(level as BidLevel)}
           >
             <div className="flex justify-center relative top-1">{level}</div>
           </button>
         ))}
       </div>
       {selectedNumber && (
-        <div className="bg-black/5 border border-[#62626226] rounded-md grid grid-cols-7 justify-items-center py-1 px-5 mt-2.5">
+        <div className="bg-black/5 border border-[#62626226] rounded-md grid grid-cols-6 justify-items-center py-1 px-5 mt-2.5">
           {["♣", "♦", "♥", "♠", "NT"].map((suit) => {
             const isRedSuit = suit === "♥" || suit === "♦";
+            const isNT = suit === "NT";
+            const suitSelectable = isSuitSelectable(suit as BidSuit);
+
+            const buttonClassName = `
+      w-[34px] h-[34px] text-2xl overflow-hidden border-none
+      ${selectedSuit === suit ? "bg-black/25 rounded" : ""}
+      ${suitSelectable ? "" : "text-gray-400 cursor-not-allowed opacity-50"}
+      ${isRedSuit ? "text-[#FF525D]" : "text-[#222222]"}
+    `;
+
             return (
               <button
                 key={suit}
-                className={`w-[34px] h-[34px] text-2xl overflow-hidden border-none ${
-                  selectedSuit === suit ? "bg-black/25 text-white rounded" : ""
-                }`}
-                style={{ color: isRedSuit ? "#FF525D" : "#222222" }}
+                className={buttonClassName}
                 onClick={() => handleBidSuitClick(suit as BidSuit)}
+                disabled={!suitSelectable}
               >
                 <div
-                  className={`flex justify-center relative ${suit === "NT" ? "text-sm top-1" : "text-4xl bottom-1"}`}
+                  className={`flex justify-center relative ${
+                    isNT ? "text-sm top-1 text-yellow-300" : "text-4xl bottom-1"
+                  }`}
                 >
                   {suit}
                 </div>
