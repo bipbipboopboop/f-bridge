@@ -1,9 +1,23 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useRoom } from "../../../context/RoomContext";
 import { Bid } from "types/Bid";
 
 const AuctionDashboard: React.FC = () => {
   const { room } = useRoom();
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (gridRef.current) {
+      const gridHeight = gridRef.current.offsetHeight;
+      const containerHeight = gridRef.current.parentElement?.offsetHeight || 0;
+
+      if (gridHeight > containerHeight && bidHistory.length > 12) {
+        gridRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+      } else {
+        gridRef.current.scrollTop = 0;
+      }
+    }
+  }, [room?.phase.biddingPhase?.bidHistory.length]);
 
   if (!room || !room.phase.biddingPhase) {
     return null;
@@ -16,7 +30,7 @@ const AuctionDashboard: React.FC = () => {
       {bidHistory.length === 0 ? (
         <div className="pt-5 text-center">Start Auction</div>
       ) : (
-        <div className="grid grid-cols-4 gap-2 grid-rows-5 overflow-y-auto">
+        <div ref={gridRef} className="grid grid-cols-4 gap-2 grid-rows-5 overflow-y-auto">
           {bidHistory.map((bid: Bid, index: number) => {
             const suitColor =
               bid.suit === "♥" || bid.suit === "♦"
@@ -34,7 +48,7 @@ const AuctionDashboard: React.FC = () => {
             return (
               <div key={index} className="text-sm text-center rounded-md bg-black/5 h-[40px] py-3">
                 <span className={suitEffect} style={{ color: suitColor }}>
-                  {`${bid.level} ${bid.suit}`}
+                  {bid.suit === "Pass" ? "Pass" : `${bid.level} ${bid.suit}`}
                 </span>
               </div>
             );
