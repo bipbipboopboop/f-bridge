@@ -2,6 +2,7 @@ import React from "react";
 
 import AuctionAvatarRow from "./AuctionAvatarRow";
 import AuctionButtons from "./AuctionButtons";
+import AuctionDashboard from "./AuctionDashboard";
 
 const Auction: React.FC = () => {
   return (
@@ -12,7 +13,7 @@ const Auction: React.FC = () => {
         </div>
 
         <div className="h-2/5 mb-2.5 border-y-2 border-[#e8e8e8]">
-          <div className="pt-5 text-center">Start Auction</div>
+          <AuctionDashboard />
         </div>
 
         <div className="h-3/5">
