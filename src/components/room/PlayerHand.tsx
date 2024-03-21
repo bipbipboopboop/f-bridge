@@ -1,20 +1,18 @@
 import { useState } from "react";
 import _ from "lodash";
-
 import { useRoom } from "../../context/RoomContext";
 import { useRestrictedPlayerData } from "../../context/RestrictedPlayerContext";
-
 import { Card } from "types/Card";
-
 import PlayingCard from "../PlayingCard";
 import Button from "../buttons/button";
+import { useFunctions } from "../../hooks/useFunctions";
 
 const PlayerHand = () => {
-  const [selectedCard, setSelectedCard] = useState<number | null>(null);
+  const [selectedCard, setSelectedCard] = useState<Card | null>(null);
   const [sortMode, setSortMode] = useState<"default" | "suit" | "rank">("default");
-
   const { restrictedPlayer } = useRestrictedPlayerData();
   const { room } = useRoom();
+  const { playCard } = useFunctions();
 
   if (!room) {
     return null;
@@ -35,15 +33,16 @@ const PlayerHand = () => {
   const southPlayer = room.players.find((player) => player.id === restrictedPlayer?.id)!;
   const isCurrentPlayer = southPlayer.position === phase?.currentPlayerIndex;
 
-  const handleCardClick = (index: number) => {
+  const handleCardClick = (card: Card) => {
     if (isTrickTakingPhase && isCurrentPlayer) {
-      setSelectedCard(index);
+      setSelectedCard(card);
     }
   };
 
   const handlePlayClick = () => {
-    if (selectedCard !== null && isCurrentPlayer) {
-      console.log("Playing card:", restrictedPlayer?.cards[selectedCard]);
+    if (selectedCard && isCurrentPlayer) {
+      console.log("Playing card:", selectedCard);
+      playCard(selectedCard);
       setSelectedCard(null);
     }
   };
@@ -91,20 +90,19 @@ const PlayerHand = () => {
               card={card}
               style={{ zIndex: 40 - index * 2 }}
               className={`cursor-pointer transition-transform duration-300 ease-in-out hover:transform hover:-translate-y-8 ${
-                selectedCard === index ? "transform -translate-y-8" : ""
+                selectedCard?.suit === card.suit && selectedCard?.rank === card.rank ? "transform -translate-y-8" : ""
               }`}
-              onClick={() => handleCardClick(index)}
+              onClick={() => handleCardClick(card)}
             />
           ))}
         </div>
       </div>
       <div className="w-1/12 flex flex-col absolute right-5 bottom-4 gap-y-2">
-        {isTrickTakingPhase && isCurrentPlayer && selectedCard !== null && (
-          <Button size={1} theme="orange" onClick={handlePlayClick}>
+        {isTrickTakingPhase && isCurrentPlayer && (
+          <Button size={1} theme="orange" onClick={handlePlayClick} disabled={!selectedCard}>
             Play
           </Button>
         )}
-
         <Button size={1} theme="yellow" onClick={handleSortClick}>
           Sort
         </Button>

@@ -6,7 +6,7 @@ import { createAccount } from "./PlayerAPI";
 import { createGameRoom, joinGameRoom, leaveGameRoom, startGame, toggleReady } from "./RoomAPI";
 
 import { placeBid, chooseTeammate } from "./BidAPI";
-// import { playCard } from "./TrickTakingAPI";
+import { playCard } from "./TrickTakingAPI";
 
 // import {sendMessage} from "./ChatAPI";
 
@@ -35,7 +35,7 @@ export {
   // /**
   //  * TRICK TAKING API
   //  */
-  // playCard,
+  playCard,
 
   /**
    * CHAT API
