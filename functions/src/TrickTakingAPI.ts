@@ -10,11 +10,12 @@ import { GameRoom } from "types/Room";
 import { Card } from "types/Card";
 import { PrivateTrickTakingPhase, PublicEndedPhase, RestrictedPlayerData } from "types/GameState";
 import { Message } from "types/Message";
+import { UnauthenticatedError } from "./error/error";
 
 export const playCard = functions.region("asia-east2").https.onCall(async (card: Card, context) => {
   // 0. Check if the user is authenticated
   if (!context.auth) {
-    throw new functions.https.HttpsError("unauthenticated", "The user is not authenticated.");
+    throw UnauthenticatedError;
   }
 
   const playerAccountRef = admin
@@ -141,80 +142,104 @@ export const playCard = functions.region("asia-east2").https.onCall(async (card:
 
     const trickWinnerIndex = updatedPlayers.findIndex((player) => player.id === winner.id);
 
-    const nextRoundTrickTakingPhase = produce(updatedTrickTakingPhase, (phase) => {
-      phase.leadPlayerIndex = trickWinnerIndex as 0 | 1 | 2 | 3;
-      phase.currentPlayerIndex = trickWinnerIndex as 0 | 1 | 2 | 3;
-    });
+    const updatedRoom: GameRoom = {
+      ...gameRoom,
+      phase: {
+        ...gameRoom.phase,
+        trickTakingPhase: updatedTrickTakingPhase,
+      },
+      players: updatedPlayers,
+      announcements: [
+        ...gameRoom.announcements,
+        {
+          title: "Trick Winner",
+          content: `${winner.displayName} won the trick! ${winner.displayName} will start the next trick.`,
+          createdAt: Timestamp.now().toDate(),
+        },
+      ],
+    };
 
-    const nextRoundPlayers = produce(updatedPlayers, (players) => {
-      players.forEach((player) => {
-        player.currentCardOnTable = null;
+    await gameRoomRef.update(updatedRoom);
+
+    setTimeout(async () => {
+      const nextRoundTrickTakingPhase = produce(updatedTrickTakingPhase, (phase) => {
+        phase.leadPlayerIndex = trickWinnerIndex as 0 | 1 | 2 | 3;
+        phase.currentPlayerIndex = trickWinnerIndex as 0 | 1 | 2 | 3;
       });
-      players[trickWinnerIndex].numTricksWon++;
-    });
 
-    const privateTrickTakingPhaseRef = gameRoomRef
-      .collection("privateGameState")
-      .doc("trickTakingPhase") as DocumentReference<PrivateTrickTakingPhase>;
+      const nextRoundPlayers = produce(updatedPlayers, (players) => {
+        players.forEach((player) => {
+          player.currentCardOnTable = null;
+        });
+        players[trickWinnerIndex].numTricksWon++;
+      });
 
-    const privateTrickTakingPhase = (await privateTrickTakingPhaseRef.get()).data()!;
+      const privateTrickTakingPhaseRef = gameRoomRef
+        .collection("privateGameState")
+        .doc("trickTakingPhase") as DocumentReference<PrivateTrickTakingPhase>;
 
-    const updatedPrivateTrickTakingPhase = produce(privateTrickTakingPhase, (phase) => {
-      const isWinnerFromDeclarer = phase.declarerTeam.players.some((player) => player.id === winner.id);
-      if (isWinnerFromDeclarer) {
-        phase.declarerTeam.tricksWon++;
+      const privateTrickTakingPhase = (await privateTrickTakingPhaseRef.get()).data()!;
+
+      const updatedPrivateTrickTakingPhase = produce(privateTrickTakingPhase, (phase) => {
+        const isWinnerFromDeclarer = phase.declarerTeam.players.some((player) => player.id === winner.id);
+        if (isWinnerFromDeclarer) {
+          phase.declarerTeam.tricksWon++;
+        } else {
+          phase.defenderTeam.tricksWon++;
+        }
+      });
+
+      await privateTrickTakingPhaseRef.update(updatedPrivateTrickTakingPhase);
+
+      const isDeclarerTeamWon =
+        updatedPrivateTrickTakingPhase.declarerTeam.tricksWon >=
+        updatedPrivateTrickTakingPhase.declarerTeam.tricksNeeded;
+      const isDefenderTeamWon =
+        updatedPrivateTrickTakingPhase.defenderTeam.tricksWon >=
+        updatedPrivateTrickTakingPhase.defenderTeam.tricksNeeded;
+
+      const isGameOver = isDeclarerTeamWon || isDefenderTeamWon;
+
+      if (isGameOver) {
+        const winnerTeam = isDeclarerTeamWon ? "Declarer" : "Defender";
+        const winners = isDeclarerTeamWon
+          ? updatedPrivateTrickTakingPhase.declarerTeam.players
+          : updatedPrivateTrickTakingPhase.defenderTeam.players;
+
+        const endedPhase: PublicEndedPhase = {
+          winnerTeam,
+          winners,
+        };
+
+        await gameRoomRef.update({
+          status: "Ended",
+          "phase.trickTakingPhase": null,
+          "phase.endedPhase": endedPhase,
+          players: nextRoundPlayers,
+          announcements: [
+            ...updatedRoom.announcements,
+            {
+              title: "Game Over",
+              content: `${winnerTeam} team has won the game!`,
+              createdAt: Timestamp.now().toDate(),
+            },
+          ],
+        });
       } else {
-        phase.defenderTeam.tricksWon++;
+        await gameRoomRef.update({
+          "phase.trickTakingPhase": nextRoundTrickTakingPhase,
+          players: nextRoundPlayers,
+        });
       }
-    });
+    }, 2000);
 
-    await privateTrickTakingPhaseRef.update(updatedPrivateTrickTakingPhase);
-
-    const isDeclarerTeamWon =
-      updatedPrivateTrickTakingPhase.declarerTeam.tricksWon >= updatedPrivateTrickTakingPhase.declarerTeam.tricksNeeded;
-    const isDefenderTeamWon =
-      updatedPrivateTrickTakingPhase.defenderTeam.tricksWon >= updatedPrivateTrickTakingPhase.defenderTeam.tricksNeeded;
-
-    const isGameOver = isDeclarerTeamWon || isDefenderTeamWon;
-
-    if (isGameOver) {
-      const winnerTeam = isDeclarerTeamWon ? "Declarer" : "Defender";
-      const winners = isDeclarerTeamWon
-        ? updatedPrivateTrickTakingPhase.declarerTeam.players
-        : updatedPrivateTrickTakingPhase.defenderTeam.players;
-
-      const endedPhase: PublicEndedPhase = {
-        winnerTeam,
-        winners,
-      };
-
-      await gameRoomRef.update({
-        status: "Ended",
-        "phase.trickTakingPhase": null,
-        "phase.endedPhase": endedPhase,
-        players: nextRoundPlayers,
-      });
-
-      return;
-    }
-
-    await messagesRef.add({
-      createdAt: Timestamp.now(),
-      playerName: "system",
-      text: `${winner.displayName} won the trick. ${winner.displayName} will lead the next trick.`,
-      uid: "system",
-    });
-
-    await gameRoomRef.update({
-      "phase.trickTakingPhase": nextRoundTrickTakingPhase,
-      players: nextRoundPlayers,
-    });
-
-    return;
+    return { success: true };
   }
 
   await gameRoomRef.update({
     "phase.trickTakingPhase": updatedTrickTakingPhase,
     players: updatedPlayers,
   });
+
+  return { success: true };
 });

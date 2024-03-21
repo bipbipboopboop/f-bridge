@@ -49,7 +49,6 @@ const TrickArea: React.FC = () => {
   return (
     <div className="h-full w-full">
       {room.players.map((player) => {
-        console.log({ player: player.position, southPlayerPosition });
         return (
           player.currentCardOnTable && (
             <PlayingCard

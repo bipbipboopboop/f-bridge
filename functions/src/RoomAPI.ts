@@ -72,6 +72,7 @@ export const createGameRoom = functions.region("asia-east2").https.onCall(async 
       trickTakingPhase: null,
       endedPhase: null,
     },
+    announcements: [],
   };
 
   const gameRoomRef = admin.firestore().collection("gameRooms").doc(roomID);

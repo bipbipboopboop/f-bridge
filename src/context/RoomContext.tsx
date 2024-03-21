@@ -1,6 +1,6 @@
 // BiddingContext.tsx
 
-import React, { ReactNode, createContext, useContext } from "react";
+import React, { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { doc, DocumentReference } from "firebase/firestore";
@@ -10,6 +10,8 @@ import { GameRoom } from "types/Room";
 import { Navigate, useParams } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { useFunctions } from "../hooks/useFunctions";
+import { Announcement } from "types/Annoucement";
+import AnnouncementModal from "../components/AnnouncementModal";
 
 interface RoomContextProps {
   room: GameRoom | undefined;
@@ -27,6 +29,22 @@ export const RoomProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const gameRoomRef = (roomID && (doc(firestore, "gameRooms", roomID) as DocumentReference<GameRoom>)) || null;
 
   const [room, isRoomLoading, error] = useDocumentData(gameRoomRef);
+  const [showModal, setShowModal] = useState(false);
+  const [latestAnnouncement, setLatestAnnouncement] = useState<Announcement | null>(null);
+
+  useEffect(() => {
+    if (room && room.announcements.length > 0) {
+      console.log({ room });
+      const lastAnnouncement = room.announcements[room.announcements.length - 1];
+      setLatestAnnouncement(lastAnnouncement);
+      setShowModal(true);
+    }
+  }, [room]);
+
+  const closeModal = () => {
+    setShowModal(false);
+    setLatestAnnouncement(null);
+  };
 
   if (error) {
     toast.error(error.message);
@@ -49,7 +67,12 @@ export const RoomProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }
 
-  return <RoomContext.Provider value={{ room }}>{children}</RoomContext.Provider>;
+  return (
+    <RoomContext.Provider value={{ room }}>
+      {children}
+      {showModal && latestAnnouncement && <AnnouncementModal announcement={latestAnnouncement} onClose={closeModal} />}
+    </RoomContext.Provider>
+  );
 };
 
 export const useRoom = () => {

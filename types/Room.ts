@@ -1,5 +1,6 @@
 import { PublicBiddingPhase, PublicEndedPhase, PublicTeammateChoosingPhase, PublicTrickTakingPhase } from "./GameState";
 import { PublicPlayer } from "./Player";
+import { Announcement } from "./Annoucement";
 
 // Global
 export type GameRoom = {
@@ -17,6 +18,7 @@ export type GameRoom = {
     trickTakingPhase: PublicTrickTakingPhase | null;
     endedPhase: PublicEndedPhase | null;
   };
+  announcements: Announcement[];
 };
 
 export type GameRoomSettings = {

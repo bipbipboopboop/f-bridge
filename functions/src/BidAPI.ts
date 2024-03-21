@@ -17,10 +17,11 @@ import { GameRoom } from "types/Room";
 
 import { shuffleCards } from "./utils/shuffle_cards";
 import { Card } from "types/Card";
+import { UnauthenticatedError } from "./error/error";
 
 export const placeBid = functions.region("asia-east2").https.onCall(async (bid: Bid, context) => {
   if (!context.auth) {
-    throw new functions.https.HttpsError("unauthenticated", "The user is not authenticated.");
+    throw UnauthenticatedError;
   }
 
   const playerAccountRef = admin
