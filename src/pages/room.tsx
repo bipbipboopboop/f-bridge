@@ -16,6 +16,7 @@ const Room = () => {
       return <WaitingRoom room={room} />;
     case "Bidding":
       return <BiddingRoom />;
+    case "Choosing Teammate":
     case "Taking Trick":
     //   return <TakingTrickRoom room={room} />;
     case "Ended":

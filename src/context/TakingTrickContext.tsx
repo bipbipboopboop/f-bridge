@@ -16,7 +16,7 @@ const TakingTrickContext = createContext<TakingTrickContextProps>({
   takingTrickPhase: undefined,
 });
 
-export const BiddingProvider: React.FC<{ roomID: string; children: ReactNode }> = ({ roomID, children }) => {
+export const TakingTrickProvider: React.FC<{ roomID: string; children: ReactNode }> = ({ roomID, children }) => {
   const takingTrickPhaseRef = doc(
     firestore,
     "gameRooms",
