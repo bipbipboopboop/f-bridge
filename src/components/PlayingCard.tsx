@@ -32,7 +32,7 @@ const PlayingCard: React.FC<PlayingCardProps> = ({ card, isFlipDown = false, cla
           <div className="text-xl font-bold" style={{ color: isRedSuit ? "#FF525D" : "#222222" }}>
             {card?.rank}
           </div>
-          <div className="text-xl" style={{ color: isRedSuit ? "#FF525D" : "#222222" }}>
+          <div className="relative bottom-2 text-xl mb-2" style={{ color: isRedSuit ? "#FF525D" : "#222222" }}>
             {card?.suit}
           </div>
         </div>
