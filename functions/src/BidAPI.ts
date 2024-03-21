@@ -173,7 +173,7 @@ export const chooseTeammate = functions.region("asia-east2").https.onCall(async 
     throw new functions.https.HttpsError("failed-precondition", "It's not your turn to choose your teammate.");
   }
 
-  const restrictedPlayersRef = gameRoomRef.collection("restrictedPlayers");
+  const restrictedPlayersRef = gameRoomRef.collection("restrictedPlayerCards");
   const currentPlayerRestrictedDataSnapshot = await restrictedPlayersRef.doc(currentPlayer.id).get();
   const currentPlayerRestrictedData = currentPlayerRestrictedDataSnapshot.data() as RestrictedPlayerData;
 
