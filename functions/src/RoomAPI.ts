@@ -66,6 +66,12 @@ export const createGameRoom = functions.region("asia-east2").https.onCall(async 
     status: "Waiting",
     playerCount: 1,
     players: [publicPlayerData],
+    phase: {
+      biddingPhase: null,
+      teammateChoosingPhase: null,
+      trickTakingPhase: null,
+      endedPhase: null,
+    },
   };
 
   const gameRoomRef = admin.firestore().collection("gameRooms").doc(roomID);
@@ -192,6 +198,11 @@ export const leaveGameRoom = functions.region("asia-east2").https.onCall(async (
     throw new functions.https.HttpsError("not-found", "This game no longer exists");
   }
 
+  // Check if the game has already started or ended
+  if (gameRoomData.status !== "Waiting") {
+    throw new functions.https.HttpsError("failed-precondition", "The game has either already started or ended.");
+  }
+
   // Check if the player is the only one in the room
   if (gameRoomData.playerCount === 1) {
     await Promise.all([
@@ -290,98 +301,6 @@ export const toggleReady = functions.region("asia-east2").https.onCall(async (ro
   return { success: true };
 });
 
-/**
- * Start the game
- * @param data
- * @param context
- * @returns
- * @throws
- * - unauthenticated: User is not authenticated.
- * - failed-precondition: Player is not in a game.
- * - already-exists: Game has already started.
- * - not-found: Game room does not exist.
- * - internal: Failed to start the game.
- * - invalid-argument: Game room is not full.
- * - permission-denied: Player is not the host.
- */
-export const startGame = functions.region("asia-east2").https.onCall(async (data: void, context) => {
-  if (!context.auth) {
-    throw new functions.https.HttpsError("unauthenticated", "User is not authenticated.");
-  }
-
-  const playerAccountRef = admin
-    .firestore()
-    .collection("accounts")
-    .doc(context.auth.uid) as DocumentReference<RestrictedAccountInfo>;
-
-  const playerAccountSnapshot = await playerAccountRef.get();
-  const playerAccountData = playerAccountSnapshot.data() as RestrictedAccountInfo;
-
-  if (!playerAccountData.roomID) {
-    throw new functions.https.HttpsError("failed-precondition", "Player is not in a game.");
-  }
-
-  const gameRoomRef = admin
-    .firestore()
-    .collection("gameRooms")
-    .doc(playerAccountData.roomID) as DocumentReference<GameRoom>;
-  const gameRoomSnapshot = await gameRoomRef.get();
-  const gameRoomData = gameRoomSnapshot.data() as GameRoom;
-
-  if (!gameRoomSnapshot.exists) {
-    throw new functions.https.HttpsError("not-found", "Game room does not exist.");
-  }
-
-  if (gameRoomData.hostID !== context.auth.uid) {
-    throw new functions.https.HttpsError("permission-denied", "Player is not the host.");
-  }
-
-  if (gameRoomData.status !== "Waiting") {
-    throw new functions.https.HttpsError("already-exists", "Game has already started or ended.");
-  }
-
-  const uid = context.auth.uid;
-  const otherPlayers = gameRoomData.players.filter((player) => player.id !== uid);
-  const allOtherPlayersReady = otherPlayers.every((player) => player.isReady);
-
-  if (!allOtherPlayersReady) {
-    throw new functions.https.HttpsError("failed-precondition", "Not all players are ready.");
-  }
-
-  const deck = shuffleCards();
-  const restrictedPlayersRef = gameRoomRef.collection(
-    "restrictedPlayerCards"
-  ) as CollectionReference<RestrictedPlayerData>;
-
-  const updatedPlayers: PublicPlayer[] = gameRoomData.players.map((player, index) => {
-    return {
-      ...player,
-      numCardsOnHand: 13,
-      position: index as 0 | 1 | 2 | 3,
-    };
-  });
-
-  for (const player of updatedPlayers) {
-    const playerCards = deck.splice(0, 13);
-    await restrictedPlayersRef.doc(player.id).set({ cards: playerCards, id: player.id });
-  }
-
-  const publicBiddingPhaseData: PublicBiddingPhase = {
-    currentPlayerIndex: 0,
-    numPasses: 0,
-    highestBid: null,
-    bidHistory: [],
-    players: updatedPlayers,
-  };
-
-  await gameRoomRef.collection("publicGameState").doc("biddingPhase").set(publicBiddingPhaseData);
-
-  await gameRoomRef.update({
-    status: "Bidding",
-  });
-
-  return { success: true };
-});
 /**
  * Invite a player to a game
  * @param data
@@ -500,6 +419,97 @@ export const kickPlayer = functions.region("asia-east2").https.onCall(async (pla
     publicPlayersRef.doc(playerID).delete(),
     admin.firestore().collection("accounts").doc(playerID).update({ roomID: null }),
   ]);
+
+  return { success: true };
+});
+
+/**
+ * Start the game
+ * @param data
+ * @param context
+ * @returns
+ * @throws
+ * - unauthenticated: User is not authenticated.
+ * - failed-precondition: Player is not in a game.
+ * - already-exists: Game has already started.
+ * - not-found: Game room does not exist.
+ * - internal: Failed to start the game.
+ * - invalid-argument: Game room is not full.
+ * - permission-denied: Player is not the host.
+ */
+export const startGame = functions.region("asia-east2").https.onCall(async (data: void, context) => {
+  if (!context.auth) {
+    throw UnauthenticatedError;
+  }
+
+  const playerAccountRef = admin
+    .firestore()
+    .collection("accounts")
+    .doc(context.auth.uid) as DocumentReference<RestrictedAccountInfo>;
+  const playerAccountSnapshot = await playerAccountRef.get();
+  const playerAccountData = playerAccountSnapshot.data() as RestrictedAccountInfo;
+
+  if (!playerAccountData.roomID) {
+    throw new functions.https.HttpsError("failed-precondition", "Player is not in a game.");
+  }
+
+  const gameRoomRef = admin
+    .firestore()
+    .collection("gameRooms")
+    .doc(playerAccountData.roomID) as DocumentReference<GameRoom>;
+  const gameRoomSnapshot = await gameRoomRef.get();
+  const gameRoomData = gameRoomSnapshot.data() as GameRoom;
+
+  if (!gameRoomSnapshot.exists) {
+    throw new functions.https.HttpsError("not-found", "Game room does not exist.");
+  }
+
+  if (gameRoomData.hostID !== context.auth.uid) {
+    throw new functions.https.HttpsError("permission-denied", "Player is not the host.");
+  }
+
+  if (gameRoomData.status !== "Waiting") {
+    throw new functions.https.HttpsError("already-exists", "Game has already started or ended.");
+  }
+
+  const uid = context.auth.uid;
+  const otherPlayers = gameRoomData.players.filter((player) => player.id !== uid);
+  const allOtherPlayersReady = otherPlayers.every((player) => player.isReady);
+
+  if (!allOtherPlayersReady) {
+    throw new functions.https.HttpsError("failed-precondition", "Not all players are ready.");
+  }
+
+  const deck = shuffleCards();
+  const restrictedPlayersRef = gameRoomRef.collection(
+    "restrictedPlayerCards"
+  ) as CollectionReference<RestrictedPlayerData>;
+
+  const updatedPlayers: PublicPlayer[] = gameRoomData.players.map((player, index) => {
+    return {
+      ...player,
+      numCardsOnHand: 13,
+      position: index as 0 | 1 | 2 | 3,
+    };
+  });
+
+  for (const player of updatedPlayers) {
+    const playerCards = deck.splice(0, 13);
+    await restrictedPlayersRef.doc(player.id).set({ cards: playerCards, id: player.id });
+  }
+
+  const publicBiddingPhaseData: PublicBiddingPhase = {
+    currentPlayerIndex: 0,
+    numPasses: 0,
+    highestBid: null,
+    bidHistory: [],
+  };
+
+  await gameRoomRef.update({
+    status: "Bidding",
+    "phase.biddingPhase": publicBiddingPhaseData,
+    players: updatedPlayers,
+  });
 
   return { success: true };
 });

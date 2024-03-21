@@ -3,7 +3,6 @@ import React from "react";
 import Chatbox from "../../chat/Chatbox";
 import Auction from "./Auction";
 
-import { GameStateProvider } from "../../../context/GameStateContext";
 import { RestrictedPlayerProvider } from "../../../context/RestrictedPlayerContext";
 
 import { useAuth } from "../../../hooks/useAuth";
@@ -20,17 +19,15 @@ const BiddingRoom: React.FC = () => {
 
   return (
     <RestrictedPlayerProvider roomID={roomId} playerID={currentPlayerId}>
-      <GameStateProvider roomID={roomId}>
-        <div className="flex w-full h-full">
-          <div className="relative h-full w-3/4 pt-4">
-            <Auction />
-            <MatchPeripheral />
-          </div>
-          <div className="h-full w-1/4 p-4">
-            <Chatbox />
-          </div>
+      <div className="flex w-full h-full">
+        <div className="relative h-full w-3/4 pt-4">
+          <Auction />
+          <MatchPeripheral />
         </div>
-      </GameStateProvider>
+        <div className="h-full w-1/4 p-4">
+          <Chatbox />
+        </div>
+      </div>
     </RestrictedPlayerProvider>
   );
 };

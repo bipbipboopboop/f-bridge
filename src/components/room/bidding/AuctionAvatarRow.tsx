@@ -1,16 +1,18 @@
 import { avatarLookup } from "assets/avatar";
 import { useAuth } from "../../../hooks/useAuth";
-import { useGameState } from "../../../context/GameStateContext";
+import { useRoom } from "../../../context/RoomContext";
 
 const AuctionAvatarRow = () => {
   const { playerAccount } = useAuth();
-  const { biddingPhase } = useGameState();
+  const { room } = useRoom();
 
-  if (!biddingPhase) {
+  if (!room || !room.phase.biddingPhase) {
     return null;
   }
 
-  const { players, currentPlayerIndex } = biddingPhase;
+  const { players } = room;
+  const { currentPlayerIndex } = room.phase.biddingPhase;
+
   return (
     <div className="grid-cols-4 gap-y-1 grid justify-items-center items-center">
       {players.map((player, index) => {

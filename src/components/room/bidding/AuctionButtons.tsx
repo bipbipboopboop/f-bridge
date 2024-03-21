@@ -1,23 +1,23 @@
 import Button from "../../buttons/button";
-import { useGameState } from "../../../context/GameStateContext";
 import { BidLevel, BidSuit } from "types/Bid";
 import { useAuth } from "../../../hooks/useAuth";
 import { useFunctions } from "../../../hooks/useFunctions";
 import { useState } from "react";
+import { useRoom } from "../../../context/RoomContext";
 
 const AuctionButtons = () => {
-  const { biddingPhase } = useGameState();
   const { playerAccount } = useAuth();
   const { placeBid } = useFunctions();
-
   const [selectedNumber, setSelectedNumber] = useState<BidLevel | null>(null);
   const [selectedSuit, setSelectedSuit] = useState<BidSuit | null>(null);
+  const { room } = useRoom();
 
-  if (!biddingPhase) {
+  if (!room || !room.phase.biddingPhase) {
     return null;
   }
 
-  const { highestBid, currentPlayerIndex, players } = biddingPhase;
+  const { players } = room;
+  const { highestBid, currentPlayerIndex } = room.phase.biddingPhase;
   const isYourTurn = players[currentPlayerIndex].id === playerAccount?.id;
 
   const handleNumberClick = (level: BidLevel) => {

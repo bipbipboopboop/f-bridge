@@ -5,7 +5,12 @@ import { produce } from "immer";
 
 import { RestrictedAccountInfo } from "types/Account";
 import { Bid, BidSuit } from "types/Bid";
-import { PublicBiddingPhase, PrivateTrickTakingPhase, RestrictedPlayerData } from "types/GameState";
+import {
+  PublicBiddingPhase,
+  PrivateTrickTakingPhase,
+  RestrictedPlayerData,
+  PublicTrickTakingPhase,
+} from "types/GameState";
 import { PublicPlayer } from "types/Player";
 import { GameRoom } from "types/Room";
 
@@ -46,16 +51,14 @@ export const placeBid = functions.region("asia-east2").https.onCall(async (bid: 
     throw new functions.https.HttpsError("failed-precondition", "The game is not in the bidding phase.");
   }
 
-  const publicBiddingPhaseRef = gameRoomRef.collection("publicGameState").doc("biddingPhase");
-  const publicBiddingPhaseSnapshot = await publicBiddingPhaseRef.get();
-  const publicBiddingPhase = publicBiddingPhaseSnapshot.data() as PublicBiddingPhase;
+  const publicBiddingPhase = gameRoom.phase.biddingPhase;
 
-  if (!publicBiddingPhaseSnapshot.exists || !publicBiddingPhase) {
+  if (!publicBiddingPhase) {
     throw new functions.https.HttpsError("failed-precondition", "Can't find the bidding phase.");
   }
 
   const currentPlayerIndex = publicBiddingPhase.currentPlayerIndex;
-  const currentPlayer = publicBiddingPhase.players[currentPlayerIndex];
+  const currentPlayer = gameRoom.players[currentPlayerIndex];
 
   if (currentPlayer.id !== context.auth.uid) {
     throw new functions.https.HttpsError("failed-precondition", "You are not the current player.");
@@ -89,13 +92,13 @@ export const placeBid = functions.region("asia-east2").https.onCall(async (bid: 
   if (updatedPublicBiddingPhase.numPasses === 3 && updatedPublicBiddingPhase.highestBid) {
     updatedGameStatus = "Choosing Teammate";
   } else if (updatedPublicBiddingPhase.numPasses === 4) {
-    await resetBiddingPhase(gameRoomRef, updatedPublicBiddingPhase.players);
+    await resetBiddingPhase(gameRoomRef, gameRoom.players);
     return;
   }
 
-  await publicBiddingPhaseRef.set(updatedPublicBiddingPhase);
   await gameRoomRef.update({
     status: updatedGameStatus,
+    "phase.biddingPhase": updatedPublicBiddingPhase,
   });
 });
 
@@ -133,16 +136,14 @@ export const chooseTeammate = functions.region("asia-east2").https.onCall(async 
     throw new functions.https.HttpsError("failed-precondition", "You can't choose your teammate now.");
   }
 
-  const publicBiddingPhaseRef = gameRoomRef.collection("publicGameState").doc("biddingPhase");
-  const publicBiddingPhaseSnapshot = await publicBiddingPhaseRef.get();
-  const publicBiddingPhase = publicBiddingPhaseSnapshot.data() as PublicBiddingPhase;
+  const publicBiddingPhase = gameRoom.phase.biddingPhase;
 
-  if (!publicBiddingPhaseSnapshot.exists || !publicBiddingPhase) {
+  if (!publicBiddingPhase) {
     throw new functions.https.HttpsError("failed-precondition", "Can't find the bidding phase.");
   }
 
   const currentPlayerIndex = publicBiddingPhase.currentPlayerIndex;
-  const currentPlayer = publicBiddingPhase.players[currentPlayerIndex];
+  const currentPlayer = gameRoom.players[currentPlayerIndex];
 
   if (currentPlayer.id !== context.auth.uid) {
     throw new functions.https.HttpsError("failed-precondition", "It's not your turn to choose your teammate.");
@@ -167,14 +168,9 @@ export const chooseTeammate = functions.region("asia-east2").https.onCall(async 
   }
 
   const teammate = teammateSnapshot.docs[0].data() as RestrictedPlayerData;
-  const otherPlayers = publicBiddingPhase.players.filter(
-    (player) => player.id !== currentPlayer.id && player.id !== teammate.id
-  );
+  const otherPlayers = gameRoom.players.filter((player) => player.id !== currentPlayer.id && player.id !== teammate.id);
 
-  const declarerTeam: PublicPlayer[] = [
-    currentPlayer,
-    publicBiddingPhase.players.find((player) => player.id === teammate.id)!,
-  ];
+  const declarerTeam: PublicPlayer[] = [currentPlayer, gameRoom.players.find((player) => player.id === teammate.id)!];
   const defenderTeam: PublicPlayer[] = otherPlayers;
 
   await restrictedPlayersRef.doc(currentPlayer.id).update({ team: "Declarer" });
@@ -186,7 +182,6 @@ export const chooseTeammate = functions.region("asia-east2").https.onCall(async 
     currentPlayerIndex: ((currentPlayerIndex + 1) % 4) as 0 | 1 | 2 | 3,
     leadPlayerIndex: ((currentPlayerIndex + 1) % 4) as 0 | 1 | 2 | 3,
     trumpSuit: highestBid.suit as BidSuit,
-    players: publicBiddingPhase.players,
     defenderTeam: {
       tricksWon: 0,
       tricksNeeded: 13 - (6 + highestBid.level),
@@ -199,16 +194,19 @@ export const chooseTeammate = functions.region("asia-east2").https.onCall(async 
     },
   };
 
-  await gameRoomRef.collection("privateGameState").doc("trickTakingPhase").set(privateTrickTakingPhase);
-  await gameRoomRef.collection("publicGameState").doc("trickTakingPhase").set({
+  const publicTrickTakingPhase: PublicTrickTakingPhase = {
     currentPlayerIndex: privateTrickTakingPhase.currentPlayerIndex,
     leadPlayerIndex: privateTrickTakingPhase.leadPlayerIndex,
     trumpSuit: privateTrickTakingPhase.trumpSuit,
-    players: privateTrickTakingPhase.players,
-  });
+  };
 
-  await publicBiddingPhaseRef.delete();
-  await gameRoomRef.update({ status: "Taking Trick" });
+  await gameRoomRef.collection("privateGameState").doc("trickTakingPhase").set(privateTrickTakingPhase);
+  await gameRoomRef.update({
+    status: "Taking Trick",
+    "phase.biddingPhase": null,
+    "phase.teammateChoosingPhase": null,
+    "phase.trickTakingPhase": publicTrickTakingPhase,
+  });
 });
 
 function isBidValid(bid: Bid, highestBid: Bid | null): boolean {
@@ -227,21 +225,23 @@ function isBidValid(bid: Bid, highestBid: Bid | null): boolean {
   return false;
 }
 
-async function resetBiddingPhase(gameRoomRef: DocumentReference<GameRoom>, players: PublicBiddingPhase["players"]) {
+async function resetBiddingPhase(gameRoomRef: DocumentReference<GameRoom>, players: PublicPlayer[]) {
   const deck = shuffleCards();
   const restrictedPlayersRef = gameRoomRef.collection("restrictedPlayerCards");
 
-  for (const playerDoc of players) {
+  for (const player of players) {
     const playerCards = deck.splice(0, 13);
-    await restrictedPlayersRef.doc(playerDoc.id).update({ cards: playerCards });
+    await restrictedPlayersRef.doc(player.id).update({ cards: playerCards });
   }
 
-  const publicBiddingPhaseRef = gameRoomRef.collection("publicGameState").doc("biddingPhase");
-  await publicBiddingPhaseRef.set({
+  const publicBiddingPhaseData: PublicBiddingPhase = {
     currentPlayerIndex: 0,
     numPasses: 0,
     highestBid: null,
     bidHistory: [],
-    players: players,
+  };
+
+  await gameRoomRef.update({
+    "phase.biddingPhase": publicBiddingPhaseData,
   });
 }

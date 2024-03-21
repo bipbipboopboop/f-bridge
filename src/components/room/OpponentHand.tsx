@@ -1,5 +1,4 @@
 // OpponentHand.tsx
-import { useGameState } from "../../context/GameStateContext";
 import { useRoom } from "../../context/RoomContext";
 import { useAuth } from "../../hooks/useAuth";
 import PlayingCard from "../PlayingCard";
@@ -12,16 +11,12 @@ interface OpponentHandProps {
 const OpponentHand: React.FC<OpponentHandProps> = ({ direction, className }) => {
   const { playerAccount } = useAuth();
   const { room } = useRoom();
-  const { biddingPhase, trickTakingPhase } = useGameState();
 
   if (!playerAccount || !room) {
     return null;
   }
 
-  const isBiddingPhase = room.status === "Bidding";
-  const phase = isBiddingPhase ? biddingPhase : trickTakingPhase;
-
-  const currentPlayerPosition = phase!.players.find((player) => player.id === playerAccount.id)!.position as number;
+  const currentPlayerPosition = room.players.find((player) => player.id === playerAccount.id)!.position as number;
 
   const positionMap: Record<string, number> = {
     west: (currentPlayerPosition + 3) % 4,
@@ -30,7 +25,7 @@ const OpponentHand: React.FC<OpponentHandProps> = ({ direction, className }) => 
   };
 
   const position = positionMap[direction];
-  const numCards = phase!.players.find((player) => player.position === position)?.numCardsOnHand || 0;
+  const numCards = room.players.find((player) => player.position === position)?.numCardsOnHand || 0;
 
   console.log({ numCards });
 

@@ -1,25 +1,19 @@
 import { useState } from "react";
 import { useRoom } from "../../context/RoomContext";
-import { PublicBiddingPhase, PublicTrickTakingPhase, RestrictedPlayerData } from "types/GameState";
 import PlayingCard from "../PlayingCard";
 import Button from "../buttons/button";
 import { useRestrictedPlayerData } from "../../context/RestrictedPlayerContext";
-import { useGameState } from "../../context/GameStateContext";
 
 const PlayerHand = () => {
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
   const { restrictedPlayer } = useRestrictedPlayerData();
   const { room } = useRoom();
-  //   const { trickTakingPhase } = useTrickTakingPhase();
-  const { biddingPhase } = useGameState();
 
   if (!room) {
     return null;
   }
 
-  let phase: PublicBiddingPhase | PublicTrickTakingPhase;
-  phase = room.status === "Bidding" ? biddingPhase! : null!;
-
+  const phase = room.phase[room.status === "Bidding" ? "biddingPhase" : "trickTakingPhase"];
   const isTrickTakingPhase = room.status === "Taking Trick";
   const southPlayer = room.players.find((player) => player.id === restrictedPlayer?.id)!;
   const isCurrentPlayer = southPlayer.position === phase!.currentPlayerIndex;
@@ -37,7 +31,6 @@ const PlayerHand = () => {
       setSelectedCard(null);
     }
   };
-
   return (
     <>
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">

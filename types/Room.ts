@@ -1,3 +1,4 @@
+import { PublicBiddingPhase, PublicEndedPhase, PublicTeammateChoosingPhase, PublicTrickTakingPhase } from "./GameState";
 import { PublicPlayer } from "./Player";
 
 // Global
@@ -10,6 +11,12 @@ export type GameRoom = {
   invitedPlayerIDs: string[];
   playerCount: number;
   players: PublicPlayer[];
+  phase: {
+    biddingPhase: PublicBiddingPhase | null;
+    teammateChoosingPhase: PublicTeammateChoosingPhase | null;
+    trickTakingPhase: PublicTrickTakingPhase | null;
+    endedPhase: PublicEndedPhase | null;
+  };
 };
 
 export type GameRoomSettings = {

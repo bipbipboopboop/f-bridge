@@ -1,10 +1,8 @@
 import { avatarLookup } from "assets/avatar";
 
 import { useRoom } from "../../context/RoomContext";
-import { PublicBiddingPhase, PublicTrickTakingPhase } from "types/GameState";
+
 import { useAuth } from "../../hooks/useAuth";
-import { useGameState } from "../../context/GameStateContext";
-// import { useTrickTakingPhase } from "../../context/TrickTakingPhaseContext";
 
 interface MatchAvatarProps {
   position: number;
@@ -13,22 +11,16 @@ interface MatchAvatarProps {
 
 const MatchAvatar: React.FC<MatchAvatarProps> = ({ position, className }) => {
   const { room } = useRoom();
-  const { biddingPhase, trickTakingPhase } = useGameState();
   const { playerAccount } = useAuth();
 
-  if (!playerAccount || !biddingPhase || !room) {
+  if (!playerAccount || !room) {
     return null;
   }
-  let phase: PublicBiddingPhase | PublicTrickTakingPhase;
-  if (room.status === "Bidding") {
-    phase = biddingPhase!;
-  } else {
-    phase = biddingPhase!;
-  }
+  const phase = room.phase[room.status === "Bidding" ? "biddingPhase" : "trickTakingPhase"];
 
-  const player = phase?.players.find((player) => player.position === position);
+  const player = room.players.find((player) => player.position === position);
   const avatar = player ? avatarLookup[player.avatarID] : null;
-  const isCurrentTurn = player?.position === phase.currentPlayerIndex;
+  const isCurrentTurn = player?.position === phase?.currentPlayerIndex;
   const isSouthPlayer = player?.id === playerAccount.id;
 
   return (

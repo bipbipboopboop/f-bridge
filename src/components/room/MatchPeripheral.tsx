@@ -1,7 +1,6 @@
 import { useAuth } from "../../hooks/useAuth";
 import { useRestrictedPlayerData } from "../../context/RestrictedPlayerContext";
 import { useRoom } from "../../context/RoomContext";
-import { useGameState } from "../../context/GameStateContext";
 
 import MatchAvatar from "./MatchAvatar";
 import PlayerHand from "./PlayerHand";
@@ -10,19 +9,13 @@ import OpponentHand from "./OpponentHand";
 const MatchPeripheral: React.FC = () => {
   const { playerAccount } = useAuth();
   const { room } = useRoom();
-  const { biddingPhase, trickTakingPhase } = useGameState();
   const { restrictedPlayer } = useRestrictedPlayerData();
 
   if (!playerAccount || !room || !restrictedPlayer) {
     return null;
   }
 
-  const isBiddingPhase = room.status === "Bidding";
-  const isTrickTakingPhase = room.status === "Taking Trick";
-
-  const phase = isBiddingPhase ? biddingPhase : isTrickTakingPhase ? trickTakingPhase : null;
-
-  const southPlayerPosition = phase!.players.find((player) => player.id === playerAccount.id)!.position as number;
+  const southPlayerPosition = room.players.find((player) => player.id === playerAccount.id)!.position as number;
   const westPlayerPosition = (southPlayerPosition + 3) % 4;
   const northPlayerPosition = (southPlayerPosition + 2) % 4;
   const eastPlayerPosition = (southPlayerPosition + 1) % 4;
