@@ -42,7 +42,6 @@ export const placeBid = functions.region("asia-east2").https.onCall(async (bid: 
     throw new functions.https.HttpsError("not-found", "This room does not exist.");
   }
 
-  // 1. Check if the game is in the bidding phase
   if (gameRoom.status !== "Bidding") {
     throw new functions.https.HttpsError("failed-precondition", "The game is not in the bidding phase.");
   }
@@ -55,7 +54,6 @@ export const placeBid = functions.region("asia-east2").https.onCall(async (bid: 
     throw new functions.https.HttpsError("failed-precondition", "Can't find the bidding phase.");
   }
 
-  // 2. Check if the player is in the room
   const currentPlayerIndex = publicBiddingPhase.currentPlayerIndex;
   const currentPlayer = publicBiddingPhase.players[currentPlayerIndex];
 
@@ -63,18 +61,8 @@ export const placeBid = functions.region("asia-east2").https.onCall(async (bid: 
     throw new functions.https.HttpsError("failed-precondition", "You are not the current player.");
   }
 
-  // 3. Check if it's the player's turn
-  if (currentPlayer.id !== context.auth.uid) {
-    throw new functions.https.HttpsError("failed-precondition", "It's not your turn to place a bid.");
-  }
-
-  // 4. Check if the bid is valid
   const isPass = bid.suit === "Pass";
-  const isValidBid =
-    !isPass &&
-    (!publicBiddingPhase.highestBid ||
-      bid.level > publicBiddingPhase.highestBid.level ||
-      (bid.level === publicBiddingPhase.highestBid.level && bid.suit > publicBiddingPhase.highestBid.suit));
+  const isValidBid = !isPass && isBidValid(bid, publicBiddingPhase.highestBid);
 
   if (!isPass && !isValidBid) {
     throw new functions.https.HttpsError(
@@ -99,27 +87,9 @@ export const placeBid = functions.region("asia-east2").https.onCall(async (bid: 
   let updatedGameStatus: GameRoom["status"] = gameRoom.status;
 
   if (updatedPublicBiddingPhase.numPasses === 3 && updatedPublicBiddingPhase.highestBid) {
-    // Declare bid winner when there are 3 consecutive passes
     updatedGameStatus = "Choosing Teammate";
   } else if (updatedPublicBiddingPhase.numPasses === 4) {
-    // Reshuffle everyone's cards if everyone passes
-    const deck = shuffleCards();
-    const restrictedPlayersRef = gameRoomRef.collection("restrictedPlayers");
-
-    for (const playerDoc of updatedPublicBiddingPhase.players) {
-      const playerCards = deck.splice(0, 13);
-      await restrictedPlayersRef.doc(playerDoc.id).update({ cards: playerCards });
-    }
-
-    // Reset the bidding phase
-    await publicBiddingPhaseRef.set({
-      currentPlayerIndex: 0,
-      numPasses: 0,
-      highestBid: null,
-      bidHistory: [],
-      players: updatedPublicBiddingPhase.players,
-    });
-
+    await resetBiddingPhase(gameRoomRef, updatedPublicBiddingPhase.players);
     return;
   }
 
@@ -240,3 +210,38 @@ export const chooseTeammate = functions.region("asia-east2").https.onCall(async 
   await publicBiddingPhaseRef.delete();
   await gameRoomRef.update({ status: "Taking Trick" });
 });
+
+function isBidValid(bid: Bid, highestBid: Bid | null): boolean {
+  if (!highestBid) {
+    return true;
+  }
+
+  const suitOrder: BidSuit[] = ["♣", "♦", "♥", "♠", "NT"];
+
+  if (bid.level > highestBid.level) {
+    return true;
+  } else if (bid.level === highestBid.level) {
+    return suitOrder.indexOf(bid.suit) > suitOrder.indexOf(highestBid.suit);
+  }
+
+  return false;
+}
+
+async function resetBiddingPhase(gameRoomRef: DocumentReference<GameRoom>, players: PublicBiddingPhase["players"]) {
+  const deck = shuffleCards();
+  const restrictedPlayersRef = gameRoomRef.collection("restrictedPlayers");
+
+  for (const playerDoc of players) {
+    const playerCards = deck.splice(0, 13);
+    await restrictedPlayersRef.doc(playerDoc.id).update({ cards: playerCards });
+  }
+
+  const publicBiddingPhaseRef = gameRoomRef.collection("publicGameState").doc("biddingPhase");
+  await publicBiddingPhaseRef.set({
+    currentPlayerIndex: 0,
+    numPasses: 0,
+    highestBid: null,
+    bidHistory: [],
+    players: players,
+  });
+}
