@@ -25,7 +25,7 @@ const MatchAvatar: React.FC<MatchAvatarProps> = ({ position, className }) => {
 
   return (
     <div
-      className={`w-[15%] bg-[#FCFBF8] text-[#515151] px-5 py-2 rounded-[40px] text-sm flex items-center shadow-xl ${
+      className={`select-none w-[15%] bg-[#FCFBF8] text-[#515151] px-5 py-2 rounded-[40px] text-sm flex items-center shadow-xl ${
         isCurrentTurn ? "border-4 border-teal-400 animate-pulse" : ""
       } ${className}`}
     >

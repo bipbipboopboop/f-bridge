@@ -19,13 +19,13 @@ const TrickArea: React.FC = () => {
   const getCardAnimationClass = (playerPosition: number) => {
     switch (playerPosition) {
       case southPlayerPosition:
-        return "animate-south-card-fly-center south-card";
+        return "animate-south-card-fly-center";
       case westPlayerPosition:
-        return "animate-west-card-fly-center west-card";
+        return "animate-west-card-fly-center";
       case northPlayerPosition:
-        return "animate-north-card-fly-center north-card";
+        return "animate-north-card-fly-center";
       case eastPlayerPosition:
-        return "animate-east-card-fly-center east-card";
+        return "animate-east-card-fly-center";
       default:
         return "";
     }
@@ -47,16 +47,16 @@ const TrickArea: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full h-full">
+    <div className="h-full w-full">
       {room.players.map((player) => {
         console.log({ player: player.position, southPlayerPosition });
         return (
           player.currentCardOnTable && (
             <PlayingCard
               card={player.currentCardOnTable}
-              className={`absolute transition-all duration-500 ${getCardAnimationClass(
-                player.position as number
-              )} ${getCardFinalPosition(player.position as number)}`}
+              className={`absolute ${getCardAnimationClass(player.position as number)} 
+              ${getCardFinalPosition(player.position as number)}
+              `}
             />
           )
         );

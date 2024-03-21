@@ -14,7 +14,7 @@ const AuctionAvatarRow = () => {
   const { currentPlayerIndex } = room.phase.biddingPhase;
 
   return (
-    <div className="grid-cols-4 gap-y-1 grid justify-items-center items-center">
+    <div className="grid-cols-4 gap-y-1 grid justify-items-center items-center select-none">
       {players.map((player, index) => {
         const avatar = avatarLookup[player.avatarID];
         return (
@@ -22,7 +22,9 @@ const AuctionAvatarRow = () => {
             key={player.id}
             className={`${index === currentPlayerIndex ? "border-b-4 border-orange-400 h-full py-1" : ""}`}
           >
-            <div className="text-xs text-center">{player.id === playerAccount?.id ? "You" : `P${player.position}`}</div>
+            <div className="text-xs text-center select-none">
+              {player.id === playerAccount?.id ? "You" : `P${player.position}`}
+            </div>
             <img src={avatar} className="h-10" />
           </div>
         );
