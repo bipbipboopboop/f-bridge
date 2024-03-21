@@ -80,6 +80,8 @@ const PlayerHand = () => {
     }
   };
 
+  const canPlayCard = isTrickTakingPhase && isCurrentPlayer;
+
   return (
     <>
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
@@ -101,8 +103,9 @@ const PlayerHand = () => {
         <Button
           size={1}
           theme="green"
+          className={!canPlayCard ? "opacity-0" : selectedCard ? "opacity-100" : "opacity-50"}
           onClick={handlePlayClick}
-          disabled={!isTrickTakingPhase || !isCurrentPlayer || !selectedCard}
+          disabled={!canPlayCard && !selectedCard}
         >
           Play
         </Button>
