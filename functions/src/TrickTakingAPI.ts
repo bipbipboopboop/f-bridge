@@ -152,6 +152,7 @@ export const playCard = functions.region("asia-east2").https.onCall(async (card:
       announcements: [
         ...gameRoom.announcements,
         {
+          id: Timestamp.now().toMillis().toString(),
           title: "Trick Winner",
           content: `${winner.displayName} won the trick! ${winner.displayName} will start the next trick.`,
           createdAt: Timestamp.now().toDate(),
@@ -205,6 +206,32 @@ export const playCard = functions.region("asia-east2").https.onCall(async (card:
         const winners = isDeclarerTeamWon
           ? updatedPrivateTrickTakingPhase.declarerTeam.players
           : updatedPrivateTrickTakingPhase.defenderTeam.players;
+        const winnerIDs = winners.map((winner) => winner.id);
+
+        await Promise.all(
+          winnerIDs.map(async (winnerId) => {
+            const winnerAccountRef = admin.firestore().collection("accounts").doc(winnerId);
+            const winnerAccount = (await winnerAccountRef.get()).data() as RestrictedAccountInfo;
+
+            await winnerAccountRef.update({
+              numOfGamesWon: winnerAccount.numOfGamesWon + 1,
+              numOfGamesPlayed: winnerAccount.numOfGamesPlayed + 1,
+              roomID: null,
+            });
+          })
+        );
+
+        await Promise.all(
+          gameRoom.players.map(async (player) => {
+            const loserAccountRef = admin.firestore().collection("accounts").doc(player.id);
+            const loserAccount = (await loserAccountRef.get()).data() as RestrictedAccountInfo;
+
+            await loserAccountRef.update({
+              numOfGamesPlayed: loserAccount.numOfGamesPlayed + 1,
+              roomID: null,
+            });
+          })
+        );
 
         const endedPhase: PublicEndedPhase = {
           winnerTeam,
@@ -219,6 +246,7 @@ export const playCard = functions.region("asia-east2").https.onCall(async (card:
           announcements: [
             ...updatedRoom.announcements,
             {
+              id: Timestamp.now().toMillis().toString(),
               title: "Game Over",
               content: `${winnerTeam} team has won the game!`,
               createdAt: Timestamp.now().toDate(),

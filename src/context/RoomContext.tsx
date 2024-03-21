@@ -34,10 +34,14 @@ export const RoomProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   useEffect(() => {
     if (room && room.announcements.length > 0) {
-      console.log({ room });
       const lastAnnouncement = room.announcements[room.announcements.length - 1];
-      setLatestAnnouncement(lastAnnouncement);
-      setShowModal(true);
+      const lastDisplayedAnnouncementId = localStorage.getItem("lastDisplayedAnnouncementId");
+
+      if (lastAnnouncement.id !== lastDisplayedAnnouncementId) {
+        setLatestAnnouncement(lastAnnouncement);
+        setShowModal(true);
+        localStorage.setItem("lastDisplayedAnnouncementId", lastAnnouncement.id);
+      }
     }
   }, [room]);
 

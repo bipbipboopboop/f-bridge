@@ -7,6 +7,7 @@ import { RestrictedPlayerProvider } from "../../../context/RestrictedPlayerConte
 import { useAuth } from "../../../hooks/useAuth";
 import MatchPeripheral from "../MatchPeripheral";
 import TrickArea from "./TrickArea";
+import TrickMonitor from "./TrickMonitor";
 
 const TrickTakingRoom: React.FC = () => {
   const { playerAccount } = useAuth();
@@ -25,7 +26,12 @@ const TrickTakingRoom: React.FC = () => {
           <MatchPeripheral />
         </div>
         <div className="h-full w-1/4 p-4">
-          <Chatbox />
+          <div className="h-1/5">
+            <TrickMonitor />
+          </div>
+          <div className="h-4/5">
+            <Chatbox />
+          </div>
         </div>
       </div>
     </RestrictedPlayerProvider>

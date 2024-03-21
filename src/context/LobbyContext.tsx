@@ -3,7 +3,7 @@ import React, { ReactNode, createContext, useContext } from "react";
 import { toast } from "react-toastify";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 
-import { collection, query, orderBy, CollectionReference } from "firebase/firestore";
+import { collection, query, orderBy, CollectionReference, where } from "firebase/firestore";
 
 import { firestore } from "../firebase";
 import { GameRoom } from "types/Room";
@@ -20,7 +20,7 @@ const LobbyContext = createContext<LobbyContextProps>({
 
 export const LobbyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const roomsCollection = collection(firestore, "gameRooms") as CollectionReference<GameRoom>;
-  const roomsQuery = query(roomsCollection, orderBy("createdAt", "desc"));
+  const roomsQuery = query(roomsCollection, where("status", "==", "Waiting"), orderBy("createdAt", "desc"));
   const [roomList, isRoomListLoading, error] = useCollectionData(roomsQuery);
 
   if (error) {
