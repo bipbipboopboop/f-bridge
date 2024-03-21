@@ -24,9 +24,9 @@ const MatchPeripheral: React.FC = () => {
     <div className="top-0 left-0 w-full h-full">
       <PlayerHand />
 
-      <MatchAvatar position={westPlayerPosition} className="absolute top-1/4 left-10" />
-      <MatchAvatar position={northPlayerPosition} className="absolute top-5 left-28" />
-      <MatchAvatar position={eastPlayerPosition} className="absolute top-1/4 right-10" />
+      <MatchAvatar position={westPlayerPosition} className="absolute top-[23%] left-5" />
+      <MatchAvatar position={eastPlayerPosition} className="absolute top-[23%] right-5" />
+      <MatchAvatar position={northPlayerPosition} className="absolute top-5 left-[5%]" />
       <MatchAvatar position={southPlayerPosition} className="absolute bottom-[16%] right-10" />
 
       <OpponentHand direction="west" className="absolute top-1/3 left-[22%]" />

@@ -83,12 +83,12 @@ const PlayerHand = () => {
   return (
     <>
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-        <div className="flex justify-center -space-x-[12%]">
+        <div className="flex justify-center -space-x-12">
           {sortCards(restrictedPlayer?.cards || []).map((card, index) => (
             <PlayingCard
               key={index}
               card={card}
-              style={{ zIndex: 40 - index * 2 }}
+              style={{ zIndex: index + 1 }}
               className={`cursor-pointer transition-transform duration-300 ease-in-out hover:transform hover:-translate-y-8 ${
                 selectedCard?.suit === card.suit && selectedCard?.rank === card.rank ? "transform -translate-y-8" : ""
               }`}
@@ -97,7 +97,7 @@ const PlayerHand = () => {
           ))}
         </div>
       </div>
-      <div className="w-full flex absolute left-[44%] bottom-[22%] gap-x-2">
+      <div className="w-[13%] flex flex-col absolute right-5 bottom-4 gap-y-2">
         <Button
           size={1}
           theme="green"
@@ -106,7 +106,6 @@ const PlayerHand = () => {
         >
           Play
         </Button>
-
         <Button size={1} theme="orange" onClick={handleSortClick}>
           Sort
         </Button>
