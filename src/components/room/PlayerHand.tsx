@@ -4,14 +4,14 @@ import { PublicBiddingPhase, PublicTrickTakingPhase, RestrictedPlayerData } from
 import PlayingCard from "../PlayingCard";
 import Button from "../buttons/button";
 import { useRestrictedPlayerData } from "../../context/RestrictedPlayerContext";
-import { useBiddingPhase } from "../../context/BiddingContext";
+import { useGameState } from "../../context/GameStateContext";
 
 const PlayerHand = () => {
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
   const { restrictedPlayer } = useRestrictedPlayerData();
   const { room } = useRoom();
   //   const { trickTakingPhase } = useTrickTakingPhase();
-  const { biddingPhase } = useBiddingPhase();
+  const { biddingPhase } = useGameState();
 
   if (!room) {
     return null;

@@ -1,12 +1,12 @@
-import { useBiddingPhase } from "../../../context/BiddingContext";
 import Button from "../../buttons/button";
+import { useGameState } from "../../../context/GameStateContext";
 import { BidLevel, BidSuit } from "types/Bid";
 import { useAuth } from "../../../hooks/useAuth";
 import { useFunctions } from "../../../hooks/useFunctions";
 import { useState } from "react";
 
 const AuctionButtons = () => {
-  const { biddingPhase } = useBiddingPhase();
+  const { biddingPhase } = useGameState();
   const { playerAccount } = useAuth();
   const { placeBid } = useFunctions();
 

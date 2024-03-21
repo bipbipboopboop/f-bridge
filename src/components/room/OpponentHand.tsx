@@ -1,5 +1,5 @@
 // OpponentHand.tsx
-import { useBiddingPhase } from "../../context/BiddingContext";
+import { useGameState } from "../../context/GameStateContext";
 import { useTakingTrickPhase } from "../../context/TakingTrickContext";
 import { useRoom } from "../../context/RoomContext";
 import { useAuth } from "../../hooks/useAuth";
@@ -13,7 +13,7 @@ interface OpponentHandProps {
 const OpponentHand: React.FC<OpponentHandProps> = ({ direction, className }) => {
   const { playerAccount } = useAuth();
   const { room } = useRoom();
-  const { biddingPhase } = useBiddingPhase();
+  const { biddingPhase } = useGameState();
   const { takingTrickPhase } = useTakingTrickPhase();
 
   if (!playerAccount || !room) {

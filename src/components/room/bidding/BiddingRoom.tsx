@@ -3,7 +3,7 @@ import React from "react";
 import Chatbox from "../../chat/Chatbox";
 import Auction from "./Auction";
 
-import { BiddingProvider } from "../../../context/BiddingContext";
+import { GameStateProvider } from "../../../context/GameStateContext";
 import { RestrictedPlayerProvider } from "../../../context/RestrictedPlayerContext";
 
 import { useAuth } from "../../../hooks/useAuth";
@@ -15,12 +15,12 @@ const BiddingRoom: React.FC = () => {
   const roomId = playerAccount?.roomID;
 
   if (!roomId || !currentPlayerId) {
-    return null; // Or display a loading state or error message
+    return null;
   }
 
   return (
     <RestrictedPlayerProvider roomID={roomId} playerID={currentPlayerId}>
-      <BiddingProvider roomID={roomId}>
+      <GameStateProvider roomID={roomId}>
         <div className="flex w-full h-full">
           <div className="relative h-full w-3/4 pt-4">
             <Auction />
@@ -30,7 +30,7 @@ const BiddingRoom: React.FC = () => {
             <Chatbox />
           </div>
         </div>
-      </BiddingProvider>
+      </GameStateProvider>
     </RestrictedPlayerProvider>
   );
 };

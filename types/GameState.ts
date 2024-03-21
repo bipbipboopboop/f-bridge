@@ -11,6 +11,12 @@ export type PublicBiddingPhase = {
   players: PublicPlayer[];
 };
 
+export type PublicTeammateChoosingPhase = {
+  currentPlayerIndex: 0 | 1 | 2 | 3;
+  trumpSuit: BidSuit | null;
+  players: PublicPlayer[];
+};
+
 export type PublicTrickTakingPhase = {
   currentPlayerIndex: 0 | 1 | 2 | 3;
   leadPlayerIndex: 0 | 1 | 2 | 3;

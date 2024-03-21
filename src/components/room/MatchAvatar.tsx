@@ -1,8 +1,9 @@
 import { avatarLookup } from "assets/avatar";
-import { useBiddingPhase } from "../../context/BiddingContext";
+
 import { useRoom } from "../../context/RoomContext";
 import { PublicBiddingPhase, PublicTrickTakingPhase } from "types/GameState";
 import { useAuth } from "../../hooks/useAuth";
+import { useGameState } from "../../context/GameStateContext";
 // import { useTrickTakingPhase } from "../../context/TrickTakingPhaseContext";
 
 interface MatchAvatarProps {
@@ -12,9 +13,8 @@ interface MatchAvatarProps {
 
 const MatchAvatar: React.FC<MatchAvatarProps> = ({ position, className }) => {
   const { room } = useRoom();
-  const { biddingPhase } = useBiddingPhase();
+  const { biddingPhase, trickTakingPhase } = useGameState();
   const { playerAccount } = useAuth();
-  // const { trickTakingPhase } = useTrickTakingPhase();
 
   if (!playerAccount || !biddingPhase || !room) {
     return null;

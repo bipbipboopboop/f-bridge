@@ -10,56 +10,51 @@ import Loading from "../components/Loading";
 import { useRoom } from "./RoomContext";
 
 interface GameStateContextProps {
-  gameState: PublicBiddingPhase | PublicTrickTakingPhase | undefined;
+  biddingPhase: PublicBiddingPhase | undefined;
+  trickTakingPhase: PublicTrickTakingPhase | undefined;
 }
 
 const GameStateContext = createContext<GameStateContextProps>({
-  gameState: undefined,
+  biddingPhase: undefined,
+  trickTakingPhase: undefined,
 });
 
 export const GameStateProvider: React.FC<{ roomID: string; children: ReactNode }> = ({ roomID, children }) => {
   const { room } = useRoom();
 
-  const getGameStateRef = () => {
-    if (room?.status === "Bidding") {
-      return doc(
-        firestore,
-        "gameRooms",
-        roomID,
-        "publicGameState",
-        "biddingPhase"
-      ) as DocumentReference<PublicBiddingPhase>;
-    } else if (room?.status === "Taking Trick") {
-      return doc(
-        firestore,
-        "gameRooms",
-        roomID,
-        "publicGameState",
-        "takingTrickPhase"
-      ) as DocumentReference<PublicTrickTakingPhase>;
-    }
-    return null;
-  };
+  const biddingPhaseRef = doc(
+    firestore,
+    "gameRooms",
+    roomID,
+    "publicGameState",
+    "biddingPhase"
+  ) as DocumentReference<PublicBiddingPhase>;
 
-  const gameStateRef = getGameStateRef();
+  const trickTakingPhaseRef = doc(
+    firestore,
+    "gameRooms",
+    roomID,
+    "publicGameState",
+    "takingTrickPhase"
+  ) as DocumentReference<PublicTrickTakingPhase>;
 
-  const [gameState, isGameStateLoading, gameStateError] = useDocumentData<PublicBiddingPhase | PublicTrickTakingPhase>(
-    room?.status === "Bidding"
-      ? (gameStateRef as DocumentReference<PublicBiddingPhase>)
-      : room?.status === "Taking Trick"
-      ? (gameStateRef as DocumentReference<PublicTrickTakingPhase>)
-      : null
+  const [biddingPhase, isBiddingPhaseLoading, biddingPhaseError] = useDocumentData(
+    room?.status === "Bidding" ? biddingPhaseRef : null
   );
 
-  if (gameStateError) {
-    toast.error(gameStateError.message);
+  const [trickTakingPhase, isTrickTakingPhaseLoading, trickTakingPhaseError] = useDocumentData(
+    room?.status === "Taking Trick" ? trickTakingPhaseRef : null
+  );
+
+  if (biddingPhaseError || trickTakingPhaseError) {
+    toast.error(biddingPhaseError?.message || trickTakingPhaseError?.message);
   }
 
-  if (isGameStateLoading) {
+  if (isBiddingPhaseLoading || isTrickTakingPhaseLoading) {
     return <Loading text="Loading Game State" />;
   }
 
-  return <GameStateContext.Provider value={{ gameState }}>{children}</GameStateContext.Provider>;
+  return <GameStateContext.Provider value={{ biddingPhase, trickTakingPhase }}>{children}</GameStateContext.Provider>;
 };
 
 export const useGameState = () => {

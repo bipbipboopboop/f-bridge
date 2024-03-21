@@ -1,10 +1,10 @@
 import { avatarLookup } from "assets/avatar";
-import { useBiddingPhase } from "../../../context/BiddingContext";
 import { useAuth } from "../../../hooks/useAuth";
+import { useGameState } from "../../../context/GameStateContext";
 
 const AuctionAvatarRow = () => {
   const { playerAccount } = useAuth();
-  const { biddingPhase } = useBiddingPhase();
+  const { biddingPhase } = useGameState();
 
   if (!biddingPhase) {
     return null;
