@@ -229,7 +229,7 @@ function isBidValid(bid: Bid, highestBid: Bid | null): boolean {
 
 async function resetBiddingPhase(gameRoomRef: DocumentReference<GameRoom>, players: PublicBiddingPhase["players"]) {
   const deck = shuffleCards();
-  const restrictedPlayersRef = gameRoomRef.collection("restrictedPlayers");
+  const restrictedPlayersRef = gameRoomRef.collection("restrictedPlayerCards");
 
   for (const playerDoc of players) {
     const playerCards = deck.splice(0, 13);
