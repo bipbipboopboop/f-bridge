@@ -3,6 +3,7 @@ import BiddingRoom from "../components/room/bidding/BiddingRoom";
 import TakingTrickRoom from "../components/room/taking-trick/TakingTrickRoom";
 import EndedRoom from "../components/room/ended/EndedRoom";
 import { useRoom } from "../context/RoomContext";
+import TeammateChoosingRoom from "../components/room/choosing-teammate/TeammateChoosingRoom";
 
 const Room = () => {
   const { room } = useRoom();
@@ -17,6 +18,7 @@ const Room = () => {
     case "Bidding":
       return <BiddingRoom />;
     case "Choosing Teammate":
+      return <TeammateChoosingRoom />;
     case "Taking Trick":
     //   return <TakingTrickRoom room={room} />;
     case "Ended":

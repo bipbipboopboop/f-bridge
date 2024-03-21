@@ -10,6 +10,7 @@ import {
   PrivateTrickTakingPhase,
   RestrictedPlayerData,
   PublicTrickTakingPhase,
+  PublicTeammateChoosingPhase,
 } from "types/GameState";
 import { PublicPlayer } from "types/Player";
 import { GameRoom } from "types/Room";
@@ -90,7 +91,30 @@ export const placeBid = functions.region("asia-east2").https.onCall(async (bid: 
   let updatedGameStatus: GameRoom["status"] = gameRoom.status;
 
   if (updatedPublicBiddingPhase.numPasses === 3 && updatedPublicBiddingPhase.highestBid) {
-    updatedGameStatus = "Choosing Teammate";
+    // Find the bid winner based on the index of the highest bid in bidHistory
+    const bidWinnerIndex = updatedPublicBiddingPhase.bidHistory.findIndex(
+      (bidEntry) =>
+        bidEntry.level === updatedPublicBiddingPhase.highestBid!.level &&
+        bidEntry.suit === updatedPublicBiddingPhase.highestBid!.suit
+    );
+
+    // Calculate the position of the bid winner
+    const bidWinnerPosition = (((bidWinnerIndex - updatedPublicBiddingPhase.bidHistory.length) % 4) + 4) % 4;
+
+    // Set up PublicTeammateChoosingPhase when there are 3 consecutive passes
+    const publicTeammateChoosingPhase: PublicTeammateChoosingPhase = {
+      currentPlayerIndex: bidWinnerPosition as 0 | 1 | 2 | 3,
+      chosenCard: null,
+      highestBid: updatedPublicBiddingPhase.highestBid,
+    };
+
+    await gameRoomRef.update({
+      status: "Choosing Teammate",
+      "phase.biddingPhase": null,
+      "phase.teammateChoosingPhase": publicTeammateChoosingPhase,
+    });
+
+    return;
   } else if (updatedPublicBiddingPhase.numPasses === 4) {
     await resetBiddingPhase(gameRoomRef, gameRoom.players);
     return;
@@ -136,13 +160,13 @@ export const chooseTeammate = functions.region("asia-east2").https.onCall(async 
     throw new functions.https.HttpsError("failed-precondition", "You can't choose your teammate now.");
   }
 
-  const publicBiddingPhase = gameRoom.phase.biddingPhase;
+  const publicTeammateChoosingPhase = gameRoom.phase.teammateChoosingPhase;
 
-  if (!publicBiddingPhase) {
-    throw new functions.https.HttpsError("failed-precondition", "Can't find the bidding phase.");
+  if (!publicTeammateChoosingPhase) {
+    throw new functions.https.HttpsError("failed-precondition", "Can't find the teammate choosing phase.");
   }
 
-  const currentPlayerIndex = publicBiddingPhase.currentPlayerIndex;
+  const currentPlayerIndex = publicTeammateChoosingPhase.currentPlayerIndex;
   const currentPlayer = gameRoom.players[currentPlayerIndex];
 
   if (currentPlayer.id !== context.auth.uid) {
@@ -177,7 +201,7 @@ export const chooseTeammate = functions.region("asia-east2").https.onCall(async 
   await restrictedPlayersRef.doc(teammate.id).update({ team: "Declarer" });
   await Promise.all(otherPlayers.map((player) => restrictedPlayersRef.doc(player.id).update({ team: "Defender" })));
 
-  const highestBid = publicBiddingPhase.highestBid!;
+  const highestBid = publicTeammateChoosingPhase.highestBid!;
   const privateTrickTakingPhase: PrivateTrickTakingPhase = {
     currentPlayerIndex: ((currentPlayerIndex + 1) % 4) as 0 | 1 | 2 | 3,
     leadPlayerIndex: ((currentPlayerIndex + 1) % 4) as 0 | 1 | 2 | 3,
@@ -203,7 +227,6 @@ export const chooseTeammate = functions.region("asia-east2").https.onCall(async 
   await gameRoomRef.collection("privateGameState").doc("trickTakingPhase").set(privateTrickTakingPhase);
   await gameRoomRef.update({
     status: "Taking Trick",
-    "phase.biddingPhase": null,
     "phase.teammateChoosingPhase": null,
     "phase.trickTakingPhase": publicTrickTakingPhase,
   });

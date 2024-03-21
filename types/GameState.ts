@@ -12,7 +12,8 @@ export type PublicBiddingPhase = {
 
 export type PublicTeammateChoosingPhase = {
   currentPlayerIndex: 0 | 1 | 2 | 3;
-  trumpSuit: BidSuit | null;
+  chosenCard: Card | null;
+  highestBid: Bid;
 };
 
 export type PublicTrickTakingPhase = {

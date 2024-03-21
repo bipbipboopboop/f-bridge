@@ -18,13 +18,13 @@ const RoomList = () => {
           className="w-1/2 py-2 text-center rounded-tl-lg text-white hover:bg-[#006cb1]"
           selectedClassName="bg-[#0567a6]"
         >
-          Rooms
+          Public Rooms
         </Tab>
         <Tab
           className="w-1/2 py-2 text-center rounded-tr-lg text-white hover:bg-[#006cb1]"
           selectedClassName="bg-[#0567a6]"
         >
-          Spectate
+          Invite Only
         </Tab>
       </TabList>
       <TabPanel index={0} className="h-full">

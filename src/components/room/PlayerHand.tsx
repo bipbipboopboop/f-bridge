@@ -13,10 +13,20 @@ const PlayerHand = () => {
     return null;
   }
 
-  const phase = room.phase[room.status === "Bidding" ? "biddingPhase" : "trickTakingPhase"];
+  const isBiddingPhase = room.status === "Bidding";
+  const isTeammateChoosingPhase = room.status === "Choosing Teammate";
   const isTrickTakingPhase = room.status === "Taking Trick";
+
+  const phase = isBiddingPhase
+    ? room.phase.biddingPhase
+    : isTeammateChoosingPhase
+    ? room.phase.teammateChoosingPhase
+    : isTrickTakingPhase
+    ? room.phase.trickTakingPhase
+    : null;
+
   const southPlayer = room.players.find((player) => player.id === restrictedPlayer?.id)!;
-  const isCurrentPlayer = southPlayer.position === phase!.currentPlayerIndex;
+  const isCurrentPlayer = southPlayer.position === phase?.currentPlayerIndex;
 
   const handleCardClick = (index: number) => {
     if (isTrickTakingPhase && isCurrentPlayer) {
