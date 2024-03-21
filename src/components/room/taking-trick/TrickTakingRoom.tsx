@@ -25,11 +25,11 @@ const TrickTakingRoom: React.FC = () => {
           <TrickArea />
           <MatchPeripheral />
         </div>
-        <div className="h-full w-1/4 p-4">
-          <div className="h-1/5">
+        <div className="h-full w-1/4 p-4 flex flex-col">
+          <div className="h-2/5">
             <TrickMonitor />
           </div>
-          <div className="h-4/5">
+          <div className="h-3/5">
             <Chatbox />
           </div>
         </div>
