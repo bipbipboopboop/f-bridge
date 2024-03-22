@@ -71,11 +71,21 @@ const AuctionButtons = () => {
   return (
     <div>
       <div className="flex mb-2.5 space-x-2">
-        <Button size={1} theme="orange" className="py-1.5 px-3.5 text-white text-xs" onClick={handlePassClick}>
+        <Button
+          size={1}
+          theme="orange"
+          className="py-1.5 px-3.5 text-white text-xs mobile-landscape:h-6 mobile-landscape:text-3xs"
+          onClick={handlePassClick}
+        >
           Pass
         </Button>
         {selectedNumber && selectedSuit && (
-          <Button size={1} theme="yellow" className="py-1.5 px-3.5 text-xs" onClick={handleConfirmClick}>
+          <Button
+            size={1}
+            theme="yellow"
+            className="py-1.5 px-3.5 text-xs mobile-landscape:h-6 mobile-landscape:text-3xs"
+            onClick={handleConfirmClick}
+          >
             Confirm
           </Button>
         )}
@@ -84,14 +94,15 @@ const AuctionButtons = () => {
         {[1, 2, 3, 4, 5, 6].map((level) => (
           <button
             key={level}
-            className={`w-[34px] h-[34px] rounded-[5px] text-base overflow-hidden border-none
+            className={`w-[34px] h-[34px] rounded-[5px] text-base overflow-hidden border-none 
+            mobile-landscape:text-2xs mobile-landscape:h-[18px] mobile-landscape:w-[18px]
              ${selectedNumber === level ? "bg-black/20 text-white" : ""} ${
               !isNumberSelectable(level as BidLevel) ? "text-gray-400 cursor-not-allowed" : ""
             }`}
             onClick={() => handleNumberClick(level as BidLevel)}
             disabled={!isNumberSelectable(level as BidLevel)}
           >
-            <div className="flex justify-center relative top-1">{level}</div>
+            <div className="flex justify-center relative top-1 mobile-landscape:top-0">{level}</div>
           </button>
         ))}
       </div>
@@ -104,6 +115,7 @@ const AuctionButtons = () => {
 
             const buttonClassName = `
       w-[34px] h-[34px] text-2xl overflow-hidden border-none
+      mobile-landscape:text-2xs mobile-landscape:h-[18px] mobile-landscape:w-[18px]
       ${selectedSuit === suit ? "bg-black/25 rounded" : ""}
       ${suitSelectable ? "" : "text-gray-400 cursor-not-allowed opacity-50"}
       ${isRedSuit ? "text-[#FF525D]" : "text-[#222222]"}
@@ -118,7 +130,9 @@ const AuctionButtons = () => {
               >
                 <div
                   className={`flex justify-center relative ${
-                    isNT ? "text-sm top-1 text-yellow-300" : "text-4xl bottom-1"
+                    isNT
+                      ? "text-sm top-1 text-yellow-300 mobile-landscape:text-2xs mobile-landscape:top-0.5"
+                      : "text-4xl bottom-1 mobile-landscape:text-sm mobile-landscape:bottom-0.5"
                   }`}
                 >
                   {suit}
