@@ -9,7 +9,8 @@ import { useFunctions } from "../../hooks/useFunctions";
 
 const PlayerHand = () => {
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
-  const [sortMode, setSortMode] = useState<"default" | "suit" | "rank">("default");
+  // Start sorting by suit by default
+  const [sortMode, setSortMode] = useState<"suit" | "rank">("suit");
   const { restrictedPlayer } = useRestrictedPlayerData();
   const { room } = useRoom();
   const { playCard } = useFunctions();
@@ -49,35 +50,25 @@ const PlayerHand = () => {
 
   const sortCards = (cards: Card[]) => {
     switch (sortMode) {
-      case "default":
-        return cards;
       case "suit":
+        // Sorting by suit, then by rank within each suit
         return _.chain(cards)
           .groupBy("suit")
-          .map((group) => _.sortBy(group, (card) => card.value).reverse())
+          .map((group) => _.sortBy(group, ["value"]))
           .flatten()
           .value();
       case "rank":
-        return _.sortBy(cards, (card) => card.value);
+        // Directly sorting by rank
+        return _.sortBy(cards, ["value"]);
       default:
+        // Should not reach here as we've removed 'default', but just in case
         return cards;
     }
   };
 
   const handleSortClick = () => {
-    switch (sortMode) {
-      case "default":
-        setSortMode("suit");
-        break;
-      case "suit":
-        setSortMode("rank");
-        break;
-      case "rank":
-        setSortMode("default");
-        break;
-      default:
-        break;
-    }
+    // Toggle between sort modes
+    setSortMode(sortMode === "suit" ? "rank" : "suit");
   };
 
   const canPlayCard = isTrickTakingPhase && isCurrentPlayer;
