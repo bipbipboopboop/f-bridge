@@ -7,7 +7,7 @@ const PlayerBox = ({ player }: { player: PublicPlayer | undefined }) => {
   const isMe = player && playerAccount?.id === player.id;
 
   return (
-    <div className="text-3xs md:text-xs lg:text-base text-center aspect-square min-w-[50px] min-h-[50px] w-[12rem] m-2.5 bg-black bg-opacity-5 hover:bg-opacity-20 flex flex-col items-center justify-center">
+    <div className="text-3xs md:text-xs lg:text-base text-center aspect-square w-[12rem] min-w-[50px] min-h-[50px] m-2.5 bg-black bg-opacity-5 hover:bg-opacity-20 flex flex-col items-center justify-center mobile-portrait:h-[120px] mobile-portrait:w-[120px]">
       {player ? (
         <>
           <div>

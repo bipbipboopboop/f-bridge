@@ -1,8 +1,18 @@
 import { GameRoom } from "types/Room";
 import PlayerPanel from "./PlayerPanel";
 import RoomSettings from "./RoomSettings";
+import { useMediaQuery } from "react-responsive";
 
 const WaitingPanel = ({ room }: { room: GameRoom }) => {
+  const isDesktop = useMediaQuery({ minWidth: 768 }); // Adjust the breakpoint as needed
+  const isLandscape = useMediaQuery({ orientation: "landscape" });
+
+  if (isDesktop) return <WaitingPanelWeb room={room} />;
+  if (isLandscape) return <WaitingPanelLandscape room={room} />;
+  return <WaitingPanelPortrait room={room} />;
+};
+
+const WaitingPanelWeb = ({ room }: { room: GameRoom }) => {
   return (
     <div className="flex h-full w-100">
       <div className="w-2/5">
@@ -10,6 +20,32 @@ const WaitingPanel = ({ room }: { room: GameRoom }) => {
       </div>
       <div className="w-3/5 mx-6">
         <PlayerPanel room={room} />
+      </div>
+    </div>
+  );
+};
+
+const WaitingPanelLandscape = ({ room }: { room: GameRoom }) => {
+  return (
+    <div className="flex h-full w-100">
+      <div className="w-2/5">
+        <RoomSettings room={room} />
+      </div>
+      <div className="w-3/5 mx-6">
+        <PlayerPanel room={room} />
+      </div>
+    </div>
+  );
+};
+
+const WaitingPanelPortrait = ({ room }: { room: GameRoom }) => {
+  return (
+    <div className="h-full w-full flex flex-col">
+      <div className="h-[60%] w-full px-4">
+        <PlayerPanel room={room} />
+      </div>
+      <div className="h-[40%] w-full px-4">
+        <RoomSettings room={room} />
       </div>
     </div>
   );

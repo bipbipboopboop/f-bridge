@@ -6,9 +6,9 @@ const PlayerPanel = ({ room }: { room: GameRoom }) => {
   const { players } = room;
 
   return (
-    <div className="bg-black/10 p-4 rounded-lg h-full w-full">
+    <div className="bg-black/10 p-4 rounded-lg h-full w-full mobile-portrait:p-1">
       <div className="h-5/6 pt-5">
-        <h4 className="text-xl">Players</h4>
+        <h4 className="text-xl mobile-portrait:text-sm">Players</h4>
         <div className="h-full flex flex-col items-center justify-center">
           <div className="flex h-1/2 w-full justify-center items-end">
             <PlayerBox player={players[0]} />
