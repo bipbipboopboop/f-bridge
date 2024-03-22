@@ -47,7 +47,7 @@ const LobbyButtons = () => {
   const renderRoomButton = () => {
     if (playerAccount?.roomID) {
       return (
-        <Button theme="orange" className="mb-4" onClick={() => navigate(`/rooms/${playerAccount.roomID}`)}>
+        <Button theme="orange" size={2} className="mb-4" onClick={() => navigate(`/rooms/${playerAccount.roomID}`)}>
           Return to Room
         </Button>
       );
@@ -61,9 +61,9 @@ const LobbyButtons = () => {
   };
 
   return (
-    <div className="h-full flex flex-col justify-end">
+    <div className="flex flex-col">
       {renderRoomButton()}
-      <Button theme="green" onClick={openModal}>
+      <Button theme="green" size={2} onClick={openModal}>
         Join Room
       </Button>
 

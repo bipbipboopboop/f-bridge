@@ -1,7 +1,9 @@
 import { useAuth } from "../../hooks/useAuth";
 import { avatarLookup } from "../../assets/avatar";
-const LobbyAvatar = () => {
+const LobbyAvatar: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) => {
   const { playerAccount } = useAuth();
+
+  const { className, ...rest } = props;
 
   if (!playerAccount) {
     return null;
@@ -9,7 +11,10 @@ const LobbyAvatar = () => {
 
   const avatar = avatarLookup[playerAccount.avatarID];
   return (
-    <div className="h-full flex flex-col justify-center items-center py-10 text-center">
+    <div
+      className={`flex flex-col justify-center items-center text-center mobile-landscape:text-3xs ${className}`}
+      {...rest}
+    >
       <div>
         {playerAccount.displayName} ({playerAccount.country})
       </div>
