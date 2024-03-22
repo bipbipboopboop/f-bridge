@@ -19,7 +19,7 @@ root.render(
       <FunctionProvider>
         <BrowserRouter>
           <App />
-          <ToastContainer limit={2} autoClose={1000} />
+          <ToastContainer limit={2} autoClose={3000} />
         </BrowserRouter>
       </FunctionProvider>
     </AuthProvider>
