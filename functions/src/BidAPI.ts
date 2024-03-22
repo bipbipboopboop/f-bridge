@@ -1,6 +1,6 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import { DocumentReference } from "firebase-admin/firestore";
+import { CollectionReference, DocumentReference, Timestamp } from "firebase-admin/firestore";
 import { produce } from "immer";
 
 import { RestrictedAccountInfo } from "types/Account";
@@ -18,6 +18,8 @@ import { GameRoom } from "types/Room";
 import { shuffleCards } from "./utils/shuffle_cards";
 import { Card } from "types/Card";
 import { UnauthenticatedError } from "./error/error";
+import { Announcement } from "types/Annoucement";
+import { Message } from "types/Message";
 
 export const placeBid = functions.region("asia-east2").https.onCall(async (bid: Bid, context) => {
   if (!context.auth) {
@@ -217,12 +219,23 @@ export const chooseTeammate = functions.region("asia-east2").https.onCall(async 
       tricksNeeded: 6 + highestBid.level,
       players: declarerTeam,
     },
+    declarerTricksNeeded: 6 + highestBid.level,
+    defenderTricksNeeded: 13 - (6 + highestBid.level),
   };
 
   const publicTrickTakingPhase: PublicTrickTakingPhase = {
     currentPlayerIndex: privateTrickTakingPhase.currentPlayerIndex,
     leadPlayerIndex: privateTrickTakingPhase.leadPlayerIndex,
     trumpSuit: privateTrickTakingPhase.trumpSuit,
+    declarerTricksNeeded: privateTrickTakingPhase.declarerTricksNeeded,
+    defenderTricksNeeded: privateTrickTakingPhase.defenderTricksNeeded,
+  };
+
+  const announcement: Announcement = {
+    id: Timestamp.now().toMillis().toString(),
+    title: "Teammate Chosen",
+    content: `${currentPlayer.displayName} has chosen ${highestBid.level} ${highestBid.suit} as their teammate.`,
+    createdAt: Timestamp.now().toDate(),
   };
 
   await gameRoomRef.collection("privateGameState").doc("trickTakingPhase").set(privateTrickTakingPhase);
@@ -230,6 +243,18 @@ export const chooseTeammate = functions.region("asia-east2").https.onCall(async 
     status: "Taking Trick",
     "phase.teammateChoosingPhase": null,
     "phase.trickTakingPhase": publicTrickTakingPhase,
+    announcements: [...gameRoom.announcements, announcement], // Add the announcement to the announcements array
+  });
+
+  // Add the teammate chosen message to the messages collection
+  const messagesRef = gameRoomRef.collection("messages") as CollectionReference<Message>;
+  await messagesRef.add({
+    createdAt: Timestamp.now(),
+    playerName: "system",
+    text: `${currentPlayer.displayName} has chosen ${
+      gameRoom.players.find((player) => player.id === teammate.id)!.displayName
+    } as their teammate with the ${highestBid.level} ${highestBid.suit} bid.`,
+    uid: "system",
   });
 });
 
