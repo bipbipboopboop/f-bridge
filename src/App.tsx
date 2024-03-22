@@ -10,7 +10,7 @@ import { RoomProvider } from "./context/RoomContext";
 
 function App() {
   return (
-    <div className="App">
+    <div className="App text-xs md:text-base">
       <Routes>
         <Route path="/" element={<Home />} />
 

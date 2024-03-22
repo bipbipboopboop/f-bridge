@@ -10,11 +10,11 @@ const PlayerPanel = ({ room }: { room: GameRoom }) => {
       <div className="h-5/6 pt-5">
         <h4 className="text-xl">Players</h4>
         <div className="h-full flex flex-col items-center justify-center">
-          <div className="flex justify-around w-full">
+          <div className="flex h-1/2 w-full justify-center items-end">
             <PlayerBox player={players[0]} />
             <PlayerBox player={players[1]} />
           </div>
-          <div className="flex justify-around w-full">
+          <div className="flex h-1/2 w-full justify-center items-start">
             <PlayerBox player={players[2]} />
             <PlayerBox player={players[3]} />
           </div>

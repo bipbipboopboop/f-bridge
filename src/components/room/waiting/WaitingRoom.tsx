@@ -9,7 +9,7 @@ const WaitingRoom = ({ room }: { room: GameRoom }) => {
       <div className="h-[5%] w-full">
         <Navbar />
       </div>
-      <div className="flex w-full h-[95%] px-10">
+      <div className="flex w-full h-[95%] px-[2%]">
         <div className="h-full w-2/3 p-4">
           <WaitingPanel room={room} />
         </div>

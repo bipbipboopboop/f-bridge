@@ -36,7 +36,7 @@ const ChatboxInput = () => {
         type="text"
         value={inputMessage}
         onChange={onChangeInput}
-        className="flex-grow mr-2 h-full rounded border border-gray-300 text-black text-xs "
+        className="w-[80%] mr-[2%] h-full rounded border border-gray-300 text-gray-700 text-2xs md:text-sm"
       />
       <Button theme="green" size={1} type="submit" disabled={!inputMessage}>
         Send
