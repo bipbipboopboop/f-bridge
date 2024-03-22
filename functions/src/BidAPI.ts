@@ -251,9 +251,7 @@ export const chooseTeammate = functions.region("asia-east2").https.onCall(async 
   await messagesRef.add({
     createdAt: Timestamp.now(),
     playerName: "system",
-    text: `${currentPlayer.displayName} has chosen ${
-      gameRoom.players.find((player) => player.id === teammate.id)!.displayName
-    } as their teammate with the ${highestBid.level} ${highestBid.suit} bid.`,
+    text: `${currentPlayer.displayName} has chosen ${highestBid.level} ${highestBid.suit} as their teammate.`,
     uid: "system",
   });
 });
