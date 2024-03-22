@@ -11,23 +11,26 @@ interface TeammateCardProps extends React.HTMLAttributes<HTMLDivElement> {
 const TeammateCard: React.FC<TeammateCardProps> = ({ suit, rank, className, style, ...rest }) => {
   const isRedSuit = suit === "♥" || suit === "♦";
 
+  // Determine the card's color based on its suit
+  const cardColor = isRedSuit ? "#FF525D" : "#222222";
+
   return (
     <div
-      className={`w-[100px] h-[123px] bg-white rounded-2xl text-black border-4 border-black/5 p-3 ${className}`}
+      className={`w-[100px] h-[123px] rounded-2xl border-4 p-3 select-none ${className} bg-white mobile-portrait:w-[20px] mobile-portrait:h-[25px] mobile-portrait:p-1 mobile-landscape:w-[50px] mobile-landscape:h-[61.5px] mobile-landscape:p-2 mobile-landscape:rounded-md mobile-landscape:border-2`}
       style={style}
       {...rest}
     >
       <div className="flex flex-col h-full">
         <div className="flex flex-col">
-          <div className="text-xl font-bold" style={{ color: isRedSuit ? "#FF525D" : "#222222" }}>
+          <div className="text-xl font-bold select-none mobile-landscape:text-xs" style={{ color: cardColor }}>
             {rank || " "}
           </div>
-          <div className="relative bottom-2 text-xl mb-2" style={{ color: isRedSuit ? "#FF525D" : "#222222" }}>
+          <div className="relative bottom-2 text-xl mb-2 select-none" style={{ color: cardColor }}>
             {suit || " "}
           </div>
         </div>
         <div className="flex-grow flex items-center justify-center relative bottom-6">
-          <div className="text-6xl" style={{ color: isRedSuit ? "#FF525D" : "#222222" }}>
+          <div className="text-6xl select-none mobile-landscape:text-xl" style={{ color: cardColor }}>
             {suit || " "}
           </div>
         </div>

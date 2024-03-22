@@ -6,6 +6,7 @@ import { useRestrictedPlayerData } from "../../../context/RestrictedPlayerContex
 import { Suit, Rank, RankValue, Card } from "types/Card";
 import Button from "../../buttons/button";
 import TeammateCard from "./TeammateCard";
+import { useMediaQuery } from "react-responsive";
 
 const TeammatePanel: React.FC = () => {
   const { room } = useRoom();
@@ -14,6 +15,10 @@ const TeammatePanel: React.FC = () => {
   const { restrictedPlayer } = useRestrictedPlayerData();
   const [selectedSuit, setSelectedSuit] = useState<Suit>("♣");
   const [selectedRank, setSelectedRank] = useState<Rank | null>(null);
+
+  const isDesktop = useMediaQuery({ minWidth: 768 });
+  const isLandscape = useMediaQuery({ orientation: "landscape" }) && !isDesktop;
+  const isPortrait = !isDesktop && !isLandscape;
 
   useEffect(() => {
     const firstAvailableSuit = getFirstAvailableSuit();
@@ -107,46 +112,78 @@ const TeammatePanel: React.FC = () => {
     return null;
   };
 
+  const portraitStyles = "p-4 h-[60%] w-[90%] max-w-[400px] min-w-[300px]";
+  const landscapeStyles = "p-2 h-[70%] w-[40%] max-w-[800px] min-w-[300px] relative bottom-[6%]";
+
   return (
     <div className="flex justify-center items-center h-full">
-      <div className="p-6 h-[60%] w-full max-w-[500px] min-w-[300px] rounded-md bg-teal-400 shadow-xl">
-        <div className="pb-2.5 mb-2.5">
+      <div
+        className={`rounded-md bg-teal-400 shadow-xl ${
+          isDesktop
+            ? "p-6 h-[60%] w-full max-w-[500px] min-w-[300px]"
+            : isLandscape
+            ? landscapeStyles
+            : isPortrait
+            ? portraitStyles
+            : ""
+        }`}
+        style={{ zIndex: 1 }}
+      >
+        <div className="pb-2.5 mb-2.5 mobile-landscape:mb-1 mobile-landscape:pb-1">
           <div className="text-center">
             {isBidWinner ? "Choose A Teammate" : `P${players[currentPlayerIndex].position} is chosing a teammate`}
           </div>
         </div>
         {isBidWinner && (
           <>
-            <div className="bg-black/10 rounded-md p-4">
-              <div className="bg-black/5 rounded-md grid grid-cols-4 justify-items-center py-1 px-5 mb-4">
+            <div className="bg-black/10 rounded-md p-4 mobile-landscape:p-2">
+              <div
+                className={`bg-black/5 rounded-md grid justify-items-center py-1 px-5 mb-4 mobile-landscape:mb-2 ${
+                  isDesktop ? "grid-cols-4" : isLandscape ? "grid-cols-4" : "grid-cols-3"
+                }`}
+              >
                 {["♣", "♦", "♥", "♠"].map((suit) => (
                   <button
                     key={suit}
-                    className={`w-[44px] h-[44px] text-2xl overflow-hidden ${
-                      selectedSuit === suit ? "border-4 border-black/50 rounded" : ""
-                    }`}
+                    className={`overflow-hidden ${
+                      isDesktop
+                        ? "w-[44px] h-[44px] text-2xl"
+                        : isLandscape
+                        ? "w-[30px] h-[30px] text-xl"
+                        : "w-[35px] h-[35px] text-lg"
+                    } ${selectedSuit === suit ? "border-4 border-black/50 rounded" : ""}`}
                     style={{ color: suit === "♥" || suit === "♦" ? "#FF525D" : "#222222" }}
                     onClick={() => handleSuitClick(suit as Suit)}
                   >
-                    <div className="flex justify-center relative text-4xl bottom-1">{suit}</div>
+                    <div
+                      className={`flex justify-center relative ${
+                        isDesktop ? "text-4xl bottom-1" : isLandscape ? "text-2xl bottom-0.5" : "text-3xl bottom-0.5"
+                      }`}
+                    >
+                      {suit}
+                    </div>
                   </button>
                 ))}
               </div>
-              <div className="flex items-center justify-center mb-4">
+              <div className="flex items-center justify-center mb-4 mobile-landscape:mb-2">
                 <Button
-                  size={1}
+                  size={isDesktop ? 1 : isLandscape ? 2 : 1}
                   theme="yellow"
-                  className="py-1.5 px-3.5 mr-2"
+                  className={`mr-2 ${isDesktop ? "py-1.5 px-3.5" : isLandscape ? "py-1 px-2" : "py-0.5 px-1.5"}`}
                   onClick={() => handleRankChange(false)}
                   disabled={isOnlyOneRankAvailable(selectedSuit)}
                 >
                   {`<`}
                 </Button>
-                <TeammateCard suit={selectedSuit} rank={selectedRank} />
+                <TeammateCard
+                  suit={selectedSuit}
+                  rank={selectedRank}
+                  className={`${isDesktop ? "" : isLandscape ? "w-[60px] h-[75px]" : "w-[45px] h-[55px]"}`}
+                />
                 <Button
-                  size={1}
+                  size={isDesktop ? 1 : isLandscape ? 2 : 1}
                   theme="yellow"
-                  className="py-1.5 px-3.5 ml-2"
+                  className={`ml-2 ${isDesktop ? "py-1.5 px-3.5" : isLandscape ? "py-1 px-2" : "py-0.5 px-1.5"}`}
                   onClick={() => handleRankChange(true)}
                   disabled={isOnlyOneRankAvailable(selectedSuit)}
                 >
@@ -154,12 +191,17 @@ const TeammatePanel: React.FC = () => {
                 </Button>
               </div>
               <div className="flex justify-center">
-                <Button size={1} theme="orange" className="py-1.5 px-3.5" onClick={handleConfirmClick}>
+                <Button
+                  size={isDesktop ? 1 : isLandscape ? 2 : 1}
+                  theme="orange"
+                  className={`${isDesktop ? "py-1.5 px-3.5" : isLandscape ? "py-1 px-2" : "py-0.5 px-1.5"}`}
+                  onClick={handleConfirmClick}
+                >
                   Confirm
                 </Button>
               </div>
             </div>
-            <div className="mt-4 text-sm text-center">
+            <div className="mt-4 text-sm text-center mobile-landscape:mt-0 mobile-landscape:text-3xs">
               Pick a card by selecting a suit and its rank, whoever has this card will be your teammate.
             </div>
           </>
