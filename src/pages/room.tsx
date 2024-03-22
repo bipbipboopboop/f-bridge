@@ -25,7 +25,7 @@ const Room = () => {
     case "Ended":
       return <EndedRoom />;
     default:
-      return <>Hi</>;
+      return <></>;
   }
 };
 

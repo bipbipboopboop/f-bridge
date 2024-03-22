@@ -44,7 +44,7 @@ const RoomTable: React.FC<RoomTableProps> = ({ gameRoomList }) => {
   };
 
   return (
-    <div className="h-[95%] overflow-auto">
+    <div className="h-[95%] overflow-auto select-none">
       <table className="min-w-full divide-y w-full border-separate border-spacing-y-2">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -69,7 +69,7 @@ const RoomTable: React.FC<RoomTableProps> = ({ gameRoomList }) => {
                 }`}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="py-2 px-4">
+                  <td key={cell.id} className="py-2 px-4 select-text">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}

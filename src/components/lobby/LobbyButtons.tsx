@@ -31,7 +31,7 @@ const LobbyButtons = () => {
         navigate(`/rooms/${roomIdInput}`);
       }
       if (!success) {
-        toast.error("Opps, your room dissapeared :(");
+        toast.error("Opps, couldn't find your room :(");
       }
       closeModal();
       return;

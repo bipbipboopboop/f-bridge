@@ -24,14 +24,9 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="w-full py-3">
+    <nav className="w-full py-3 select-none">
       <div className="container mx-auto flex justify-between items-center">
-        <div>
-          {/* No decoration for link */}
-          <Link to="/lobby" style={{ textDecoration: "none" }} className="text-white font-semibold text-xl">
-            Lobby
-          </Link>
-        </div>
+        <div></div>
         <div className="relative">
           <button className="flex items-center text-white font-semibold focus:outline-none" onClick={toggleDropdown}>
             <span>{playerAccount?.displayName}</span>
@@ -44,17 +39,13 @@ const Navbar = () => {
             </svg>
           </button>
           <div className={`absolute right-0 mt-2 py-2 bg-white rounded-md shadow-lg ${isDropdownOpen ? "" : "hidden"}`}>
-            <a href="/profile" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
-              Edit Profile
-            </a>
-            <a href="/settings" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
-              Settings
-            </a>
-            {user?.isAnonymous ? (
+            {user?.isAnonymous && (
               <div onClick={handleSignInWithGoogle} className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
                 Login
               </div>
-            ) : (
+            )}
+
+            {!user?.isAnonymous && (
               <div onClick={handleSignOut} className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
                 Logout
               </div>

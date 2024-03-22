@@ -19,7 +19,7 @@ const RoomSettings = ({ room }: { room: GameRoom }) => {
   };
 
   return (
-    <div className="bg-black/10 p-4 rounded-lg h-full">
+    <div className="bg-black/10 p-4 rounded-lg h-full select-none">
       <div className="h-5/6 pt-5">
         <h4 className="text-xl font-bold mb-4">Settings</h4>
         <div className="space-y-2">
