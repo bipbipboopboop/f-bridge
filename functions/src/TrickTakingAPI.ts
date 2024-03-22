@@ -11,6 +11,7 @@ import { Card } from "types/Card";
 import { PrivateTrickTakingPhase, PublicEndedPhase, RestrictedPlayerData } from "types/GameState";
 import { Message } from "types/Message";
 import { UnauthenticatedError } from "./error/error";
+import { PublicPlayer } from "types/Player";
 
 export const playCard = functions.region("asia-east2").https.onCall(async (card: Card, context) => {
   // 0. Check if the user is authenticated
@@ -129,12 +130,22 @@ export const playCard = functions.region("asia-east2").https.onCall(async (card:
     const leadCard = updatedPlayers[leadPlayerIndex].currentCardOnTable!;
     const trumpSuit = updatedTrickTakingPhase.trumpSuit;
 
-    const playersWhoCouldWin = updatedPlayers.filter((player) => {
-      if (trumpSuit && player.currentCardOnTable!.suit === trumpSuit) {
-        return true;
+    let playersWhoCouldWin: PublicPlayer[];
+
+    if (trumpSuit) {
+      // Check if there are any trump cards played
+      const trumpCardsPlayed = updatedPlayers.filter((player) => player.currentCardOnTable!.suit === trumpSuit);
+      if (trumpCardsPlayed.length > 0) {
+        // If there are trump cards, the player with the highest trump card wins
+        playersWhoCouldWin = trumpCardsPlayed;
+      } else {
+        // If no trump cards are played, the player with the highest card of the lead suit wins
+        playersWhoCouldWin = updatedPlayers.filter((player) => player.currentCardOnTable!.suit === leadCard.suit);
       }
-      return player.currentCardOnTable!.suit === leadCard.suit;
-    });
+    } else {
+      // If there is no trump suit, the player with the highest card of the lead suit wins
+      playersWhoCouldWin = updatedPlayers.filter((player) => player.currentCardOnTable!.suit === leadCard.suit);
+    }
 
     const winner = playersWhoCouldWin.reduce((p0, p1) => {
       return p0.currentCardOnTable!.value > p1.currentCardOnTable!.value ? p0 : p1;
