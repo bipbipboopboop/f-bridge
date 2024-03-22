@@ -19,14 +19,14 @@ const PlayingCard: React.FC<PlayingCardProps> = ({ card, isFlipDown = false, cla
 
   return (
     <div
-      className={`w-[100px] h-[123px] rounded-2xl border-4 p-3 select-none ${dynamicClass} ${className} mobile-portrait:w-[20px] mobile-portrait:h-[25px] mobile-portrait:p-1 mobile-landscape:w-[30px] mobile-landscape:h-[40px] mobile-landscape:p-2`}
+      className={`w-[100px] h-[123px] rounded-2xl border-4 p-3 select-none ${dynamicClass} ${className} mobile-portrait:w-[20px] mobile-portrait:h-[25px] mobile-portrait:p-1 mobile-landscape:w-[50px] mobile-landscape:h-[61.5px] mobile-landscape:p-2 mobile-landscape:rounded-md mobile-landscape:border-2`}
       style={style}
       {...rest}
     >
       {!isFlipDown && (
         <div className="flex flex-col h-full">
           <div className="flex flex-col">
-            <div className="text-xl font-bold select-none" style={{ color: cardColor }}>
+            <div className="text-xl font-bold select-none mobile-landscape:text-xs" style={{ color: cardColor }}>
               {card?.rank}
             </div>
             <div className="relative bottom-2 text-xl mb-2 select-none" style={{ color: cardColor }}>
@@ -34,7 +34,7 @@ const PlayingCard: React.FC<PlayingCardProps> = ({ card, isFlipDown = false, cla
             </div>
           </div>
           <div className="flex-grow flex items-center justify-center relative bottom-6">
-            <div className="text-6xl select-none" style={{ color: cardColor }}>
+            <div className="text-6xl select-none mobile-landscape:text-xl" style={{ color: cardColor }}>
               {card?.suit}
             </div>
           </div>

@@ -25,6 +25,7 @@ const Auction: React.FC = () => {
             ? portraitStyles
             : ""
         }`}
+        style={{ zIndex: 1 }}
       >
         <div className="h-1/5 pb-2.5 mb-2.5 mobile-landscape:mb-1 mobile-landscape:pb-1 mobile-landscape:h-1/6">
           <AuctionAvatarRow />

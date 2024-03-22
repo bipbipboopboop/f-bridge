@@ -62,14 +62,14 @@ const MatchPeripheralLandscape = () => {
 
   return (
     <div className="top-0 left-0 w-full h-full">
-      {/* <PlayerHand /> */}
+      <PlayerHand />
       <MatchAvatar position={westPlayerPosition} className="absolute top-[23%] left-5" />
       <MatchAvatar position={eastPlayerPosition} className="absolute top-[23%] right-5" />
       <MatchAvatar position={northPlayerPosition} className="absolute top-5 left-[5%]" />
-      <MatchAvatar position={southPlayerPosition} className="absolute bottom-[16%] right-10" />
-      {/* <OpponentHandLandscape direction="west" className="absolute top-1/3 left-[22%]" />
-      <OpponentHandLandscape direction="north" className="absolute top-5 left-1/2 transform -translate-x-1/2" />
-      <OpponentHandLandscape direction="east" className="absolute top-1/3 right-[22%]" /> */}
+      <MatchAvatar position={southPlayerPosition} className="absolute bottom-[16%] left-14" />
+      <OpponentHand direction="west" className="absolute top-[36%] left-[18%]" />
+      <OpponentHand direction="north" className="absolute top-1 left-1/2 transform -translate-x-1/2" />
+      <OpponentHand direction="east" className="absolute top-[36%] right-[18%]" />
     </div>
   );
 };

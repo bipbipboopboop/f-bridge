@@ -61,8 +61,9 @@ const BiddingRoomLandscape = () => {
       <div className="flex w-full h-full">
         <div className="relative h-full w-full">
           <button
-            className="bg-black/20 hover:bg-[#006cb1] p-2 rounded-md absolute top-[5%] right-4"
+            className="bg-black/20 hover:bg-[#006cb1] p-2 rounded-md absolute bottom-[5%] left-4"
             onClick={openModal}
+            style={{ zIndex: 1 }}
           >
             Chat
           </button>
@@ -76,7 +77,8 @@ const BiddingRoomLandscape = () => {
         isOpen={isModalOpen}
         onRequestClose={closeModal}
         contentLabel="Chat Modal"
-        className="bg-white rounded shadow p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96"
+        style={{ overlay: { zIndex: 1 } }}
+        className="bg-white rounded shadow p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 z-10"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50"
       >
         <Chatbox />
