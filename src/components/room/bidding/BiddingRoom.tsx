@@ -16,7 +16,7 @@ const BiddingRoom: React.FC = () => {
 
   if (isDesktop) return <BiddingRoomWeb />;
   if (isLandscape) return <BiddingRoomLandscape />;
-  return <></>;
+  return <>Flip your phone man, who card game in portrait mode? :/</>;
 };
 
 const BiddingRoomWeb: React.FC = () => {

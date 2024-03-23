@@ -4,7 +4,7 @@ import { Message } from "types/Message";
 const ChatMessage = ({ message }: { message: Message }) => {
   if (message.playerName === "system") {
     return (
-      <div className="text-center bg-gray-800 bg-opacity-30 mb-1 rounded p-3 break-words text-xs">
+      <div className="text-center bg-gray-800 bg-opacity-30 mb-1 rounded p-2 break-words text-2xs md:text-xs md:p-3">
         <span>{message.text}</span>
       </div>
     );

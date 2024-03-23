@@ -1,14 +1,15 @@
 // BiddingRoom.tsx
 import React, { useState } from "react";
 import Modal from "react-modal";
-import Chatbox from "../../chat/Chatbox";
+
+import { useMediaQuery } from "react-responsive";
+import { useAuth } from "../../../hooks/useAuth";
 
 import { RestrictedPlayerProvider } from "../../../context/RestrictedPlayerContext";
 
-import { useAuth } from "../../../hooks/useAuth";
+import Chatbox from "../../chat/Chatbox";
 import MatchPeripheral from "../MatchPeripheral";
 import TeammatePanel from "./TeammatePanel";
-import { useMediaQuery } from "react-responsive";
 
 const TeammateChoosingRoom: React.FC = () => {
   const isDesktop = useMediaQuery({ minWidth: 768 });
@@ -26,7 +27,7 @@ const TeammateChoosingRoom: React.FC = () => {
     <RestrictedPlayerProvider roomID={roomId} playerID={currentPlayerId}>
       {isDesktop && <TeammateChoosingRoomWeb />}
       {!isDesktop && isLandscape && <TeammateChoosingRoomLandscape />}
-      {!isDesktop && !isLandscape && <div>{/* Fallback or portrait-specific layout can go here */}</div>}
+      {!isDesktop && !isLandscape && <TeammateChoosingRoomPortrait />}
     </RestrictedPlayerProvider>
   );
 };
@@ -95,6 +96,14 @@ const TeammateChoosingRoomLandscape = () => {
         <Chatbox />
       </Modal>
     </RestrictedPlayerProvider>
+  );
+};
+
+const TeammateChoosingRoomPortrait = () => {
+  return (
+    <div className="h-full w-full flex flex-col justify-center text-center text-xl">
+      Flip your phone man, who plays card game in portrait mode? :/
+    </div>
   );
 };
 
