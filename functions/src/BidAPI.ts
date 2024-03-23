@@ -20,6 +20,7 @@ import { Card } from "types/Card";
 import { UnauthenticatedError } from "./error/error";
 import { Announcement } from "types/Annoucement";
 import { Message } from "types/Message";
+import { findLastIndex } from "lodash";
 
 export const placeBid = functions.region("asia-east2").https.onCall(async (bid: Bid, context) => {
   if (!context.auth) {
@@ -94,15 +95,22 @@ export const placeBid = functions.region("asia-east2").https.onCall(async (bid: 
   let updatedGameStatus: GameRoom["status"] = gameRoom.status;
 
   if (updatedPublicBiddingPhase.numPasses === 3 && updatedPublicBiddingPhase.highestBid) {
-    // Find the bid winner based on the index of the highest bid in bidHistory
-    const bidWinnerIndex = updatedPublicBiddingPhase.bidHistory.findIndex(
+    // Find the bid winner based on the highest bid in bidHistory
+    const highestBidIndex = findLastIndex(
+      updatedPublicBiddingPhase.bidHistory,
       (bidEntry) =>
         bidEntry.level === updatedPublicBiddingPhase.highestBid!.level &&
         bidEntry.suit === updatedPublicBiddingPhase.highestBid!.suit
     );
 
+    // If the highest bid is NT, the bid winner is the last player who bid NT
+    const bidWinnerIndex =
+      updatedPublicBiddingPhase.highestBid!.suit === "NT"
+        ? updatedPublicBiddingPhase.bidHistory.length - 1
+        : highestBidIndex;
+
     // Calculate the position of the bid winner
-    const bidWinnerPosition = (((bidWinnerIndex - updatedPublicBiddingPhase.bidHistory.length) % 4) + 4) % 4;
+    const bidWinnerPosition = (bidWinnerIndex + 1) % 4;
 
     // Set up PublicTeammateChoosingPhase when there are 3 consecutive passes
     const publicTeammateChoosingPhase: PublicTeammateChoosingPhase = {
