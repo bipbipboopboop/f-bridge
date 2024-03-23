@@ -9,7 +9,7 @@ import { useMediaQuery } from "react-responsive";
 
 const MatchPeripheral: React.FC = () => {
   const isDesktop = useMediaQuery({ minWidth: 930 });
-  const isLandscape = useMediaQuery({ orientation: "landscape" });
+  const isLandscape = useMediaQuery({ orientation: "landscape" }) && !isDesktop;
 
   if (isDesktop) return <MatchPeripheralWeb />;
   if (isLandscape) return <MatchPeripheralLandscape />;

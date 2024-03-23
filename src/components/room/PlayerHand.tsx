@@ -95,7 +95,7 @@ const PlayerHand = () => {
         <Button
           size={1}
           theme="green"
-          className={!canPlayCard ? "opacity-0" : selectedCard ? "opacity-100" : "opacity-50"}
+          className={!canPlayCard ? "opacity-0" : selectedCard ? "opacity-100" : "opacity-20"}
           onClick={handlePlayClick}
           disabled={!canPlayCard && !selectedCard}
         >

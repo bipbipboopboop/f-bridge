@@ -13,7 +13,6 @@ const OpponentHand: React.FC<OpponentHandProps> = ({ direction, className }) => 
   const { playerAccount } = useAuth();
   const { room } = useRoom();
   const isDesktop = useMediaQuery({ minWidth: 930, orientation: "landscape" });
-  const isLandscape = useMediaQuery({ orientation: "landscape" }) && !isDesktop;
 
   if (!playerAccount || !room) {
     return null;

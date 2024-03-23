@@ -11,6 +11,7 @@ import Chatbox from "../../chat/Chatbox";
 import MatchPeripheral from "../MatchPeripheral";
 import TrickArea from "./TrickArea";
 import TrickMonitor from "./TrickMonitor";
+import { useRoom } from "../../../context/RoomContext";
 
 const TrickTakingRoom: React.FC = () => {
   const { playerAccount } = useAuth();
@@ -34,8 +35,14 @@ const TrickTakingRoom: React.FC = () => {
 
 const TrickTakingRoomWeb: React.FC = () => {
   const { playerAccount } = useAuth();
+  const { room } = useRoom();
   const currentPlayerId = playerAccount?.id;
   const roomId = playerAccount?.roomID;
+  const isYourTurn =
+    room?.phase.trickTakingPhase?.currentPlayerIndex ===
+    room?.players.findIndex((player) => player.id === currentPlayerId);
+
+  const [isYourTurnModalOpen, setIsYourTurnModalOpen] = React.useState(isYourTurn);
 
   if (!roomId || !currentPlayerId) {
     return null;
@@ -56,6 +63,16 @@ const TrickTakingRoomWeb: React.FC = () => {
             <Chatbox />
           </div>
         </div>
+        <Modal
+          isOpen={isYourTurnModalOpen}
+          onRequestClose={() => setIsYourTurnModalOpen(false)}
+          contentLabel="It's your turn!"
+          style={{ overlay: { zIndex: 1 } }}
+          className="bg-white rounded shadow p-6 relative top-1/4 left-1/4 h-1/2 w-1/4 z-10 text-black"
+          overlayClassName="fixed inset-0 bg-black bg-opacity-50"
+        >
+          It's your turn
+        </Modal>
       </div>
     </RestrictedPlayerProvider>
   );
@@ -63,11 +80,18 @@ const TrickTakingRoomWeb: React.FC = () => {
 
 const TrickTakingRoomLandscape = () => {
   const { playerAccount } = useAuth();
+  const { room } = useRoom();
   const currentPlayerId = playerAccount?.id;
   const roomId = playerAccount?.roomID;
   // Use separate state variables for each modal
   const [isChatModalOpen, setIsChatModalOpen] = React.useState(false);
   const [isInfoModalOpen, setIsInfoModalOpen] = React.useState(false);
+
+  const isYourTurn =
+    room?.phase.trickTakingPhase?.currentPlayerIndex ===
+    room?.players.findIndex((player) => player.id === currentPlayerId);
+
+  const [isYourTurnModalOpen, setIsYourTurnModalOpen] = React.useState(isYourTurn);
 
   // Separate functions to open each modal
   const openChatModal = () => {
@@ -132,6 +156,16 @@ const TrickTakingRoomLandscape = () => {
         overlayClassName="fixed inset-0 bg-black bg-opacity-50"
       >
         <TrickMonitor />
+      </Modal>
+      <Modal
+        isOpen={isYourTurnModalOpen}
+        onRequestClose={() => setIsYourTurnModalOpen(false)}
+        contentLabel="It's your turn!"
+        style={{ overlay: { zIndex: 10 } }}
+        className="bg-white rounded shadow p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 z-20 text-black"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50"
+      >
+        It's your turn
       </Modal>
     </RestrictedPlayerProvider>
   );
