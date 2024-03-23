@@ -11,7 +11,7 @@ const BiddingRoom: React.FC = () => {
   const { playerAccount } = useAuth();
   const currentPlayerId = playerAccount?.id;
   const roomId = playerAccount?.roomID;
-  const isDesktop = useMediaQuery({ minWidth: 915 });
+  const isDesktop = useMediaQuery({ minWidth: 930 });
   const isLandscape = useMediaQuery({ orientation: "landscape" }) && !isDesktop;
 
   if (!roomId || !currentPlayerId) {

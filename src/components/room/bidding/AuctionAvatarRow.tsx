@@ -6,7 +6,7 @@ import { useMediaQuery } from "react-responsive";
 const AuctionAvatarRow = () => {
   const { playerAccount } = useAuth();
   const { room } = useRoom();
-  const isDesktop = useMediaQuery({ minWidth: 915 });
+  const isDesktop = useMediaQuery({ minWidth: 930 });
   const isLandscape = useMediaQuery({ orientation: "landscape" }) && !isDesktop;
   const isPortrait = !isDesktop && !isLandscape;
 

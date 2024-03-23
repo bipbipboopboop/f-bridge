@@ -6,7 +6,7 @@ import { useMediaQuery } from "react-responsive";
 const AuctionDashboard: React.FC = () => {
   const { room } = useRoom();
   const gridRef = useRef<HTMLDivElement>(null);
-  const isDesktop = useMediaQuery({ minWidth: 915 });
+  const isDesktop = useMediaQuery({ minWidth: 930 });
   const isLandscape = useMediaQuery({ orientation: "landscape" }) && !isDesktop;
   const isPortrait = !isDesktop && !isLandscape;
 

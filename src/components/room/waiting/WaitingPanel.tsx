@@ -6,7 +6,7 @@ import PlayerPanel from "./PlayerPanel";
 import RoomSettings from "./RoomSettings";
 
 const WaitingPanel = ({ room }: { room: GameRoom }) => {
-  const isDesktop = useMediaQuery({ minWidth: 915, orientation: "landscape" });
+  const isDesktop = useMediaQuery({ minWidth: 930, orientation: "landscape" });
   const isLandscape = useMediaQuery({ orientation: "landscape" });
 
   if (isDesktop || isLandscape) return <WaitingPanelWeb room={room} />;

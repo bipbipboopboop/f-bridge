@@ -5,7 +5,7 @@ import { useMediaQuery } from "react-responsive";
 
 const PlayerPanel = ({ room }: { room: GameRoom }) => {
   const { players } = room;
-  const isDesktop = useMediaQuery({ minWidth: 915 });
+  const isDesktop = useMediaQuery({ minWidth: 930 });
   const isLandscape = useMediaQuery({ orientation: "landscape" }) && !isDesktop;
   const isPortrait = !isDesktop && !isLandscape;
 

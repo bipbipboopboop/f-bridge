@@ -8,7 +8,7 @@ import OpponentHand from "./OpponentHand";
 import { useMediaQuery } from "react-responsive";
 
 const MatchPeripheral: React.FC = () => {
-  const isDesktop = useMediaQuery({ minWidth: 915 });
+  const isDesktop = useMediaQuery({ minWidth: 930 });
   const isLandscape = useMediaQuery({ orientation: "landscape" });
 
   if (isDesktop) return <MatchPeripheralWeb />;

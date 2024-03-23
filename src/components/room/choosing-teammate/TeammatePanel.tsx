@@ -16,7 +16,7 @@ const TeammatePanel: React.FC = () => {
   const [selectedSuit, setSelectedSuit] = useState<Suit>("♣");
   const [selectedRank, setSelectedRank] = useState<Rank | null>(null);
 
-  const isDesktop = useMediaQuery({ minWidth: 915 });
+  const isDesktop = useMediaQuery({ minWidth: 930 });
   const isLandscape = useMediaQuery({ orientation: "landscape" }) && !isDesktop;
   const isPortrait = !isDesktop && !isLandscape;
 

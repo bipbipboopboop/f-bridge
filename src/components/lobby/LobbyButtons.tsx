@@ -16,7 +16,7 @@ const LobbyButtons = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [roomIdInput, setRoomIdInput] = useState("");
 
-  const isDesktop = useMediaQuery({ minWidth: 915 });
+  const isDesktop = useMediaQuery({ minWidth: 930 });
   const isLandscape = useMediaQuery({ orientation: "landscape" }) && !isDesktop;
   const isPortrait = !isDesktop && !isLandscape;
 
