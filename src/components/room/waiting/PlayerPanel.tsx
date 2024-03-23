@@ -9,29 +9,14 @@ const PlayerPanel = ({ room }: { room: GameRoom }) => {
   const isLandscape = useMediaQuery({ orientation: "landscape" }) && !isDesktop;
   const isPortrait = !isDesktop && !isLandscape;
 
-  if (isPortrait)
-    return (
-      <div className="bg-black/10 p-4 rounded-lg h-full w-full mobile-portrait:p-1">
-        <div className="h-5/6 pt-5">
-          <h4 className="text-xl mobile-portrait:text-sm mobile-landscape:text-sm mobile-landscape:mb-4">Players</h4>
-          <div className="h-full grid grid-rows-2 grid-cols-2">
-            {[0, 1, 2, 3].map((index) => (
-              <div
-                key={index}
-                className={`flex justify-center items-center ${index < 2 ? "items-end" : "items-start"}`}
-              >
-                <PlayerBox player={players[index]} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
+  const containerClasses = `bg-black/10 rounded-lg h-full w-full ${isDesktop ? "p-4" : isLandscape ? "p-4" : "p-1"}`;
+
+  const headingClasses = `text-xl ${isLandscape ? "text-sm mb-4" : isPortrait ? "text-sm" : ""}`;
 
   return (
-    <div className="bg-black/10 p-4 rounded-lg h-full w-full mobile-portrait:p-1">
+    <div className={containerClasses}>
       <div className="h-5/6 pt-5">
-        <h4 className="text-xl mobile-portrait:text-sm mobile-landscape:text-sm mobile-landscape:mb-4">Players</h4>
+        <h4 className={headingClasses}>Players</h4>
         <div className="h-full grid grid-rows-2 grid-cols-2">
           {[0, 1, 2, 3].map((index) => (
             <div key={index} className={`flex justify-center items-center ${index < 2 ? "items-end" : "items-start"}`}>
@@ -40,9 +25,11 @@ const PlayerPanel = ({ room }: { room: GameRoom }) => {
           ))}
         </div>
       </div>
-      <div className="h-1/6">
-        <RoomButtonPanel room={room} />
-      </div>
+      {!isPortrait && (
+        <div className="h-1/6">
+          <RoomButtonPanel room={room} />
+        </div>
+      )}
     </div>
   );
 };
