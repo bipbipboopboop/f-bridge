@@ -17,7 +17,7 @@ import { LobbyProvider } from "../context/LobbyContext";
 import { useMediaQuery } from "react-responsive";
 
 const Lobby = () => {
-  const isDesktop = useMediaQuery({ minWidth: 768 }); // Adjust the breakpoint as needed
+  const isDesktop = useMediaQuery({ minWidth: 915 }); // Adjust the breakpoint as needed
   const isLandscape = useMediaQuery({ orientation: "landscape" });
   return (
     <LobbyProvider>
@@ -31,15 +31,15 @@ const Lobby = () => {
 const LobbyMobileLandscape = () => {
   return (
     <div className="flex w-full h-full px-1 pt-3">
-      <div className="h-[80%] p-3 mx-3 flex justify-center bg-black/5 overflow-x-auto">
+      <div className="h-[90%] p-3 mx-3 flex justify-center bg-black/5 overflow-x-auto">
         <RoomList />
       </div>
-      <div className="w-2/5 h-[80%] flex flex-col items-center">
+      <div className="w-2/5 h-[90%] flex flex-col items-center">
         <div className="h-full">
-          <div className="h-2/3">
+          <div className="h-2/3 flex flex-col justify-center">
             <LobbyAvatar />
           </div>
-          <div className="h-1/3">
+          <div className="h-1/3 flex flex-col-reverse">
             <LobbyButtons />
           </div>
         </div>
@@ -51,11 +51,11 @@ const LobbyMobileLandscape = () => {
 const LobbyMobilePortrait = () => {
   return (
     <div className="flex flex-col h-full items-center">
-      <div className="h-[80%] w-[70%] p-3 mx-3 flex justify-center bg-black/5 overflow-x-auto">
-        <RoomList />
-      </div>
       <div className="h-[20%] flex flex-col items-center">
         <LobbyButtons />
+      </div>
+      <div className="h-[80%] w-[70%] p-3 mx-3 flex justify-center bg-black/5 overflow-x-auto">
+        <RoomList />
       </div>
     </div>
   );

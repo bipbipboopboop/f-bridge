@@ -7,6 +7,7 @@ import { useFunctions } from "../../hooks/useFunctions";
 import { useAuth } from "../../hooks/useAuth";
 
 import Button from "../buttons/button";
+import { useMediaQuery } from "react-responsive";
 
 const LobbyButtons = () => {
   const { createGameRoom, joinGameRoom } = useFunctions();
@@ -14,6 +15,10 @@ const LobbyButtons = () => {
   const { playerAccount } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [roomIdInput, setRoomIdInput] = useState("");
+
+  const isDesktop = useMediaQuery({ minWidth: 915 });
+  const isLandscape = useMediaQuery({ orientation: "landscape" }) && !isDesktop;
+  const isPortrait = !isDesktop && !isLandscape;
 
   const handleCreateRoom = async () => {
     const gameRoom = (await createGameRoom())?.data;
@@ -44,16 +49,23 @@ const LobbyButtons = () => {
     setRoomIdInput("");
   };
 
+  const buttonSize = isDesktop ? 2 : 1;
+
   const renderRoomButton = () => {
     if (playerAccount?.roomID) {
       return (
-        <Button theme="orange" size={2} className="mb-4" onClick={() => navigate(`/rooms/${playerAccount.roomID}`)}>
+        <Button
+          theme="orange"
+          size={buttonSize}
+          className="mb-4"
+          onClick={() => navigate(`/rooms/${playerAccount.roomID}`)}
+        >
           Return to Room
         </Button>
       );
     } else {
       return (
-        <Button theme="orange" className="mb-4" onClick={handleCreateRoom}>
+        <Button theme="orange" size={buttonSize} className="mb-4" onClick={handleCreateRoom}>
           Create Room
         </Button>
       );
@@ -63,7 +75,7 @@ const LobbyButtons = () => {
   return (
     <div className="flex flex-col">
       {renderRoomButton()}
-      <Button theme="green" size={2} onClick={openModal}>
+      <Button theme="green" size={buttonSize} onClick={openModal}>
         Join Room
       </Button>
 
