@@ -103,14 +103,8 @@ export const placeBid = functions.region("asia-east2").https.onCall(async (bid: 
         bidEntry.suit === updatedPublicBiddingPhase.highestBid!.suit
     );
 
-    // If the highest bid is NT, the bid winner is the last player who bid NT
-    const bidWinnerIndex =
-      updatedPublicBiddingPhase.highestBid!.suit === "NT"
-        ? updatedPublicBiddingPhase.bidHistory.length - 1
-        : highestBidIndex;
-
     // Calculate the position of the bid winner
-    const bidWinnerPosition = (bidWinnerIndex + 1) % 4;
+    const bidWinnerPosition = highestBidIndex % 4;
 
     // Set up PublicTeammateChoosingPhase when there are 3 consecutive passes
     const publicTeammateChoosingPhase: PublicTeammateChoosingPhase = {
