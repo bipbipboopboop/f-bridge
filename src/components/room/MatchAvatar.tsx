@@ -10,7 +10,7 @@ interface MatchAvatarProps {
 }
 
 const MatchAvatar: React.FC<MatchAvatarProps> = ({ position, className }) => {
-  const isDesktop = useMediaQuery({ minWidth: 768 }); // Adjust the breakpoint as needed
+  const isDesktop = useMediaQuery({ minWidth: 915 });
   const isLandscape = useMediaQuery({ orientation: "landscape" });
 
   if (isDesktop) return <MatchAvatarWeb position={position} className={className} />;

@@ -17,7 +17,7 @@ import { LobbyProvider } from "../context/LobbyContext";
 import { useMediaQuery } from "react-responsive";
 
 const Lobby = () => {
-  const isDesktop = useMediaQuery({ minWidth: 915 }); // Adjust the breakpoint as needed
+  const isDesktop = useMediaQuery({ minWidth: 915 });
   const isLandscape = useMediaQuery({ orientation: "landscape" });
   return (
     <LobbyProvider>

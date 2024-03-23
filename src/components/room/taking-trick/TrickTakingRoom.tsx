@@ -16,7 +16,7 @@ const TrickTakingRoom: React.FC = () => {
   const { playerAccount } = useAuth();
   const currentPlayerId = playerAccount?.id;
   const roomId = playerAccount?.roomID;
-  const isDesktop = useMediaQuery({ minWidth: 768 });
+  const isDesktop = useMediaQuery({ minWidth: 915 });
   const isLandscape = useMediaQuery({ orientation: "landscape" });
 
   if (!roomId || !currentPlayerId) {

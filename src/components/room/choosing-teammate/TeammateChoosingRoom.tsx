@@ -12,7 +12,7 @@ import MatchPeripheral from "../MatchPeripheral";
 import TeammatePanel from "./TeammatePanel";
 
 const TeammateChoosingRoom: React.FC = () => {
-  const isDesktop = useMediaQuery({ minWidth: 768 });
+  const isDesktop = useMediaQuery({ minWidth: 915 });
   const isLandscape = useMediaQuery({ orientation: "landscape" });
 
   const { playerAccount } = useAuth();
