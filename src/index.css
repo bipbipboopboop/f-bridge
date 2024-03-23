@@ -31,3 +31,8 @@ body {
 .firebase-emulator-warning {
   display: none;
 }
+
+.Toastify__toast-body {
+  font-family: "BridgeFont";
+  font-size: 8px;
+}
