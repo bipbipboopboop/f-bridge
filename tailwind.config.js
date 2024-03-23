@@ -50,7 +50,7 @@ module.exports = {
         lg: "1024px",
         xl: "1280px",
         "mobile-portrait": { raw: "(orientation: portrait)" },
-        "mobile-landscape": { raw: "(orientation: landscape) and (max-width: 700px)" },
+        "mobile-landscape": { raw: "(orientation: landscape) and (max-width: 915px)" },
       },
     },
   },

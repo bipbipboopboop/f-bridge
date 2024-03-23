@@ -5,6 +5,10 @@ import Navbar from "../../navbar";
 import Modal from "react-modal";
 import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
+import PlayerBox from "./PlayerBox";
+import Button from "../../buttons/button";
+import PlayerPanel from "./PlayerPanel";
+import RoomSettings from "./RoomSettings";
 
 const WaitingRoom = ({ room }: { room: GameRoom }) => {
   const isDesktop = useMediaQuery({ minWidth: 768 }); // Adjust the breakpoint as needed
@@ -50,7 +54,6 @@ const WaitingRoomLandscape = ({ room }: { room: GameRoom }) => {
     </div>
   );
 };
-
 const WaitingRoomPortrait = ({ room }: { room: GameRoom }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -62,12 +65,16 @@ const WaitingRoomPortrait = ({ room }: { room: GameRoom }) => {
       <div className="h-[5%] w-full flex justify-end items-center">
         <Navbar />
         <button className="bg-black/20 hover:bg-[#006cb1] p-2 rounded-md mr-4" onClick={openModal}>
-          {/* <FaCommentAlt className="text-white" /> */}
           Chat
         </button>
       </div>
-      <div className="flex-grow flex w-full h-full">
-        <WaitingPanel room={room} />
+      <div className="h-full w-full flex flex-col justify-center items-center">
+        <div className="w-[90%] h-3/5">
+          <PlayerPanel room={room} />
+        </div>
+        <div className="h-2/5 w-[70%]">
+          <RoomSettings room={room} />
+        </div>
       </div>
       <Modal
         isOpen={isModalOpen}
