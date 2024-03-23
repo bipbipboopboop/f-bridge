@@ -12,7 +12,7 @@ interface OpponentHandProps {
 const OpponentHand: React.FC<OpponentHandProps> = ({ direction, className }) => {
   const { playerAccount } = useAuth();
   const { room } = useRoom();
-  const isDesktop = useMediaQuery({ minWidth: 915 });
+  const isDesktop = useMediaQuery({ minWidth: 915, orientation: "landscape" });
   const isLandscape = useMediaQuery({ orientation: "landscape" }) && !isDesktop;
 
   if (!playerAccount || !room) {

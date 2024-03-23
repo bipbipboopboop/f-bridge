@@ -1,21 +1,22 @@
-import { GameRoom } from "types/Room";
+import { useState } from "react";
+import Modal from "react-modal";
+import { useMediaQuery } from "react-responsive";
+
 import WaitingPanel from "./WaitingPanel";
 import Chatbox from "../../chat/Chatbox";
 import Navbar from "../../navbar";
-import Modal from "react-modal";
-import { useState } from "react";
-import { useMediaQuery } from "react-responsive";
-import PlayerBox from "./PlayerBox";
-import Button from "../../buttons/button";
+
 import PlayerPanel from "./PlayerPanel";
 import RoomSettings from "./RoomSettings";
+
+import { GameRoom } from "types/Room";
 
 const WaitingRoom = ({ room }: { room: GameRoom }) => {
   const isDesktop = useMediaQuery({ minWidth: 768 }); // Adjust the breakpoint as needed
   const isLandscape = useMediaQuery({ orientation: "landscape" });
 
-  if (isDesktop) return <WaitingRoomWeb room={room} />;
-  if (isLandscape) return <WaitingRoomLandscape room={room} />;
+  if (isDesktop || isLandscape) return <WaitingRoomWeb room={room} />;
+
   return <WaitingRoomPortrait room={room} />;
 };
 
@@ -26,10 +27,10 @@ const WaitingRoomWeb = ({ room }: { room: GameRoom }) => {
         <Navbar />
       </div>
       <div className="flex w-full h-[95%] px-[2%]">
-        <div className="h-full w-2/3 p-4">
+        <div className="h-full w-2/3 pl-4 py-4">
           <WaitingPanel room={room} />
         </div>
-        <div className="h-full w-1/3 p-4">
+        <div className="h-full w-1/3 pr-4 py-4">
           <Chatbox />
         </div>
       </div>
@@ -37,23 +38,6 @@ const WaitingRoomWeb = ({ room }: { room: GameRoom }) => {
   );
 };
 
-const WaitingRoomLandscape = ({ room }: { room: GameRoom }) => {
-  return (
-    <div className="h-full w-full">
-      <div className="h-[5%] w-full">
-        <Navbar />
-      </div>
-      <div className="flex w-full h-[95%] px-[2%]">
-        <div className="h-full w-2/3 p-4">
-          <WaitingPanel room={room} />
-        </div>
-        <div className="h-full w-1/3 p-4">
-          <Chatbox />
-        </div>
-      </div>
-    </div>
-  );
-};
 const WaitingRoomPortrait = ({ room }: { room: GameRoom }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 

@@ -4,8 +4,10 @@ import { useParams } from "react-router-dom";
 import Button from "../../buttons/button";
 import { useAuth } from "../../../hooks/useAuth";
 import { useFunctions } from "../../../hooks/useFunctions";
+import { HTMLAttributes } from "react";
 
-const RoomButtonPanel = ({ room }: { room: GameRoom }) => {
+const RoomButtonPanel: React.FC<HTMLAttributes<HTMLDivElement> & { room: GameRoom }> = (props) => {
+  const { room, className, ...rest } = props;
   const { playerAccount } = useAuth();
   const { toggleReady, startGame } = useFunctions();
   const { roomID } = useParams<{ roomID: string }>();
@@ -20,7 +22,7 @@ const RoomButtonPanel = ({ room }: { room: GameRoom }) => {
 
   if (isPlayerAHost) {
     return (
-      <div className="h-full flex flex-col justify-end">
+      <div className={`h-full flex flex-col justify-end ${className}`} {...rest}>
         <Button
           theme="orange"
           size={2}

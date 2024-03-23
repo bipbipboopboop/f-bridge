@@ -7,7 +7,6 @@ import { useFunctions } from "../../hooks/useFunctions";
 
 import PlayingCard from "../PlayingCard";
 import Button from "../buttons/button";
-import { useMediaQuery } from "react-responsive";
 
 const PlayerHand = () => {
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);

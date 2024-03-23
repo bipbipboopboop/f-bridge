@@ -49,7 +49,7 @@ const LobbyButtons = () => {
     setRoomIdInput("");
   };
 
-  const buttonSize = isDesktop ? 2 : 1;
+  const buttonSize = isDesktop || isPortrait ? 2 : 1;
 
   const renderRoomButton = () => {
     if (playerAccount?.roomID) {
@@ -57,7 +57,7 @@ const LobbyButtons = () => {
         <Button
           theme="orange"
           size={buttonSize}
-          className="mb-4"
+          className="mb-4 mobile-portrait:mb-0"
           onClick={() => navigate(`/rooms/${playerAccount.roomID}`)}
         >
           Return to Room
@@ -65,7 +65,12 @@ const LobbyButtons = () => {
       );
     } else {
       return (
-        <Button theme="orange" size={buttonSize} className="mb-4" onClick={handleCreateRoom}>
+        <Button
+          theme="orange"
+          size={buttonSize}
+          className="mb-4 mobile-portrait:mb-0 mobile-portrait:mr-1"
+          onClick={handleCreateRoom}
+        >
           Create Room
         </Button>
       );
@@ -73,7 +78,7 @@ const LobbyButtons = () => {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col mobile-portrait:flex-row">
       {renderRoomButton()}
       <Button theme="green" size={buttonSize} onClick={openModal}>
         Join Room

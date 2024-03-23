@@ -1,31 +1,19 @@
-import { GameRoom } from "types/Room";
-import PlayerPanel from "./PlayerPanel";
-import RoomSettings from "./RoomSettings";
 import { useMediaQuery } from "react-responsive";
 
+import { GameRoom } from "types/Room";
+
+import PlayerPanel from "./PlayerPanel";
+import RoomSettings from "./RoomSettings";
+
 const WaitingPanel = ({ room }: { room: GameRoom }) => {
-  const isDesktop = useMediaQuery({ minWidth: 915 });
+  const isDesktop = useMediaQuery({ minWidth: 915, orientation: "landscape" });
   const isLandscape = useMediaQuery({ orientation: "landscape" });
 
-  if (isDesktop) return <WaitingPanelWeb room={room} />;
-  if (isLandscape) return <WaitingPanelLandscape room={room} />;
+  if (isDesktop || isLandscape) return <WaitingPanelWeb room={room} />;
   return <WaitingPanelPortrait room={room} />;
 };
 
 const WaitingPanelWeb = ({ room }: { room: GameRoom }) => {
-  return (
-    <div className="flex h-full w-100">
-      <div className="w-2/5">
-        <RoomSettings room={room} />
-      </div>
-      <div className="w-3/5 mx-6">
-        <PlayerPanel room={room} />
-      </div>
-    </div>
-  );
-};
-
-const WaitingPanelLandscape = ({ room }: { room: GameRoom }) => {
   return (
     <div className="flex h-full w-100">
       <div className="w-2/5">

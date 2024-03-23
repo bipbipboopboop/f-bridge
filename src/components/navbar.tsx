@@ -1,6 +1,5 @@
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
-import { Link } from "react-router-dom";
 import { useSignInWithGoogle } from "react-firebase-hooks/auth";
 
 import { useState } from "react";

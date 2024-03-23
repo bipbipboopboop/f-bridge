@@ -32,7 +32,6 @@ const AuctionDashboard: React.FC = () => {
 
   const { bidHistory } = room.phase.biddingPhase;
 
-  const gridCols = isDesktop ? "grid-cols-4" : isLandscape ? "grid-cols-4" : "grid-cols-3";
   const gridRows = isDesktop ? "grid-rows-5" : isLandscape ? "grid-rows-4" : "grid-rows-8";
   const textSize = isDesktop ? "text-sm" : isLandscape ? "text-2xs" : "text-2xs";
   const cellHeight = isDesktop ? "h-[40px]" : isLandscape ? "h-[30px]" : "h-[30px]";

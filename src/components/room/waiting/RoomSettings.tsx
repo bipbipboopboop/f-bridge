@@ -6,6 +6,7 @@ import Button from "../../buttons/button";
 import { useFunctions } from "../../../hooks/useFunctions";
 import { useMediaQuery } from "react-responsive";
 import { useState } from "react";
+import RoomButtonPanel from "./RoomButtonPanel";
 
 const RoomSettings = ({ room }: { room: GameRoom }) => {
   const { leaveGameRoom } = useFunctions();
@@ -96,22 +97,20 @@ const RoomSettingsPortrait = ({ room }: { room: GameRoom }) => {
       <div className="flex flex-col items-center justify-center h-2/3">
         <div className="text-lg font-bold mb-2">Settings</div>
         <div className="flex items-center">
-          <button className="p-2 rounded-md bg-gray-300 hover:bg-gray-400 mr-2" onClick={handlePrevSetting}>
+          <Button theme="yellow" className="mr-2" onClick={handlePrevSetting}>
             &lt;
-          </button>
-          <div className="py-2 px-4 bg-black/5 rounded-md">
+          </Button>
+          <div className="py-5 px-4 bg-black/5 rounded-md mobile-portrait:text-xs">
             {settings[currentSettingIndex].label}: {settings[currentSettingIndex].value.toString()}
           </div>
-          <button className="p-2 rounded-md bg-gray-300 hover:bg-gray-400 ml-2" onClick={handleNextSetting}>
+          <Button theme="yellow" className="p-2 ml-2" onClick={handleNextSetting}>
             &gt;
-          </button>
+          </Button>
         </div>
       </div>
       <div className="flex justify-center mb-4 items-center">
-        <Button theme="orange" className="mr-4">
-          Ready/Start
-        </Button>
-        <Button theme="green" onClick={handleLeaveRoom}>
+        <RoomButtonPanel room={room} className="mr-4" />
+        <Button theme="green" size={2} onClick={handleLeaveRoom}>
           Leave Room
         </Button>
       </div>
