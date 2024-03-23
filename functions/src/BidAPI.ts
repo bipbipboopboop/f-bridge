@@ -234,7 +234,7 @@ export const chooseTeammate = functions.region("asia-east2").https.onCall(async 
   const announcement: Announcement = {
     id: Timestamp.now().toMillis().toString(),
     title: "Teammate Chosen",
-    content: `${currentPlayer.displayName} has chosen ${highestBid.level} ${highestBid.suit} as their teammate.`,
+    content: `${currentPlayer.displayName} has chosen ${card.rank} ${card.suit} as their teammate.`,
     createdAt: Timestamp.now().toDate(),
   };
 
@@ -251,7 +251,7 @@ export const chooseTeammate = functions.region("asia-east2").https.onCall(async 
   await messagesRef.add({
     createdAt: Timestamp.now(),
     playerName: "system",
-    text: `${currentPlayer.displayName} has chosen ${highestBid.level} ${highestBid.suit} as their teammate.`,
+    text: `${currentPlayer.displayName} has chosen ${card.rank} ${card.suit} as their teammate.`,
     uid: "system",
   });
 });
