@@ -22,15 +22,20 @@ const RoomSettings = ({ room }: { room: GameRoom }) => {
     }
   };
 
+  const isDesktop = useMediaQuery({ minWidth: 930, orientation: "landscape" });
+  const isLandscape = useMediaQuery({ orientation: "landscape" }) && isDesktop;
+
   if (isPortrait) {
     return <RoomSettingsPortrait room={room} />;
   }
 
+  const buttonSize = isDesktop ? 2 : 1;
+
   return (
     <div className="text-4xs md:text-2xs lg:text-base bg-black/10 p-4 rounded-lg h-full select-none">
       <div className="h-5/6 pt-5">
-        <h4 className="mobile-landscape:text-sm md:text-xl font-bold mb-4">Settings</h4>
-        <div className="space-y-[5%]">
+        <h4 className="mobile-landscape:text-xs md:text-xl font-bold mb-1">Settings</h4>
+        <div className="space-y-[5%] mobile-landscape:space-y-1">
           <div className="flex justify-between bg-black/20 hover:bg-[#006cb1] p-[5%] rounded-md">
             <span>Invite Only:</span>
             <span>{room.settings.isInviteOnly ? "True" : "False"}</span>
@@ -54,7 +59,7 @@ const RoomSettings = ({ room }: { room: GameRoom }) => {
         </div>
       </div>
       <div className="h-1/6 flex flex-col-reverse">
-        <Button theme="green" size={2} className="w-full" onClick={handleLeaveRoom}>
+        <Button theme="green" size={buttonSize} className="w-full" onClick={handleLeaveRoom}>
           Leave Room
         </Button>
       </div>
