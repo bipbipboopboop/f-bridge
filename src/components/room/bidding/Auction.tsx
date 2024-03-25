@@ -27,13 +27,13 @@ const Auction: React.FC = () => {
         }`}
         style={{ zIndex: 1 }}
       >
-        <div className="h-1/5 pb-2.5 mb-2.5 mobile-landscape:mb-1 mobile-landscape:pb-1 mobile-landscape:h-1/6">
+        <div className="h-1/6 pb-2.5 mb-2.5 mobile-landscape:mb-1 mobile-landscape:pb-1 mobile-landscape:h-1/6">
           <AuctionAvatarRow />
         </div>
-        <div className="h-2/5 mb-2.5 border-y-2 border-[#e8e8e8] mobile-landscape:h-2/6">
+        <div className="h-2/6 mb-2.5 border-y-2 border-[#e8e8e8] mobile-landscape:h-2/6">
           <AuctionDashboard />
         </div>
-        <div className="h-3/5">
+        <div className="h-3/6">
           <AuctionButtons />
         </div>
       </div>

@@ -95,6 +95,10 @@ const BidContent: React.FC<BidContentProps> = ({ bid, suitColor, suitEffect, isD
     <span className={suitEffect} style={{ color: suitColor }}>
       {bid.suit === "Pass" ? (
         "Pass"
+      ) : bid.suit === "NT" ? (
+        <span>
+          {bid.level} {bid.suit}
+        </span>
       ) : (
         <>
           {bid.level}{" "}

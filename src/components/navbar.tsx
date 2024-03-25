@@ -22,6 +22,10 @@ const Navbar = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  const handleChangeName = () => {
+    console.log("Change Name");
+  };
+
   return (
     <nav className="w-full py-3 select-none">
       <div className="container mx-auto flex justify-between items-center">
@@ -38,6 +42,7 @@ const Navbar = () => {
             </svg>
           </button>
           <div className={`absolute right-0 mt-2 py-2 bg-white rounded-md shadow-lg ${isDropdownOpen ? "" : "hidden"}`}>
+            <div className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Edit Name</div>
             {user?.isAnonymous && (
               <div onClick={handleSignInWithGoogle} className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
                 Login
