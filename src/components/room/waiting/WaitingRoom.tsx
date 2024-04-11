@@ -47,10 +47,10 @@ const WaitingRoomPortrait = ({ room }: { room: GameRoom }) => {
   return (
     <div className="h-full w-full flex flex-col relative">
       <div className="h-[5%] w-full flex justify-end items-center">
-        <Navbar />
         <button className="bg-black/20 hover:bg-[#006cb1] p-2 rounded-md mr-4" onClick={openModal}>
           Chat
         </button>
+        <Navbar />
       </div>
       <div className="h-full w-full flex flex-col justify-center items-center">
         <div className="w-[90%] h-3/5">

@@ -32,7 +32,7 @@ const RoomSettings = ({ room }: { room: GameRoom }) => {
   const buttonSize = isDesktop ? 2 : 1;
 
   return (
-    <div className="text-4xs md:text-2xs lg:text-base bg-black/10 p-4 rounded-lg h-full select-none">
+    <div className="text-2xs md:text-2xs lg:text-base bg-black/10 p-4 rounded-lg h-full select-none">
       <div className="h-5/6 pt-5">
         <h4 className="mobile-landscape:text-xs md:text-xl font-bold mb-1">Settings</h4>
         <div className="space-y-[5%] mobile-landscape:space-y-1">
