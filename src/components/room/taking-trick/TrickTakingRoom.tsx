@@ -12,6 +12,7 @@ import MatchPeripheral from "../MatchPeripheral";
 import TrickArea from "./TrickArea";
 import TrickMonitor from "./TrickMonitor";
 import { useRoom } from "../../../context/RoomContext";
+import Button from "../../buttons/button";
 
 const TrickTakingRoom: React.FC = () => {
   const { playerAccount } = useAuth();
@@ -67,11 +68,17 @@ const TrickTakingRoomWeb: React.FC = () => {
           isOpen={isYourTurnModalOpen}
           onRequestClose={() => setIsYourTurnModalOpen(false)}
           contentLabel="It's your turn!"
-          style={{ overlay: { zIndex: 1 } }}
-          className="bg-white rounded shadow p-6 relative top-1/4 left-1/4 h-1/2 w-1/4 z-10 text-black"
+          ariaHideApp={false}
+          style={{ overlay: { zIndex: 40 } }}
+          className="rounded relative top-1/4 left-1/3 h-full w-full text-black select-none outline-none"
           overlayClassName="fixed inset-0 bg-black bg-opacity-50"
         >
-          It's your turn
+          <div className="bg-teal-400 w-1/3 h-1/2 shadow-md rounded-lg p-6 select-none flex flex-col justify-around items-center">
+            It's your turn!
+            <Button onClick={() => setIsYourTurnModalOpen(false)} theme="orange">
+              OK
+            </Button>
+          </div>
         </Modal>
       </div>
     </RestrictedPlayerProvider>
@@ -141,7 +148,7 @@ const TrickTakingRoomLandscape = () => {
         isOpen={isChatModalOpen}
         onRequestClose={closeModal}
         contentLabel="Chat Modal"
-        style={{ overlay: { zIndex: 10 } }}
+        ariaHideApp={false}
         className="bg-white rounded shadow p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 z-20"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50"
       >
@@ -151,7 +158,7 @@ const TrickTakingRoomLandscape = () => {
         isOpen={isInfoModalOpen}
         onRequestClose={closeModal}
         contentLabel="Info Modal"
-        style={{ overlay: { zIndex: 10 } }}
+        ariaHideApp={false}
         className="bg-black/5 rounded shadow p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 z-20"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50"
       >
@@ -161,11 +168,16 @@ const TrickTakingRoomLandscape = () => {
         isOpen={isYourTurnModalOpen}
         onRequestClose={() => setIsYourTurnModalOpen(false)}
         contentLabel="It's your turn!"
-        style={{ overlay: { zIndex: 10 } }}
-        className="bg-white rounded shadow p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 z-20 text-black"
+        ariaHideApp={false}
+        className="bg-black/5 rounded shadow absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/2 h-1/2 z-20 outline-none"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50"
       >
-        It's your turn
+        <div className="bg-teal-400 h-full w-full shadow-md rounded-lg p-6 select-none flex flex-col justify-around items-center">
+          It's your turn!
+          <Button onClick={() => setIsYourTurnModalOpen(false)} theme="orange">
+            OK
+          </Button>
+        </div>
       </Modal>
     </RestrictedPlayerProvider>
   );
