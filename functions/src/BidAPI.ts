@@ -236,7 +236,15 @@ export const chooseTeammate = functions.region("asia-east2").https.onCall(async 
   const announcement: Announcement = {
     id: Timestamp.now().toMillis().toString(),
     title: "Teammate Chosen",
-    content: `${currentPlayer.displayName} has chosen ${card.rank} ${card.suit} as their teammate.`,
+    gameStatus: "Choosing Teammate",
+    teammateChoosingAnnoucement: {
+      bidWinnerID: currentPlayer.id,
+      bidWinnerName: currentPlayer.displayName,
+      chosenCard: card,
+      content: `${currentPlayer.displayName} has chosen ${card.rank} ${card.suit} as their teammate.`,
+    },
+    trickTakingAnnouncement: null,
+    endedAnnouncement: null,
     createdAt: Timestamp.now().toDate(),
   };
 

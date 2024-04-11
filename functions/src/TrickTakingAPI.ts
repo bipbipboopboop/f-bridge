@@ -165,7 +165,14 @@ export const playCard = functions.region("asia-east2").https.onCall(async (card:
         {
           id: Timestamp.now().toMillis().toString(),
           title: "Trick Winner",
-          content: `${winner.displayName} won the trick! ${winner.displayName} will start the next trick.`,
+          gameStatus: "Taking Trick",
+          trickTakingAnnouncement: {
+            trickWinnerID: winner.id,
+            trickWinnerName: winner.displayName,
+            content: `${winner.displayName} won the trick! ${winner.displayName} will start the next trick.`,
+          },
+          teammateChoosingAnnoucement: null,
+          endedAnnouncement: null,
           createdAt: Timestamp.now().toDate(),
         },
       ],
@@ -259,7 +266,13 @@ export const playCard = functions.region("asia-east2").https.onCall(async (card:
             {
               id: Timestamp.now().toMillis().toString(),
               title: "Game Over",
-              content: `${winnerTeam} team has won the game!`,
+              gameStatus: "Ended",
+              endedAnnouncement: {
+                winningTeamName: winnerTeam,
+                content: `${winnerTeam} won the game!`,
+              },
+              teammateChoosingAnnoucement: null,
+              trickTakingAnnouncement: null,
               createdAt: Timestamp.now().toDate(),
             },
           ],
