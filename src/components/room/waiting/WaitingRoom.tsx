@@ -12,7 +12,7 @@ import RoomSettings from "./RoomSettings";
 import { GameRoom } from "types/Room";
 
 const WaitingRoom = ({ room }: { room: GameRoom }) => {
-  const isDesktop = useMediaQuery({ minWidth: 768 }); // Adjust the breakpoint as needed
+  const isDesktop = useMediaQuery({ minWidth: 930 });
   const isLandscape = useMediaQuery({ orientation: "landscape" });
 
   if (isDesktop || isLandscape) return <WaitingRoomWeb room={room} />;
