@@ -1,7 +1,7 @@
 import React from "react";
-import PlayingCard from "../../PlayingCard";
-import { useAuth } from "../../../hooks/useAuth";
-import { useRoom } from "../../../context/RoomContext";
+import PlayingCard from "../../../PlayingCard";
+import { useAuth } from "../../../../hooks/useAuth";
+import { useRoom } from "../../../../context/RoomContext";
 
 const TrickArea: React.FC = () => {
   const { room } = useRoom();

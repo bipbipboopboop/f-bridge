@@ -1,6 +1,6 @@
 import { avatarLookup } from "assets/avatar";
-import { useAuth } from "../../../hooks/useAuth";
-import { useRoom } from "../../../context/RoomContext";
+import { useAuth } from "../../../../hooks/useAuth";
+import { useRoom } from "../../../../context/RoomContext";
 import { useMediaQuery } from "react-responsive";
 
 const AuctionAvatarRow = () => {

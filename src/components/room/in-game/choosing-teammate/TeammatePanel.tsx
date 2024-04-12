@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useRoom } from "../../../context/RoomContext";
-import { useAuth } from "../../../hooks/useAuth";
-import { useFunctions } from "../../../hooks/useFunctions";
-import { useRestrictedPlayerData } from "../../../context/RestrictedPlayerContext";
+import { useRoom } from "../../../../context/RoomContext";
+import { useAuth } from "../../../../hooks/useAuth";
+import { useFunctions } from "../../../../hooks/useFunctions";
+import { useRestrictedPlayerData } from "../../../../context/RestrictedPlayerContext";
 import { Suit, Rank, RankValue, Card } from "types/Card";
-import Button from "../../buttons/button";
+import Button from "../../../buttons/button";
 import TeammateCard from "./TeammateCard";
 import { useMediaQuery } from "react-responsive";
 

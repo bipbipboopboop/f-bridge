@@ -1,5 +1,5 @@
 import React from "react";
-import { useRoom } from "../../../context/RoomContext";
+import { useRoom } from "../../../../context/RoomContext";
 import { avatarLookup } from "assets/avatar";
 
 const TrickMonitor: React.FC = () => {

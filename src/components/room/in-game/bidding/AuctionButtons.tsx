@@ -1,9 +1,9 @@
-import Button from "../../buttons/button";
+import Button from "../../../buttons/button";
 import { BidLevel, BidSuit } from "types/Bid";
-import { useAuth } from "../../../hooks/useAuth";
-import { useFunctions } from "../../../hooks/useFunctions";
+import { useAuth } from "../../../../hooks/useAuth";
+import { useFunctions } from "../../../../hooks/useFunctions";
 import { useState } from "react";
-import { useRoom } from "../../../context/RoomContext";
+import { useRoom } from "../../../../context/RoomContext";
 
 const AuctionButtons = () => {
   const { playerAccount } = useAuth();

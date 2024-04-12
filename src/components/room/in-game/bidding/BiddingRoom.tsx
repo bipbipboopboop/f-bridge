@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
-import Chatbox from "../../chat/Chatbox";
+import Chatbox from "../../../chat/Chatbox";
 import Auction from "./Auction";
-import { RestrictedPlayerProvider } from "../../../context/RestrictedPlayerContext";
-import { useAuth } from "../../../hooks/useAuth";
-import MatchPeripheral from "../MatchPeripheral";
+import { RestrictedPlayerProvider } from "../../../../context/RestrictedPlayerContext";
+import { useAuth } from "../../../../hooks/useAuth";
+import MatchPeripheral from "../match-peripheral/MatchPeripheral";
 import { useMediaQuery } from "react-responsive";
 
 const BiddingRoom: React.FC = () => {

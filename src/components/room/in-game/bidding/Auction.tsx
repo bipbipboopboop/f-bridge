@@ -1,29 +1,20 @@
 import React from "react";
+import useScreenSize from "../../../../hooks/useScreenSize";
 
 import AuctionAvatarRow from "./AuctionAvatarRow";
 import AuctionButtons from "./AuctionButtons";
 import AuctionDashboard from "./AuctionDashboard";
-import { useMediaQuery } from "react-responsive";
 
 const Auction: React.FC = () => {
-  const isDesktop = useMediaQuery({ minWidth: 930 });
-  const isLandscape = useMediaQuery({ orientation: "landscape" }) && !isDesktop;
-  const isPortrait = !isDesktop && !isLandscape;
+  const { isDesktop } = useScreenSize();
 
-  const portraitStyles = "p-4 h-[60%] w-[90%] max-w-[400px] min-w-[300px]";
   const landscapeStyles = "p-2 h-[70%] w-[40%] max-w-[800px] min-w-[300px] relative bottom-[6%]";
 
   return (
     <div className="flex justify-center items-center h-full">
       <div
         className={`rounded-md bg-teal-400 shadow-xl ${
-          isDesktop
-            ? "p-6 h-[60%] w-full max-w-[500px] min-w-[300px]"
-            : isLandscape
-            ? landscapeStyles
-            : isPortrait
-            ? portraitStyles
-            : ""
+          isDesktop ? "p-6 h-[60%] w-full max-w-[500px] min-w-[300px]" : landscapeStyles
         }`}
         style={{ zIndex: 1 }}
       >

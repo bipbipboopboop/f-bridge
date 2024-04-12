@@ -1,6 +1,7 @@
 import { useState } from "react";
-import Modal from "react-modal";
 import { useMediaQuery } from "react-responsive";
+
+import Modal from "react-modal";
 
 import WaitingPanel from "./WaitingPanel";
 import Chatbox from "../../chat/Chatbox";

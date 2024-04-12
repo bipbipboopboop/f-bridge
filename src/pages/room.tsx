@@ -1,10 +1,9 @@
-import WaitingRoom from "../components/room/waiting/WaitingRoom";
-import BiddingRoom from "../components/room/bidding/BiddingRoom";
-import TakingTrickRoom from "../components/room/taking-trick/TrickTakingRoom";
-import EndedRoom from "../components/room/ended/EndedRoom";
-
 import { useRoom } from "../context/RoomContext";
-import TeammateChoosingRoom from "../components/room/choosing-teammate/TeammateChoosingRoom";
+
+import WaitingRoom from "../components/room/waiting/WaitingRoom";
+import EndedRoom from "../components/room/ended/EndedRoom";
+import InGameRoom from "../components/room/in-game/InGameRoom";
+import BiddingRoom from "../components/room/in-game/bidding/BiddingRoom";
 
 const Room = () => {
   const { room } = useRoom();
@@ -17,11 +16,9 @@ const Room = () => {
     case "Waiting":
       return <WaitingRoom room={room} />;
     case "Bidding":
-      return <BiddingRoom />;
     case "Choosing Teammate":
-      return <TeammateChoosingRoom />;
     case "Taking Trick":
-      return <TakingTrickRoom />;
+      return <InGameRoom />;
     case "Ended":
       return <EndedRoom />;
     default:

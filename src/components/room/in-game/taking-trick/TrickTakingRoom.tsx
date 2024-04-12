@@ -2,13 +2,13 @@
 import React from "react";
 import Modal from "react-modal";
 
-import { RestrictedPlayerProvider } from "../../../context/RestrictedPlayerContext";
+import { RestrictedPlayerProvider } from "../../../../context/RestrictedPlayerContext";
 
-import { useAuth } from "../../../hooks/useAuth";
+import { useAuth } from "../../../../hooks/useAuth";
 import { useMediaQuery } from "react-responsive";
 
-import Chatbox from "../../chat/Chatbox";
-import MatchPeripheral from "../MatchPeripheral";
+import Chatbox from "../../../chat/Chatbox";
+import MatchPeripheral from "../match-peripheral/MatchPeripheral";
 import TrickArea from "./TrickArea";
 import TrickMonitor from "./TrickMonitor";
 

@@ -3,12 +3,12 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 
 import { useMediaQuery } from "react-responsive";
-import { useAuth } from "../../../hooks/useAuth";
+import { useAuth } from "../../../../hooks/useAuth";
 
-import { RestrictedPlayerProvider } from "../../../context/RestrictedPlayerContext";
+import { RestrictedPlayerProvider } from "../../../../context/RestrictedPlayerContext";
 
-import Chatbox from "../../chat/Chatbox";
-import MatchPeripheral from "../MatchPeripheral";
+import Chatbox from "../../../chat/Chatbox";
+import MatchPeripheral from "../match-peripheral/MatchPeripheral";
 import TeammatePanel from "./TeammatePanel";
 
 const TeammateChoosingRoom: React.FC = () => {

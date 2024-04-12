@@ -4,7 +4,7 @@ import { useSpring, animated } from "react-spring";
 import Button from "./buttons/button";
 import { useRoom } from "../context/RoomContext";
 import { useAuth } from "../hooks/useAuth";
-import TeammateCard from "./room/choosing-teammate/TeammateCard";
+import TeammateCard from "./room/in-game/choosing-teammate/TeammateCard";
 
 interface AnnouncementModalProps {
   announcement: Announcement;

@@ -1,8 +1,8 @@
 // OpponentHand.tsx
 import { useMediaQuery } from "react-responsive";
-import { useRoom } from "../../context/RoomContext";
-import { useAuth } from "../../hooks/useAuth";
-import PlayingCard from "../PlayingCard";
+import { useRoom } from "../../../../context/RoomContext";
+import { useAuth } from "../../../../hooks/useAuth";
+import PlayingCard from "../../../PlayingCard";
 
 interface OpponentHandProps {
   direction: "west" | "north" | "east";

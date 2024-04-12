@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { useRoom } from "../../../context/RoomContext";
+import { useRoom } from "../../../../context/RoomContext";
 import { Bid } from "types/Bid";
 import { useMediaQuery } from "react-responsive";
 

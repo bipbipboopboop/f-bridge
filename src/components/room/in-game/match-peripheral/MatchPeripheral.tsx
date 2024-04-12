@@ -1,19 +1,18 @@
 import { useState } from "react";
-import { useAuth } from "../../hooks/useAuth";
-import { useRestrictedPlayerData } from "../../context/RestrictedPlayerContext";
-import { useRoom } from "../../context/RoomContext";
+import { useAuth } from "../../../../hooks/useAuth";
+import { useRestrictedPlayerData } from "../../../../context/RestrictedPlayerContext";
+import { useRoom } from "../../../../context/RoomContext";
+import useScreenSize from "../../../../hooks/useScreenSize";
+
+import Modal from "react-modal";
 
 import MatchAvatar from "./MatchAvatar";
 import PlayerHand from "./PlayerHand";
 import OpponentHand from "./OpponentHand";
-import Modal from "react-modal";
-import Chatbox from "../chat/Chatbox";
-
-import { useMediaQuery } from "react-responsive";
+import Chatbox from "../../../chat/Chatbox";
 
 const MatchPeripheral: React.FC = () => {
-  const isDesktop = useMediaQuery({ minWidth: 930 });
-  const isLandscape = useMediaQuery({ orientation: "landscape" }) && !isDesktop;
+  const { isDesktop, isLandscape } = useScreenSize();
 
   if (isDesktop) return <MatchPeripheralWeb />;
   if (isLandscape) return <MatchPeripheralLandscape />;
