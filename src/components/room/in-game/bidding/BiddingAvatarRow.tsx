@@ -1,14 +1,12 @@
 import { avatarLookup } from "assets/avatar";
 import { useAuth } from "../../../../hooks/useAuth";
 import { useRoom } from "../../../../context/RoomContext";
-import { useMediaQuery } from "react-responsive";
+import useScreenSize from "../../../../hooks/useScreenSize";
 
 const AuctionAvatarRow = () => {
   const { playerAccount } = useAuth();
   const { room } = useRoom();
-  const isDesktop = useMediaQuery({ minWidth: 930 });
-  const isLandscape = useMediaQuery({ orientation: "landscape" }) && !isDesktop;
-  const isPortrait = !isDesktop && !isLandscape;
+  const { isDesktop } = useScreenSize();
 
   if (!room || !room.phase.biddingPhase) {
     return null;
@@ -17,7 +15,6 @@ const AuctionAvatarRow = () => {
   const { players } = room;
   const { currentPlayerIndex } = room.phase.biddingPhase;
 
-  const portraitAvatarSize = "h-8";
   const landscapeAvatarSize = "h-4";
   const desktopAvatarSize = "h-10";
 
@@ -25,13 +22,7 @@ const AuctionAvatarRow = () => {
     <div className="text-2xs grid grid-cols-4 gap-y-1 justify-items-center items-center select-none h-full relative bottom-[30%]">
       {players.map((player, index) => {
         const avatar = avatarLookup[player.avatarID];
-        const avatarSize = isDesktop
-          ? desktopAvatarSize
-          : isLandscape
-          ? landscapeAvatarSize
-          : isPortrait
-          ? portraitAvatarSize
-          : desktopAvatarSize;
+        const avatarSize = isDesktop ? desktopAvatarSize : landscapeAvatarSize;
 
         return (
           <div

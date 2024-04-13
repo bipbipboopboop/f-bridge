@@ -9,7 +9,7 @@ import { useMediaQuery } from "react-responsive";
 
 import Chatbox from "../../../chat/Chatbox";
 import MatchPeripheral from "../match-peripheral/MatchPeripheral";
-import TrickArea from "./TrickArea";
+import TrickAreaPanel from "./TrickAreaPanel";
 import TrickMonitor from "./TrickMonitor";
 
 const TrickTakingRoom: React.FC = () => {
@@ -45,7 +45,7 @@ const TrickTakingRoomWeb: React.FC = () => {
     <RestrictedPlayerProvider roomID={roomId} playerID={currentPlayerId}>
       <div className="flex w-full h-full">
         <div className="relative h-full w-3/4 pt-4">
-          <TrickArea />
+          <TrickAreaPanel />
           <MatchPeripheral />
         </div>
         <div className="h-full w-1/4 p-4 flex flex-col">
@@ -108,7 +108,7 @@ const TrickTakingRoomLandscape = () => {
             Info
           </button>
           <div className="w-full h-[95%] pt-4">
-            <TrickArea />
+            <TrickAreaPanel />
             <MatchPeripheral />
           </div>
         </div>

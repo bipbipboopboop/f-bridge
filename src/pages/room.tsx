@@ -3,7 +3,6 @@ import { useRoom } from "../context/RoomContext";
 import WaitingRoom from "../components/room/waiting/WaitingRoom";
 import EndedRoom from "../components/room/ended/EndedRoom";
 import InGameRoom from "../components/room/in-game/InGameRoom";
-import BiddingRoom from "../components/room/in-game/bidding/BiddingRoom";
 
 const Room = () => {
   const { room } = useRoom();

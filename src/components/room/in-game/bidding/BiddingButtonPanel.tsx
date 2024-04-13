@@ -5,7 +5,7 @@ import { useFunctions } from "../../../../hooks/useFunctions";
 import { useState } from "react";
 import { useRoom } from "../../../../context/RoomContext";
 
-const AuctionButtons = () => {
+const BiddingButtonPanel = () => {
   const { playerAccount } = useAuth();
   const { placeBid } = useFunctions();
   const [selectedNumber, setSelectedNumber] = useState<BidLevel | null>(null);
@@ -146,4 +146,4 @@ const AuctionButtons = () => {
   );
 };
 
-export default AuctionButtons;
+export default BiddingButtonPanel;

@@ -3,7 +3,7 @@ import { useRoom } from "../../../../context/RoomContext";
 import { Bid } from "types/Bid";
 import { useMediaQuery } from "react-responsive";
 
-const AuctionDashboard: React.FC = () => {
+const BiddingDashboard: React.FC = () => {
   const { room } = useRoom();
   const gridRef = useRef<HTMLDivElement>(null);
 
@@ -109,4 +109,4 @@ const BidContent: React.FC<BidContentProps> = ({ bid, suitColor, suitEffect, isD
   );
 };
 
-export default AuctionDashboard;
+export default BiddingDashboard;

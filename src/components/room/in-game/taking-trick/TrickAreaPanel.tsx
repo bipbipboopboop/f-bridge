@@ -3,7 +3,7 @@ import PlayingCard from "../../../PlayingCard";
 import { useAuth } from "../../../../hooks/useAuth";
 import { useRoom } from "../../../../context/RoomContext";
 
-const TrickArea: React.FC = () => {
+const TrickAreaPanel: React.FC = () => {
   const { room } = useRoom();
   const { playerAccount } = useAuth();
 
@@ -64,4 +64,4 @@ const TrickArea: React.FC = () => {
   );
 };
 
-export default TrickArea;
+export default TrickAreaPanel;
