@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from "react";
+
+import { Suit, Rank, RankValue, Card } from "types/Card";
+
 import { useRoom } from "../../../../context/RoomContext";
 import { useAuth } from "../../../../hooks/useAuth";
 import { useFunctions } from "../../../../hooks/useFunctions";
 import { useRestrictedPlayerData } from "../../../../context/RestrictedPlayerContext";
-import { Suit, Rank, RankValue, Card } from "types/Card";
+import { useScreenSize } from "../../../../hooks/useScreenSize";
+
 import Button from "../../../buttons/Button";
 import TeammateCard from "./TeammateCard";
-import { useMediaQuery } from "react-responsive";
 
 const TeammatePanel: React.FC = () => {
   const { room } = useRoom();
   const { playerAccount } = useAuth();
   const { chooseTeammate } = useFunctions();
   const { restrictedPlayer } = useRestrictedPlayerData();
+  const { isDesktop } = useScreenSize();
+
   const [selectedSuit, setSelectedSuit] = useState<Suit>("♣");
   const [selectedRank, setSelectedRank] = useState<Rank | null>(null);
-
-  const isDesktop = useMediaQuery({ minWidth: 930 });
-  const isLandscape = useMediaQuery({ orientation: "landscape" }) && !isDesktop;
-  const isPortrait = !isDesktop && !isLandscape;
 
   useEffect(() => {
     const firstAvailableSuit = getFirstAvailableSuit();
@@ -59,8 +60,6 @@ const TeammatePanel: React.FC = () => {
       const rankValue: RankValue = getRankValue(selectedRank);
       const card: Card = { suit: selectedSuit, rank: selectedRank, value: rankValue };
       chooseTeammate(card);
-      setSelectedSuit("♣");
-      setSelectedRank(null);
     }
   };
 
@@ -112,26 +111,16 @@ const TeammatePanel: React.FC = () => {
     return null;
   };
 
-  const portraitStyles = "p-4 h-[60%] w-[90%] max-w-[400px] min-w-[300px]";
-  const landscapeStyles = "p-2 h-[70%] w-[40%] max-w-[800px] min-w-[300px] relative bottom-[6%]";
+  const panelStyles = isDesktop
+    ? "p-6 h-[60%] w-full max-w-[500px] min-w-[300px]"
+    : "p-2 h-[70%] w-[40%] max-w-[800px] min-w-[300px] relative bottom-[6%]";
 
   return (
     <div className="flex justify-center items-center h-full">
-      <div
-        className={`rounded-md bg-teal-400 shadow-xl ${
-          isDesktop
-            ? "p-6 h-[60%] w-full max-w-[500px] min-w-[300px]"
-            : isLandscape
-            ? landscapeStyles
-            : isPortrait
-            ? portraitStyles
-            : ""
-        }`}
-        style={{ zIndex: 1 }}
-      >
+      <div className={`rounded-md bg-teal-400 shadow-xl ${panelStyles}`} style={{ zIndex: 1 }}>
         <div className="pb-2.5 mb-2.5 mobile-landscape:mb-1 mobile-landscape:pb-1">
           <div className="text-center">
-            {isBidWinner ? "Choose A Teammate" : `P${players[currentPlayerIndex].position} is chosing a teammate`}
+            {isBidWinner ? "Choose A Teammate" : `P${players[currentPlayerIndex].position} is choosing a teammate`}
           </div>
         </div>
         {isBidWinner && (
@@ -139,25 +128,21 @@ const TeammatePanel: React.FC = () => {
             <div className="bg-black/10 rounded-md p-4 mobile-landscape:p-2">
               <div
                 className={`bg-black/5 rounded-md grid justify-items-center py-1 px-5 mb-4 mobile-landscape:mb-2 ${
-                  isDesktop ? "grid-cols-4" : isLandscape ? "grid-cols-4" : "grid-cols-3"
+                  isDesktop ? "grid-cols-4" : "grid-cols-4"
                 }`}
               >
                 {["♣", "♦", "♥", "♠"].map((suit) => (
                   <button
                     key={suit}
                     className={`overflow-hidden ${
-                      isDesktop
-                        ? "w-[44px] h-[44px] text-2xl"
-                        : isLandscape
-                        ? "w-[30px] h-[30px] text-xl"
-                        : "w-[35px] h-[35px] text-lg"
+                      isDesktop ? "w-[44px] h-[44px] text-2xl" : "w-[30px] h-[30px] text-xl"
                     } ${selectedSuit === suit ? "border-4 border-black/50 rounded" : ""}`}
                     style={{ color: suit === "♥" || suit === "♦" ? "#FF525D" : "#222222" }}
                     onClick={() => handleSuitClick(suit as Suit)}
                   >
                     <div
                       className={`flex justify-center relative ${
-                        isDesktop ? "text-4xl bottom-1" : isLandscape ? "text-2xl bottom-0.5" : "text-3xl bottom-0.5"
+                        isDesktop ? "text-4xl bottom-1" : "text-2xl bottom-0.5"
                       }`}
                     >
                       {suit}
@@ -167,9 +152,9 @@ const TeammatePanel: React.FC = () => {
               </div>
               <div className="flex items-center justify-center mb-4 mobile-landscape:mb-2">
                 <Button
-                  size={isDesktop ? 1 : isLandscape ? 2 : 1}
+                  size={isDesktop ? 1 : 2}
                   theme="yellow"
-                  className={`mr-2 ${isDesktop ? "py-1.5 px-3.5" : isLandscape ? "py-1 px-2" : "py-0.5 px-1.5"}`}
+                  className={`mr-2 ${isDesktop ? "py-1.5 px-3.5" : "py-1 px-2"}`}
                   onClick={() => handleRankChange(false)}
                   disabled={isOnlyOneRankAvailable(selectedSuit)}
                 >
@@ -178,12 +163,12 @@ const TeammatePanel: React.FC = () => {
                 <TeammateCard
                   suit={selectedSuit}
                   rank={selectedRank}
-                  className={`${isDesktop ? "" : isLandscape ? "w-[60px] h-[75px]" : "w-[45px] h-[55px]"}`}
+                  className={`${isDesktop ? "" : "w-[60px] h-[75px]"}`}
                 />
                 <Button
-                  size={isDesktop ? 1 : isLandscape ? 2 : 1}
+                  size={isDesktop ? 1 : 2}
                   theme="yellow"
-                  className={`ml-2 ${isDesktop ? "py-1.5 px-3.5" : isLandscape ? "py-1 px-2" : "py-0.5 px-1.5"}`}
+                  className={`ml-2 ${isDesktop ? "py-1.5 px-3.5" : "py-1 px-2"}`}
                   onClick={() => handleRankChange(true)}
                   disabled={isOnlyOneRankAvailable(selectedSuit)}
                 >
@@ -192,9 +177,9 @@ const TeammatePanel: React.FC = () => {
               </div>
               <div className="flex justify-center">
                 <Button
-                  size={isDesktop ? 1 : isLandscape ? 2 : 1}
+                  size={isDesktop ? 1 : 2}
                   theme="orange"
-                  className={`${isDesktop ? "py-1.5 px-3.5" : isLandscape ? "py-1 px-2" : "py-0.5 px-1.5"}`}
+                  className={`${isDesktop ? "py-1.5 px-3.5" : "py-1 px-2"}`}
                   onClick={handleConfirmClick}
                 >
                   Confirm

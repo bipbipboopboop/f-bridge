@@ -1,6 +1,6 @@
 import { RestrictedPlayerProvider } from "../../../context/RestrictedPlayerContext";
 import { useAuth } from "../../../hooks/useAuth";
-import useScreenSize from "../../../hooks/useScreenSize";
+import { useScreenSize } from "../../../hooks/useScreenSize";
 
 import GameSidebar from "./GameSidebar";
 import MatchCenter from "./MatchCenter";

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../../../../hooks/useAuth";
 import { useRestrictedPlayerData } from "../../../../context/RestrictedPlayerContext";
 import { useRoom } from "../../../../context/RoomContext";
-import useScreenSize from "../../../../hooks/useScreenSize";
+import { useScreenSize } from "../../../../hooks/useScreenSize";
 
 import Modal from "react-modal";
 

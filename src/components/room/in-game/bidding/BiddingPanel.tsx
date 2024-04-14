@@ -1,5 +1,5 @@
 import React from "react";
-import useScreenSize from "../../../../hooks/useScreenSize";
+import { useScreenSize } from "../../../../hooks/useScreenSize";
 
 import BiddingAvatarRow from "./BiddingAvatarRow";
 import BiddingButtonPanel from "./BiddingButtonPanel";

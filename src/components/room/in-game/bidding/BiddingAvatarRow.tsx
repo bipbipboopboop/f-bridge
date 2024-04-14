@@ -1,7 +1,7 @@
 import { avatarLookup } from "assets/avatar";
 import { useAuth } from "../../../../hooks/useAuth";
 import { useRoom } from "../../../../context/RoomContext";
-import useScreenSize from "../../../../hooks/useScreenSize";
+import { useScreenSize } from "../../../../hooks/useScreenSize";
 
 const AuctionAvatarRow = () => {
   const { playerAccount } = useAuth();
