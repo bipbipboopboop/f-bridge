@@ -1,9 +1,9 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 
-import Lobby from "./pages/Llobby";
-import Home from "./pages/Hhome";
-import NotFound from "./pages/NnotFound";
+import Lobby from "./pages/Lobby";
+import Home from "./pages/Home";
+import NotFound from "./pages/NotFound";
 import Room from "./pages/Rroom";
 
 import { RoomProvider } from "./context/RoomContext";

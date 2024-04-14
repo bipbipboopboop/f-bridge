@@ -3,7 +3,7 @@ import { useRoom } from "../../../context/RoomContext";
 
 import { avatarLookup } from "assets/avatar";
 import Confetti from "react-confetti";
-import Button from "../../buttons/Bbutton";
+import Button from "../../buttons/Button";
 import { useNavigate } from "react-router-dom";
 
 const EndedRoom: React.FC = () => {

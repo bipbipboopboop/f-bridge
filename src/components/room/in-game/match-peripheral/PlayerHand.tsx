@@ -6,7 +6,7 @@ import { Card } from "types/Card";
 import { useFunctions } from "../../../../hooks/useFunctions";
 
 import PlayingCard from "../../../PlayingCard";
-import Button from "../../../buttons/Bbutton";
+import Button from "../../../buttons/Button";
 
 const PlayerHand = () => {
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);

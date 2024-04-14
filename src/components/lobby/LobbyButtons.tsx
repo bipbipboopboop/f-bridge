@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useFunctions } from "../../hooks/useFunctions";
 import { useAuth } from "../../hooks/useAuth";
 
-import Button from "../buttons/Bbutton";
+import Button from "../buttons/Button";
 import { useMediaQuery } from "react-responsive";
 
 const LobbyButtons = () => {

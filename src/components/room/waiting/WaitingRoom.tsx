@@ -5,7 +5,7 @@ import Modal from "react-modal";
 
 import WaitingPanel from "./WaitingPanel";
 import Chatbox from "../../chat/Chatbox";
-import Navbar from "../../Nnavbar";
+import Navbar from "../../Navbar";
 
 import PlayerPanel from "./PlayerPanel";
 import RoomSettings from "./RoomSettings";

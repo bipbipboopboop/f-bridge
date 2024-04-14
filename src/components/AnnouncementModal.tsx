@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Announcement } from "types/Annoucement";
 import { useSpring, animated } from "react-spring";
-import Button from "./buttons/Bbutton";
+import Button from "./buttons/Button";
 import { useRoom } from "../context/RoomContext";
 import { useAuth } from "../hooks/useAuth";
 import TeammateCard from "./room/in-game/choosing-teammate/TeammateCard";
