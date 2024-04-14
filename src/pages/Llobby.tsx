@@ -1,7 +1,7 @@
 /**
  * COMPONENTS
  */
-import Navbar from "../components/navbar";
+import Navbar from "../components/Nnavbar";
 import RoomList from "../components/lobby/RoomList";
 import LobbyButtons from "../components/lobby/LobbyButtons";
 import LobbyAvatar from "../components/lobby/LobbyAvatar";

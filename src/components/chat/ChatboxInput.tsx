@@ -1,7 +1,7 @@
 // ChatboxInput.tsx
 import { ChangeEvent, FormEvent, memo, useState } from "react";
 import { useParams } from "react-router-dom";
-import Button from "../buttons/button";
+import Button from "../buttons/Bbutton";
 import { CollectionReference, Timestamp, addDoc, collection } from "firebase/firestore";
 import { firestore } from "../../firebase";
 import { Message } from "types/Message";

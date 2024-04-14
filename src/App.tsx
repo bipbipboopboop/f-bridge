@@ -1,10 +1,10 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 
-import Lobby from "./pages/lobby";
-import Home from "./pages/home";
-import NotFound from "./pages/not-found";
-import Room from "./pages/room";
+import Lobby from "./pages/Llobby";
+import Home from "./pages/Hhome";
+import NotFound from "./pages/NnotFound";
+import Room from "./pages/Rroom";
 
 import { RoomProvider } from "./context/RoomContext";
 

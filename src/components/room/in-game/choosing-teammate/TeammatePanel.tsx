@@ -4,7 +4,7 @@ import { useAuth } from "../../../../hooks/useAuth";
 import { useFunctions } from "../../../../hooks/useFunctions";
 import { useRestrictedPlayerData } from "../../../../context/RestrictedPlayerContext";
 import { Suit, Rank, RankValue, Card } from "types/Card";
-import Button from "../../../buttons/button";
+import Button from "../../../buttons/Bbutton";
 import TeammateCard from "./TeammateCard";
 import { useMediaQuery } from "react-responsive";
 

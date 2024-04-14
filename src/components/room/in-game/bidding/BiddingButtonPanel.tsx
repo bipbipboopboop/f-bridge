@@ -1,4 +1,4 @@
-import Button from "../../../buttons/button";
+import Button from "../../../buttons/Bbutton";
 import { BidLevel, BidSuit } from "types/Bid";
 import { useAuth } from "../../../../hooks/useAuth";
 import { useFunctions } from "../../../../hooks/useFunctions";

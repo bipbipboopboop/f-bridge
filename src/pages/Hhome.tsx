@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import spinning from "../assets/spinning.gif";
-import Button from "../components/buttons/button";
+import Button from "../components/buttons/Bbutton";
 import { useAuth } from "../hooks/useAuth";
-import Navbar from "../components/navbar";
+import Navbar from "../components/Nnavbar";
 
 const Home = () => {
   const { playerAccount } = useAuth();

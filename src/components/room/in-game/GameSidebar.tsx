@@ -24,8 +24,6 @@ const GameSidebar = () => {
     default:
       return <></>;
   }
-
-  return <div>Sidebar</div>;
 };
 
 export default GameSidebar;

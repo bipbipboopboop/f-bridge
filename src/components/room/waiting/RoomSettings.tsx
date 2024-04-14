@@ -2,7 +2,7 @@ import { GameRoom } from "types/Room";
 
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import Button from "../../buttons/button";
+import Button from "../../buttons/Bbutton";
 import { useFunctions } from "../../../hooks/useFunctions";
 import { useMediaQuery } from "react-responsive";
 import { useState } from "react";

@@ -1,7 +1,7 @@
 import { GameRoom } from "types/Room";
 
 import { useParams } from "react-router-dom";
-import Button from "../../buttons/button";
+import Button from "../../buttons/Bbutton";
 import { useAuth } from "../../../hooks/useAuth";
 import { useFunctions } from "../../../hooks/useFunctions";
 import { HTMLAttributes } from "react";
