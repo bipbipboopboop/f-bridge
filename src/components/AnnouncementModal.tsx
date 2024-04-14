@@ -124,14 +124,14 @@ const AnnouncementModal: React.FC<AnnouncementModalProps> = ({ announcement, onC
   };
 
   return (
-    <div className="fixed z-50 inset-0 overflow-y-auto ">
-      <div className="absolute inset-0 bg-gray-700 opacity-75"></div>
+    <div className="fixed z-50 inset-0 overflow-y-auto">
+      <div className="absolute inset-0 bg-gray-700 opacity-75" />
       <div className="flex items-center justify-center h-full w-full">
         <animated.div style={modalAnimation} className="rounded-lg transform transition-all">
           <div className="bg-teal-400 text-black px-4 pt-5 pb-4 sm:p-6 sm:pb-4 h-1/2">
             <div className="flex flex-col text-center">
-              <h3 className="text-lg">{announcement.title}</h3>
-              <div className="mt-2">{renderAnnouncementContent()}</div>
+              <h3 className="text-lg text-white">{announcement.title}</h3>
+              <div className="mt-2 text-white">{renderAnnouncementContent()}</div>
             </div>
           </div>
           <div className="bg-teal-400 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
