@@ -58,7 +58,7 @@ export const FunctionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [chooseTeammate, l9, e9] = useHttpsCallable<Card, void>(functions, "chooseTeammate");
   const [playCard, l10, e10] = useHttpsCallable<Card, void>(functions, "playCard");
 
-  const isLoading = l0 || l1 || l2 || l3 || l4 || l5 || l6 || l7 || l8 || l9 || l10;
+  const isLoading = l0 || l1 || l2 || l3 || l4 || l5 || l6 || l7 || l8 || l9;
   const error = e0 || e1 || e2 || e3 || e4 || e5 || e6 || e7 || e8 || e9 || e10;
 
   const contextValue: FunctionContextProps = {
