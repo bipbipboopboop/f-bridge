@@ -1,8 +1,9 @@
-import { avatarLookup } from "assets/avatar";
-import { useRoom } from "../../../../context/RoomContext";
-import { useAuth } from "../../../../hooks/useAuth";
 import { useState } from "react";
-import { useMediaQuery } from "react-responsive";
+import { useAuth } from "../../../../hooks/useAuth";
+import { useRoom } from "../../../../context/RoomContext";
+import { useScreenSize } from "../../../../hooks/useScreenSize";
+
+import { avatarLookup } from "assets/avatar";
 
 interface MatchAvatarProps {
   position: number;
@@ -10,8 +11,7 @@ interface MatchAvatarProps {
 }
 
 const MatchAvatar: React.FC<MatchAvatarProps> = ({ position, className }) => {
-  const isDesktop = useMediaQuery({ minWidth: 930 });
-  const isLandscape = useMediaQuery({ orientation: "landscape" });
+  const { isDesktop, isLandscape } = useScreenSize();
 
   if (isDesktop) return <MatchAvatarWeb position={position} className={className} />;
   if (isLandscape) {
@@ -40,7 +40,7 @@ const MatchAvatarWeb: React.FC<MatchAvatarProps> = ({ position, className }) => 
       className={`select-none w-[20%] bg-[#FCFBF8] text-[#515151] px-5 py-2 rounded-[40px] text-sm flex items-center shadow-xl h-18 ${
         isCurrentTurn ? "border-4 border-teal-400 animate-pulse" : ""
       } ${className}`}
-      style={{ zIndex: 100 }}
+      style={{ zIndex: 20 }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

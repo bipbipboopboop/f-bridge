@@ -124,7 +124,7 @@ const AnnouncementModal: React.FC<AnnouncementModalProps> = ({ announcement, onC
   };
 
   return (
-    <div className="fixed z-40 inset-0 overflow-y-auto ">
+    <div className="fixed z-50 inset-0 overflow-y-auto ">
       <div className="absolute inset-0 bg-gray-700 opacity-75"></div>
       <div className="flex items-center justify-center h-full w-full">
         <animated.div style={modalAnimation} className="rounded-lg transform transition-all">
