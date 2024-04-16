@@ -22,7 +22,12 @@ const EndedRoom: React.FC = () => {
       <div className="grid grid-cols-2 gap-8">
         {winners.map((player) => (
           <div key={player.id} className="flex flex-col items-center">
-            <img src={avatarLookup[player.avatarID]} alt={player.displayName} className="w-32 h-32 rounded-full mb-4" />
+            <img
+              src={avatarLookup[player.avatarID]}
+              alt={player.displayName}
+              className="w-32 h-32 rounded-full mb-4"
+              style={{ imageRendering: "pixelated" }}
+            />
             <h2 className="text-2xl font-bold">{player.displayName}</h2>
           </div>
         ))}

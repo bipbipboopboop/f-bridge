@@ -18,7 +18,7 @@ const LobbyAvatar: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) => {
       <div>
         {playerAccount.displayName} ({playerAccount.country})
       </div>
-      <img src={avatar} alt="avatar" className="w-1/2 h-1/2" />
+      <img src={avatar} alt="avatar" className="w-1/2 h-1/2" style={{ imageRendering: "pixelated" }} />
       <div>
         W/R: {playerAccount.numOfGamesWon}/{playerAccount.numOfGamesPlayed}
       </div>

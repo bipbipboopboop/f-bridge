@@ -31,9 +31,7 @@ const WaitingRoomWeb = ({ room }: { room: GameRoom }) => {
         <div className="h-full w-2/3 pl-4 py-4">
           <WaitingPanel room={room} />
         </div>
-        <div className="h-full w-1/3 pr-4 py-4">
-          <Chatbox />
-        </div>
+        <Chatbox className="h-full w-1/3 pr-4 py-4" />
       </div>
     </div>
   );

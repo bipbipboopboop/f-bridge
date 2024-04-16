@@ -38,7 +38,12 @@ const TrickMonitor: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ classNam
       <div className="grid grid-cols-4 gap-4 mb-2 border-y-2 py-2 ${}">
         {players.map((player) => (
           <div key={player.id} className={`flex flex-col items-center`}>
-            <img src={avatarLookup[player.avatarID]} alt={player.displayName} className="w-8 h-8 rounded-full mb-2" />
+            <img
+              src={avatarLookup[player.avatarID]}
+              alt={player.displayName}
+              className="w-8 h-8 rounded-full mb-2"
+              style={{ imageRendering: "pixelated" }}
+            />
             <div className="text-center border-b-2 border-white pb-2">
               <p className="text-xs">P{player.position}</p>
             </div>

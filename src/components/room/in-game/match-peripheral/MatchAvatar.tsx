@@ -45,7 +45,14 @@ const MatchAvatarWeb: React.FC<MatchAvatarProps> = ({ position, className }) => 
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="w-[50px] h-[50px] rounded-full overflow-hidden bg-white">
-        {avatar && <img src={avatar} alt="Player Avatar" className="w-full h-full object-cover" />}
+        {avatar && (
+          <img
+            src={avatar}
+            alt="Player Avatar"
+            className="w-full h-full object-cover"
+            style={{ imageRendering: "pixelated" }}
+          />
+        )}
       </div>
       <div className="ml-2.5 pr-4">
         {!isHovered && <p className="text-xs">{isSouthPlayer ? "You" : `[P${position}] ${player?.displayName}`}</p>}
@@ -80,7 +87,14 @@ const MatchAvatarLandscape: React.FC<MatchAvatarProps> = ({ position, className 
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="w-[30px] h-[30px] rounded-full overflow-hidden bg-white">
-        {avatar && <img src={avatar} alt="Player Avatar" className="w-full h-full object-cover" />}
+        {avatar && (
+          <img
+            src={avatar}
+            alt="Player Avatar"
+            className="w-full h-full object-cover"
+            style={{ imageRendering: "pixelated" }}
+          />
+        )}
       </div>
       <div className="ml-2 pr-2">
         {!isHovered && <p className="text-3xs">{isSouthPlayer ? "You" : `[P${position}] ${player?.displayName}`}</p>}

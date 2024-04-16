@@ -14,7 +14,12 @@ const PlayerBox = ({ player }: { player: PublicPlayer | undefined }) => {
             <span className="text-2xs md:text-base">{player.isHost ? "👑" : ""}</span>
             <span className={`${isMe ? "text-yellow-400" : "text-white"}`}>{player.displayName}</span>
           </div>
-          <img className="h-[5rem]" src={avatarLookup[player.avatarID]} alt={player.displayName} />
+          <img
+            className="h-[5rem]"
+            src={avatarLookup[player.avatarID]}
+            alt={player.displayName}
+            style={{ imageRendering: "pixelated" }}
+          />
           <span>{player.isReady ? "Ready" : "Not Ready"}</span>
         </>
       ) : null}

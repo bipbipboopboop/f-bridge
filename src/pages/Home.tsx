@@ -14,9 +14,9 @@ const Home = () => {
       <Navbar />
       <div className="flex flex-col items-center justify-center h-screen">
         <div className="flex items-center justify-center mb-12">
-          <img src={spinning} className="h-12 md:h-16 lg:h-20" alt="Spinning" />
+          <img src={spinning} className="h-12 md:h-16 lg:h-20" alt="Spinning" style={{ imageRendering: "pixelated" }} />
           <h1 className="text-2xl md:text-5xl lg:text-6xl font-bold mx-4 select-none">Floating Bridge</h1>
-          <img src={spinning} className="h-12 md:h-16 lg:h-20" alt="Spinning" />
+          <img src={spinning} className="h-12 md:h-16 lg:h-20" alt="Spinning" style={{ imageRendering: "pixelated" }} />
         </div>
 
         <div className="flex flex-col items-center">
