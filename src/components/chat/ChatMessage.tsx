@@ -9,9 +9,9 @@ const ChatMessage = ({ message }: { message: Message }) => {
   const player = room?.players.find((player) => player.id === message.uid);
 
   const textColorLookup = {
-    0: "text-red-200",
-    1: "text-blue-200",
-    2: "text-green-200",
+    0: "text-rose-400",
+    1: "text-amber-500",
+    2: "text-fuchsia-400",
     3: "text-yellow-200",
   };
 

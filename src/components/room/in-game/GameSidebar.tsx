@@ -16,7 +16,7 @@ const GameSidebar = () => {
     case "Taking Trick":
       return (
         <div className="h-full w-full flex flex-col">
-          <TrickMonitor className="h-2/6" />
+          <TrickMonitor className="h-2/6 mb-3" />
           <Chatbox className="h-4/6" />
         </div>
       );
