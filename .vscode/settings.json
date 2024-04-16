@@ -1,4 +1,11 @@
 {
   // "prettier.bracketSpacing": false,
-  "prettier.printWidth": 120
+  "prettier.printWidth": 120,
+
+  "tailwindCSS.classAttributes": [
+    "class",
+    "className",
+    "ngClass",
+    ".*Lookup.*" // Add ".*Styles.*" (or whatever matches your naming scheme)
+  ]
 }
