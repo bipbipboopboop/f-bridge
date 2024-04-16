@@ -8,7 +8,7 @@ import { CollectionReference, collection, orderBy, query } from "firebase/firest
 import { firestore } from "../../firebase";
 import ChatboxInput from "./ChatboxInput";
 
-const Chatbox = () => {
+const Chatbox: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className, ...props }) => {
   const { roomID } = useParams();
   const messagesCollection = collection(firestore, `gameRooms/${roomID}/messages`) as CollectionReference<Message>;
   const messagesQuery = query(messagesCollection, orderBy("createdAt", "asc"));
@@ -22,17 +22,19 @@ const Chatbox = () => {
   }, [messageList]);
 
   return (
-    <div className="bg-black/10 p-4 rounded-lg h-full w-full flex flex-col">
-      <div className="h-5/6 pt-5">
-        <h4 className="text-lg font-bold mb-2 mobile-landscape:text-sm">Chat</h4>
-        <div ref={messageListRef} className="flex flex-col max-h-full overflow-y-scroll">
-          {messageList?.map((message, index) => (
-            <ChatMessage message={message} key={index} />
-          ))}
+    <div className={className} {...props}>
+      <div className={`bg-black/10 p-4 rounded-lg h-full w-full flex flex-col`}>
+        <div className="h-5/6 pt-5">
+          <h4 className="text-lg font-bold mb-2 mobile-landscape:text-sm">Chat</h4>
+          <div ref={messageListRef} className="flex flex-col max-h-full overflow-y-scroll">
+            {messageList?.map((message, index) => (
+              <ChatMessage message={message} key={index} />
+            ))}
+          </div>
         </div>
-      </div>
-      <div className="h-1/6 flex flex-col-reverse">
-        <ChatboxInput />
+        <div className="h-1/6 flex flex-col-reverse">
+          <ChatboxInput />
+        </div>
       </div>
     </div>
   );

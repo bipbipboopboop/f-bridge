@@ -12,12 +12,12 @@ const GameSidebar = () => {
   switch (room.status) {
     case "Bidding":
     case "Choosing Teammate":
-      return <Chatbox />;
+      return <Chatbox className="h-full" />;
     case "Taking Trick":
       return (
         <div className="h-full w-full flex flex-col">
-          <TrickMonitor />
-          <Chatbox />
+          <TrickMonitor className="h-2/6" />
+          <Chatbox className="h-4/6" />
         </div>
       );
 

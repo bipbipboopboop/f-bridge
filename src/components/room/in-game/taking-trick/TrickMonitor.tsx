@@ -2,7 +2,7 @@ import React from "react";
 import { useRoom } from "../../../../context/RoomContext";
 import { avatarLookup } from "assets/avatar";
 
-const TrickMonitor: React.FC = () => {
+const TrickMonitor: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className, ...props }) => {
   const { room } = useRoom();
 
   if (!room || room.status !== "Taking Trick" || !room.phase.trickTakingPhase) {
@@ -24,7 +24,7 @@ const TrickMonitor: React.FC = () => {
   };
 
   return (
-    <div className="bg-teal-400 shadow-md rounded-lg p-6 select-none">
+    <div className={`bg-teal-400 shadow-md rounded-lg p-6 select-none ${className}`} {...props}>
       <h2 className="mb-4 text-center">Tricks Won</h2>
       <div className="grid grid-cols-4 gap-4 mb-6">
         {players.map((player) => (
