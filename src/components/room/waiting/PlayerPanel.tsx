@@ -17,7 +17,7 @@ const PlayerPanel = ({ room }: { room: GameRoom }) => {
     <div className={containerClasses}>
       <div className="h-5/6 pt-5 mobile-portrait:h-full">
         <h4 className={headingClasses}>Players</h4>
-        <div className="grid grid-rows-2 grid-cols-2 h-5/6">
+        <div className="grid grid-rows-2 grid-cols-2">
           {[0, 1, 2, 3].map((index) => (
             <div className="justify-self-center self-center">
               <PlayerBox player={players[index]} />
