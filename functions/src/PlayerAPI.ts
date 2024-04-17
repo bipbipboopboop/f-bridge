@@ -4,7 +4,16 @@ import { uniqueNamesGenerator, Config, adjectives, colors, animals } from "uniqu
 import { AvatarID } from "types/Avatar";
 import { RestrictedAccountInfo } from "types/Account";
 
-const AVATAR_IDS: AvatarID[] = ["blueDino", "greenDino", "redDino", "yellowDino", "jungleMan"];
+const AVATAR_IDS: AvatarID[] = [
+  "blueDino",
+  "greenDino",
+  "redDino",
+  "yellowDino",
+  "jungleMan",
+  "finn",
+  "kitty",
+  "popcat",
+];
 
 export const createAccount = functions
   .region("asia-east2")

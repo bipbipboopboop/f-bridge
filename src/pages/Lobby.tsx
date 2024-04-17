@@ -31,17 +31,15 @@ const Lobby = () => {
 const LobbyMobileLandscape = () => {
   return (
     <div className="flex w-full h-full px-1 pt-3">
-      <div className="h-[90%] p-3 mx-3 flex justify-center bg-black/5 overflow-x-auto">
+      <div className="h-[90%] w-3/5 p-3 mx-3 flex justify-center bg-black/5 overflow-x-auto">
         <RoomList />
       </div>
       <div className="w-2/5 h-[90%] flex flex-col items-center">
-        <div className="h-full">
-          <div className="h-2/3 flex flex-col justify-center">
-            <LobbyAvatar />
-          </div>
-          <div className="h-1/3 flex flex-col-reverse">
-            <LobbyButtons />
-          </div>
+        <div className="h-2/3 w-full flex flex-col justify-center">
+          <LobbyAvatar className="h-full" />
+        </div>
+        <div className="h-1/3 flex flex-col-reverse">
+          <LobbyButtons />
         </div>
       </div>
     </div>
@@ -68,8 +66,8 @@ const LobbyWeb = () => {
         <RoomList />
       </div>
       <div className="w-2/5 h-[95%] flex flex-col items-center">
-        <div className="h-full">
-          <div className="h-2/3 flex flex-col justify-center">
+        <div className="h-full w-full flex flex-col justify-center">
+          <div className="h-2/3 w-full flex flex-col justify-center">
             <LobbyAvatar className="h-full" />
           </div>
           <div className="h-1/3 flex flex-col-reverse">
