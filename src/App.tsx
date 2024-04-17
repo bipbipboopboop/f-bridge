@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import Lobby from "./pages/Lobby";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
-import Room from "./pages/Rroom";
+import Room from "./pages/Room";
 
 import { RoomProvider } from "./context/RoomContext";
 
