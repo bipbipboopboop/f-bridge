@@ -7,14 +7,15 @@ import NotFound from "./pages/NotFound";
 import Room from "./pages/Room";
 
 import { RoomProvider } from "./context/RoomContext";
+import Credits from "./pages/Credits";
 
 function App() {
   return (
-    <div className="App text-xs md:text-base">
+    <div className="App">
       <Routes>
         <Route path="/" element={<Home />} />
-
         <Route path="/lobby" element={<Lobby />} />
+        <Route path="credits" element={<Credits />} />
         <Route
           path="/rooms/:roomID"
           element={
