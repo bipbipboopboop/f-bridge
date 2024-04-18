@@ -2,9 +2,9 @@
  * COMPONENTS
  */
 import Navbar from "../components/Navbar";
-import RoomList from "../components/lobby/RoomList";
-import LobbyButtons from "../components/lobby/LobbyButtons";
-import LobbyAvatar from "../components/lobby/LobbyAvatar";
+import RoomList from "../features/lobby/components/RoomList";
+import LobbyButtons from "../features/lobby/components/LobbyButtons";
+import LobbyAvatar from "../features/lobby/components/LobbyAvatar";
 
 /**
  * CONTEXT

@@ -3,10 +3,10 @@ import { toast } from "react-toastify";
 import Modal from "react-modal";
 
 import { useNavigate } from "react-router-dom";
-import { useFunctions } from "../../hooks/useFunctions";
-import { useAuth } from "../../hooks/useAuth";
+import { useFunctions } from "../../../hooks/useFunctions";
+import { useAuth } from "../../../hooks/useAuth";
 
-import Button from "../buttons/Button";
+import Button from "../../../components/buttons/Button";
 import { useMediaQuery } from "react-responsive";
 
 const LobbyButtons = () => {

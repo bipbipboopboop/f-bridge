@@ -1,11 +1,12 @@
 // RoomTable.tsx
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { Row, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { GameRoom } from "types/Room";
-import { useAuth } from "../../hooks/useAuth";
-import { useFunctions } from "../../hooks/useFunctions";
+import { useAuth } from "../../../hooks/useAuth";
+import { useFunctions } from "../../../hooks/useFunctions";
 import { rowColumns } from "./RoomTableConfig";
+
+import { checkCanJoinRoom } from "../utils";
 
 interface RoomTableProps {
   gameRoomList: GameRoom[];
@@ -22,26 +23,7 @@ const RoomTable: React.FC<RoomTableProps> = ({ gameRoomList }) => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const handleRowClick = async (row: Row<GameRoom>) => {
-    if (row.original.settings.isInviteOnly) return;
-    if (!playerAccount) return;
-    if (!playerAccount.roomID) {
-      const roomID = row.original.roomID;
-      const success = await joinGameRoom(roomID);
-      if (success) {
-        toast.success("Successfully joined room");
-        navigate(`/rooms/${roomID}`);
-      }
-      return;
-    }
-    if (playerAccount.roomID === row.original.roomID) {
-      navigate(`/rooms/${playerAccount.roomID}`);
-      return;
-    }
-    if (row.original.players.length >= 4) {
-      toast.error("Room is full");
-    }
-  };
+  const handleRowClick = checkCanJoinRoom(playerAccount, joinGameRoom, navigate);
 
   return (
     <div className="h-[95%] overflow-auto select-none">

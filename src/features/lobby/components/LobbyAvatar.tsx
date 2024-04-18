@@ -1,5 +1,5 @@
-import { useAuth } from "../../hooks/useAuth";
-import { avatarLookup } from "../../assets/avatar";
+import { useAuth } from "../../../hooks/useAuth";
+import { avatarLookup } from "assets/avatar";
 const LobbyAvatar: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) => {
   const { playerAccount } = useAuth();
 
@@ -18,7 +18,12 @@ const LobbyAvatar: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) => {
       <div>
         {playerAccount.displayName} ({playerAccount.country})
       </div>
-      <img src={avatar} alt="avatar" className="h-1/2 aspect-square" style={{ imageRendering: "pixelated" }} />
+      <img
+        src={avatar}
+        alt="avatar"
+        className="h-1/2 aspect-square max-h-[200px]"
+        style={{ imageRendering: "pixelated" }}
+      />
       <div>
         W/R: {playerAccount.numOfGamesWon}/{playerAccount.numOfGamesPlayed}
       </div>

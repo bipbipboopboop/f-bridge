@@ -1,9 +1,9 @@
 // RoomList.tsx
 import { memo } from "react";
-import { Tab, TabList, Tabs, TabPanel } from "../tabs/tabs";
+import { Tab, TabList, Tabs, TabPanel } from "../../../components/tabs/tabs";
 import RoomTable from "./RoomTable";
 
-import { useRoomList } from "../../context/LobbyContext";
+import { useRoomList } from "../../../context/LobbyContext";
 
 const RoomList = () => {
   const { roomList } = useRoomList();
