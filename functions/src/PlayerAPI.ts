@@ -11,7 +11,7 @@ const AVATAR_IDS: AvatarID[] = [
   "yellowDino",
   "jungleMan",
   "finn",
-  "kitty",
+  "kucingDasco",
   "popcat",
 ];
 
