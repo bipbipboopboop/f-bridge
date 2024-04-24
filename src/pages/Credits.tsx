@@ -14,6 +14,14 @@ const Credits = () => {
         <p className="text-xl text-orange-300 mt-4">Game design</p>
         <p>Ethan</p>
 
+        <p className="text-xl text-orange-300 mt-4">Code Review and advisor</p>
+        <div className="flex">
+          <a href="https://github.com/DystoriaX" className="text-orange-500">
+            Dasco Gabriel
+          </a>
+          <img src={avatarLookup["kucingDasco"]} />
+        </div>
+
         <p className="text-xl mt-4 text-orange-300">Assets</p>
         <div className="flex">
           @LazyHamsters <img src={avatarLookup["finn"]} />

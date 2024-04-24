@@ -1,1 +1,9 @@
-export type AvatarID = "blueDino" | "redDino" | "yellowDino" | "greenDino" | "jungleMan" | "finn" | "kitty" | "popcat";
+export type AvatarID =
+  | "blueDino"
+  | "redDino"
+  | "yellowDino"
+  | "greenDino"
+  | "jungleMan"
+  | "finn"
+  | "kucingDasco"
+  | "popcat";

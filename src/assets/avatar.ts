@@ -9,7 +9,7 @@ import YELLOW_DINO from "./player_assets/dino_sprite_3.gif";
 import GREEN_DINO from "./player_assets/dino_sprite_4.gif";
 import JUNGLE_MAN from "./player_assets/jungle_man.gif";
 import FINN from "./player_assets/finn.gif";
-import KITTY from "./player_assets/kitty.gif";
+import KUCING_DASCO from "./player_assets/kucing_dasco.gif";
 import POPCAT from "./player_assets/popcat.gif";
 
 // avatarLookup maps AvatarID to the corresponding image, the keys are the AvatarID and the values are the image paths
@@ -20,6 +20,6 @@ export const avatarLookup: Record<AvatarID, string> = {
   greenDino: GREEN_DINO,
   jungleMan: JUNGLE_MAN,
   finn: FINN,
-  kitty: KITTY,
+  kucingDasco: KUCING_DASCO,
   popcat: POPCAT,
 };
