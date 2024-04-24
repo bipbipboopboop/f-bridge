@@ -10,12 +10,12 @@ const Navbar = () => {
   const [signInWithGoogle] = useSignInWithGoogle(auth);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const handleSignInWithGoogle = async () => {
-    await signInWithGoogle();
+  const handleSignInWithGoogle = () => {
+    signInWithGoogle();
   };
 
-  const handleSignOut = async () => {
-    await signOut(auth);
+  const handleSignOut = () => {
+    signOut(auth);
   };
 
   const toggleDropdown = () => {

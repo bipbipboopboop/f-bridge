@@ -1,18 +1,19 @@
 // BiddingContext.tsx
-
 import React, { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { useDocumentData } from "react-firebase-hooks/firestore";
-import { doc, DocumentReference } from "firebase/firestore";
-import { firestore } from "../firebase";
-import Loading from "../components/Loading";
-import { GameRoom } from "types/Room";
 import { Navigate, useParams } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
-import { useFunctions } from "../hooks/useFunctions";
-import { Announcement } from "types/Annoucement";
-import AnnouncementModal from "../components/AnnouncementModal";
 
+import { useAuth } from "../hooks/useAuth";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { useFunctions } from "../hooks/useFunctions";
+
+import { Announcement } from "types/Annoucement";
+import { GameRoom } from "types/Room";
+
+import { DatabaseAdapter } from "../utils/database-adapter";
+
+import AnnouncementModal from "../components/AnnouncementModal";
+import Loading from "../components/Loading";
 interface RoomContextProps {
   room: GameRoom | undefined;
 }
@@ -26,7 +27,7 @@ export const RoomProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const { playerAccount } = useAuth();
   const { joinGameRoom } = useFunctions();
 
-  const gameRoomRef = (roomID && (doc(firestore, "gameRooms", roomID) as DocumentReference<GameRoom>)) || null;
+  const gameRoomRef = DatabaseAdapter.getInstance().getGameRoomRef(roomID);
 
   const [room, isRoomLoading, error] = useDocumentData(gameRoomRef);
   const [showModal, setShowModal] = useState(false);

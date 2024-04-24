@@ -1,12 +1,11 @@
 // RestrictedPlayerContext.tsx
-
 import React, { ReactNode, createContext, useContext } from "react";
 import { toast } from "react-toastify";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import { doc, DocumentReference } from "firebase/firestore";
-import { firestore } from "../../../firebase";
+
 import { RestrictedPlayerData } from "types/GameState";
 import Loading from "../../../components/Loading";
+import { DatabaseAdapter } from "../../../utils/database-adapter";
 
 interface RestrictedPlayerContextProps {
   restrictedPlayer: RestrictedPlayerData | undefined;
@@ -21,13 +20,8 @@ export const RestrictedPlayerProvider: React.FC<{ roomID: string; playerID: stri
   playerID,
   children,
 }) => {
-  const playerDataRef = doc(
-    firestore,
-    "gameRooms",
-    roomID,
-    "restrictedPlayerCards",
-    playerID
-  ) as DocumentReference<RestrictedPlayerData>;
+  const databaseAdapter = DatabaseAdapter.getInstance();
+  const playerDataRef = databaseAdapter.getPlayerRef(roomID, playerID);
 
   const [restrictedPlayer, isRestrictedPlayerLoading, error] = useDocumentData(playerDataRef);
 
