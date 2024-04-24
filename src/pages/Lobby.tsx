@@ -9,7 +9,7 @@ import LobbyAvatar from "../features/lobby/components/LobbyAvatar";
 /**
  * CONTEXT
  */
-import { LobbyProvider } from "../context/LobbyContext";
+import { LobbyProvider } from "../features/lobby/context/LobbyContext";
 
 /**
  * HOOKS

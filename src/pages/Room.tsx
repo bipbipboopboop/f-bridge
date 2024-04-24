@@ -1,8 +1,8 @@
 import { useRoom } from "../context/RoomContext";
 
-import WaitingRoom from "../components/room/waiting/WaitingRoom";
-import EndedRoom from "../components/room/ended/EndedRoom";
-import InGameRoom from "../components/room/in-game/InGameRoom";
+import WaitingRoom from "../features/waiting/components/WaitingRoom";
+import EndedRoom from "../features/game-ended/EndedRoom";
+import InGameRoom from "../features/in-game/InGameRoom";
 
 const Room = () => {
   const { room } = useRoom();
