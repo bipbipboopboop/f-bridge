@@ -27,10 +27,10 @@ const RoomList = () => {
           Invite Only
         </Tab>
       </TabList>
-      <TabPanel index={0} className="h-full">
+      <TabPanel index={0} className="h-[90%]">
         <RoomTable gameRoomList={openRoomList} />
       </TabPanel>
-      <TabPanel index={1} className="h-full">
+      <TabPanel index={1} className="h-[90%]">
         <RoomTable gameRoomList={spectateRoomList} />
       </TabPanel>
     </Tabs>

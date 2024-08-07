@@ -24,7 +24,7 @@ export const rowColumns = [
         {[0, 1, 2, 3].map((index) => (
           <img
             key={index}
-            className={`h-5 ${info.cell.getValue()[index] ? "opacity-100" : "opacity-50"}`}
+            className={`h-4 md:h-5 ${info.cell.getValue()[index] ? "opacity-100" : "opacity-50"}`}
             src={PlayerSVG}
             alt={PlayerSVG}
           />
