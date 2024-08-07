@@ -28,7 +28,7 @@ const Navbar = () => {
 
   return (
     <nav className="w-screen py-3">
-      <div className="container mx-auto flex justify-end items-center">
+      <div className="flex justify-end">
         <div className="relative">
           <button className="flex items-center text-white font-semibold focus:outline-none" onClick={toggleDropdown}>
             <span>{playerAccount?.displayName}</span>
