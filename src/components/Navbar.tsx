@@ -27,7 +27,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="w-screen py-3">
+    <nav className="w-screen pt-2 md:py-3">
       <div className="flex justify-end">
         <div className="relative">
           <button className="flex items-center text-white font-semibold focus:outline-none" onClick={toggleDropdown}>

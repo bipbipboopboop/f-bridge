@@ -7,18 +7,13 @@ import { useFunctions } from "../../../hooks/useFunctions";
 import { useAuth } from "../../../hooks/useAuth";
 
 import Button from "../../../components/buttons/Button";
-import { useMediaQuery } from "react-responsive";
 
 const LobbyButtons = () => {
-  const { createGameRoom, joinGameRoom } = useFunctions();
   const navigate = useNavigate();
   const { playerAccount } = useAuth();
+  const { createGameRoom, joinGameRoom } = useFunctions();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [roomIdInput, setRoomIdInput] = useState("");
-
-  const isDesktop = useMediaQuery({ minWidth: 930 });
-  const isLandscape = useMediaQuery({ orientation: "landscape" }) && !isDesktop;
-  const isPortrait = !isDesktop && !isLandscape;
 
   const handleCreateRoom = async () => {
     const gameRoom = (await createGameRoom())?.data;
@@ -49,38 +44,19 @@ const LobbyButtons = () => {
     setRoomIdInput("");
   };
 
-  const buttonSize = isDesktop || isPortrait ? 2 : 1;
-
-  const renderRoomButton = () => {
-    if (playerAccount?.roomID) {
-      return (
-        <Button
-          theme="orange"
-          size={buttonSize}
-          className="mb-4 mobile-portrait:mb-0"
-          onClick={() => navigate(`/rooms/${playerAccount.roomID}`)}
-        >
-          Return to Room
-        </Button>
-      );
-    } else {
-      return (
-        <Button
-          theme="orange"
-          size={buttonSize}
-          className="mb-4 mobile-portrait:mb-0 mobile-portrait:mr-1"
-          onClick={handleCreateRoom}
-        >
-          Create Room
-        </Button>
-      );
-    }
-  };
-
   return (
-    <div className="flex flex-col mobile-portrait:flex-row">
-      {renderRoomButton()}
-      <Button theme="green" size={buttonSize} onClick={openModal}>
+    <div className="flex flex-col">
+      <Button
+        theme="orange"
+        size={1}
+        className="mb-4"
+        onClick={() => {
+          playerAccount?.roomID ? navigate(`/rooms/${playerAccount.roomID}`) : handleCreateRoom();
+        }}
+      >
+        {playerAccount?.roomID ? "Return to Room" : "Create Room"}
+      </Button>
+      <Button theme="green" size={1} onClick={openModal}>
         Join Room
       </Button>
 

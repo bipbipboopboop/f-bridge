@@ -3,7 +3,6 @@ import React from "react";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   theme?: "orange" | "green" | "yellow" | "brown";
   size?: 1 | 2 | 3 | 4 | 5;
-  disabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({ theme = "green", size = 3, disabled, children, className, ...props }) => {
