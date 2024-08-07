@@ -12,10 +12,10 @@ const RoomList = () => {
   const spectateRoomList = roomList.filter((room) => room.settings.isSpectatorAllowed && !(room.status === "Waiting"));
 
   return (
-    <Tabs className="w-full h-full bg-black/5 p-3 rounded">
+    <Tabs className="w-full h-full bg-black/5 p-1 rounded">
       <TabList className="flex">
         <Tab
-          className="w-1/2 py-2 text-center rounded-tl-lg text-white hover:bg-[#006cb1]"
+          className="w-1/2 py-2 text-center rounded-tl-lg text-white hover:bg-[#006cb1] text-xs md:text-base"
           selectedClassName="bg-[#0567a6]"
         >
           Public Rooms
