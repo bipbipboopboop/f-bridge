@@ -11,6 +11,7 @@ import reportWebVitals from "./reportWebVitals";
 import App from "./App";
 import { AuthProvider } from "./context/AuthContext";
 import { FunctionProvider } from "./context/FunctionContext";
+import { OrientationProvider } from "./context/OrientationContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
@@ -18,7 +19,9 @@ root.render(
     <AuthProvider>
       <FunctionProvider>
         <BrowserRouter>
-          <App />
+          <OrientationProvider>
+            <App />
+          </OrientationProvider>
           <ToastContainer limit={2} autoClose={3000} />
         </BrowserRouter>
       </FunctionProvider>

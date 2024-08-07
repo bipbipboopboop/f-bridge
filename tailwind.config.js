@@ -8,6 +8,7 @@ module.exports = {
         "west-card-fly-center": "west-card-fly-center 0.5s ease-in",
         "north-card-fly-center": "north-card-fly-center 0.5s ease-in",
         "east-card-fly-center": "east-card-fly-center 0.5s ease-in",
+        "phone-rotate-hint": "phone-rotate-hint 5s linear infinite",
       },
       keyframes: {
         "south-card-fly-center": {
@@ -37,6 +38,13 @@ module.exports = {
             right: "33.33%",
             opacity: 1,
           },
+        },
+        "phone-rotate-hint": {
+          "0%": { transform: "rotate(0deg)" },
+          "30%": { transform: "rotate(90deg)" },
+          "70%": { transform: "rotate(90deg)" },
+          "70.01%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(0deg)" },
         },
       },
       fontSize: {

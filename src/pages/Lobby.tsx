@@ -48,14 +48,15 @@ const LobbyMobileLandscape = () => {
 
 const LobbyMobilePortrait = () => {
   return (
-    <div className="flex flex-col h-full w-full items-center">
-      <div className="h-[10%] flex items-center justify-center">
-        <LobbyButtons />
-      </div>
-      <div className="h-[90%] w-[90%] p-3 mx-3 flex justify-center bg-black/5 overflow-x-auto">
-        <RoomList />
-      </div>
-    </div>
+    // <div className="flex flex-col h-full w-full items-center">
+    //   <div className="h-[10%] flex items-center justify-center">
+    //     <LobbyButtons />
+    //   </div>
+    //   <div className="h-[90%] w-[90%] p-3 mx-3 flex justify-center bg-black/5 overflow-x-auto">
+    //     <RoomList />
+    //   </div>
+    // </div>
+    <div></div>
   );
 };
 
