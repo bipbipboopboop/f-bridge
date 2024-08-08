@@ -2,10 +2,10 @@ import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { useSignInWithGoogle } from "react-firebase-hooks/auth";
 
-import { useState } from "react";
+import { FC, HTMLAttributes, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 
-const Navbar = () => {
+const Navbar: FC<HTMLAttributes<HTMLDivElement>> = ({ className, ...props }) => {
   const { playerAccount, user } = useAuth();
   const [signInWithGoogle] = useSignInWithGoogle(auth);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -27,7 +27,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="w-screen pt-2 md:py-3">
+    <nav className={`w-screen pt-2 md:py-3 ${className}`}>
       <div className="flex justify-end">
         <div className="relative">
           <button className="flex items-center text-white font-semibold focus:outline-none" onClick={toggleDropdown}>

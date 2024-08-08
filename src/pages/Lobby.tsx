@@ -18,10 +18,9 @@ import { LobbyProvider } from "../features/lobby/context/LobbyContext";
 const Lobby = () => {
   return (
     <LobbyProvider>
-      <div className="h-[10%] md:h-[5%]">
-        <Navbar />
-      </div>
-      <div className="h-[90%] md:h-[95%] flex pb-5">
+      <Navbar className="h-[10%] md:h-[5%]" />
+
+      <div className="h-[90%] md:h-[95%] flex pb-5 px-3">
         <div className="w-3/5 h-full max-h-full overflow-scroll mx-3 bg-black/5 rounded">
           <RoomList />
         </div>
