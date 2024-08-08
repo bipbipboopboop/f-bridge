@@ -118,16 +118,16 @@ const TeammatePanel: React.FC = () => {
   return (
     <div className="flex justify-center items-center h-full">
       <div className={`rounded-md bg-teal-400 shadow-xl ${panelStyles}`} style={{ zIndex: 1 }}>
-        <div className="pb-2.5 mb-2.5 mobile-landscape:mb-1 mobile-landscape:pb-1">
+        <div className="pb-1 md:pb-2.5 mb-1 md:mb-2.5">
           <div className="text-center">
             {isBidWinner ? "Choose A Teammate" : `P${players[currentPlayerIndex].position} is choosing a teammate`}
           </div>
         </div>
         {isBidWinner && (
           <>
-            <div className="bg-black/10 rounded-md p-4 mobile-landscape:p-2">
+            <div className="bg-black/10 rounded-md p-2 md:p-4">
               <div
-                className={`bg-black/5 rounded-md grid justify-items-center py-1 px-5 mb-4 mobile-landscape:mb-2 ${
+                className={`bg-black/5 rounded-md grid justify-items-center py-1 px-5 mb-2 md:mb-4  ${
                   isDesktop ? "grid-cols-4" : "grid-cols-4"
                 }`}
               >
@@ -150,7 +150,7 @@ const TeammatePanel: React.FC = () => {
                   </button>
                 ))}
               </div>
-              <div className="flex items-center justify-center mb-4 mobile-landscape:mb-2">
+              <div className="flex items-center justify-center mb-2 md:mb-4">
                 <Button
                   size={isDesktop ? 1 : 2}
                   theme="yellow"
@@ -186,7 +186,7 @@ const TeammatePanel: React.FC = () => {
                 </Button>
               </div>
             </div>
-            <div className="mt-4 text-sm text-center mobile-landscape:mt-0 mobile-landscape:text-3xs">
+            <div className="mt-0 md:mt-4 text-3xs md:text-sm text-center">
               Pick a card by selecting a suit and its rank, whoever has this card will be your teammate.
             </div>
           </>

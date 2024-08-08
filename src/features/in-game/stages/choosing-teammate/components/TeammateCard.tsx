@@ -22,7 +22,7 @@ const TeammateCard: React.FC<TeammateCardProps> = ({ suit, rank, className = "",
     <div className={`${baseCardStyle} ${cardSizeStyle} ${cardStyle} ${className}`} style={style} {...rest}>
       <div className="flex flex-col h-full">
         <div className="flex flex-col">
-          <div className="text-xl font-bold select-none mobile-landscape:text-xs" style={{ color: cardColor }}>
+          <div className="text-xs md:text-xl font-bold select-none " style={{ color: cardColor }}>
             {rank || " "}
           </div>
           <div className="relative bottom-2 text-xl mb-2 select-none" style={{ color: cardColor }}>
@@ -30,7 +30,7 @@ const TeammateCard: React.FC<TeammateCardProps> = ({ suit, rank, className = "",
           </div>
         </div>
         <div className="flex-grow flex items-center justify-center relative bottom-6">
-          <div className="text-6xl select-none mobile-landscape:text-xl" style={{ color: cardColor }}>
+          <div className="text-xl md:text-6xl select-none" style={{ color: cardColor }}>
             {suit || " "}
           </div>
         </div>

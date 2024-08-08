@@ -36,7 +36,7 @@ const PlayingCard: React.FC<PlayingCardProps> = ({ card, isFlipDown = false, cla
           </div>
         </div>
         <div className="flex-grow flex items-center justify-center relative bottom-6">
-          <div className="text-6xl select-none mobile-landscape:text-xl" style={{ color: cardColor }}>
+          <div className="text-xl md:text-6xl select-none" style={{ color: cardColor }}>
             {card?.suit}
           </div>
         </div>

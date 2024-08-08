@@ -57,5 +57,5 @@ const OpponentHand: React.FC<OpponentHandProps> = ({ direction, className }) => 
     </div>
   );
 };
-// text-2xs mobile-landscape:h-[18px] mobile-landscape:w-[18px]
+
 export default OpponentHand;

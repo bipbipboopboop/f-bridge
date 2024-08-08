@@ -12,7 +12,7 @@ const LobbyAvatar: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) => {
   const avatar = avatarLookup[playerAccount.avatarID];
   return (
     <div
-      className={`flex flex-col justify-center items-center text-center mobile-landscape:text-3xs ${className}`}
+      className={`flex flex-col justify-center items-center text-center text-3xs md:text-base ${className}`}
       {...rest}
     >
       <div>
