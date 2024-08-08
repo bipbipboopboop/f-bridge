@@ -22,19 +22,19 @@ const Chatbox: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className, ..
   }, [messageList]);
 
   return (
-    <div className={className} {...props}>
-      <div className={`bg-black/10 p-4 rounded-lg h-full w-full flex flex-col`}>
-        <div className="h-5/6 pt-5">
-          <h4 className="text-lg font-bold mb-2 mobile-landscape:text-sm">Chat</h4>
-          <div ref={messageListRef} className="flex flex-col max-h-full overflow-y-scroll">
-            {messageList?.map((message, index) => (
-              <ChatMessage message={message} key={index} />
-            ))}
-          </div>
-        </div>
-        <div className="h-1/6 flex flex-col-reverse">
-          <ChatboxInput />
-        </div>
+    <div className={`bg-black/10 rounded-lg flex flex-col ${className}`} {...props}>
+      <h4 className="font-bold p-4 h-[10%]">Chat</h4>
+      <div
+        ref={messageListRef}
+        className="flex flex-col h-[80%] max-h-[80%] md:h-[85%] md:max-h-[85%] overflow-y-scroll px-4"
+      >
+        {messageList?.map((message, index) => (
+          <ChatMessage message={message} key={index} />
+        ))}
+      </div>
+
+      <div className="h-[10%] md:h-[5%] px-1 mb-5">
+        <ChatboxInput />
       </div>
     </div>
   );

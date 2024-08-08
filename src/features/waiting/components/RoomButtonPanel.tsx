@@ -22,20 +22,16 @@ const RoomButtonPanel: React.FC<HTMLAttributes<HTMLDivElement> & { room: GameRoo
 
   if (isPlayerAHost) {
     return (
-      <div className={`h-full flex flex-col justify-end ${className}`} {...rest}>
-        <Button theme="orange" size={2} onClick={() => startGame()} disabled={!isGameReady}>
-          Start Game
-        </Button>
-      </div>
+      <Button theme="orange" className="w-full" size={2} onClick={() => startGame()} disabled={!isGameReady}>
+        Start Game
+      </Button>
     );
   }
 
   return (
-    <div className="h-full flex flex-col justify-end">
-      <Button theme="orange" size={2} onClick={() => toggleReady(roomID)}>
-        {isPlayerReady ? "Cancel" : "Ready"}
-      </Button>
-    </div>
+    <Button theme="orange" className="w-full" size={2} onClick={() => toggleReady(roomID)}>
+      {isPlayerReady ? "Cancel" : "Ready"}
+    </Button>
   );
 };
 

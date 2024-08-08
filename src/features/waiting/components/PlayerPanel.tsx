@@ -1,35 +1,29 @@
 import { GameRoom } from "types/Room";
 import PlayerBox from "./PlayerBox";
 import RoomButtonPanel from "./RoomButtonPanel";
-import { useMediaQuery } from "react-responsive";
 
-const PlayerPanel = ({ room }: { room: GameRoom }) => {
+interface PlayerPanelProps extends React.HTMLAttributes<HTMLDivElement> {
+  room: GameRoom;
+}
+
+const PlayerPanel = ({ room, className, ...props }: PlayerPanelProps) => {
   const { players } = room;
-  const isDesktop = useMediaQuery({ minWidth: 930 });
-  const isLandscape = useMediaQuery({ orientation: "landscape" }) && !isDesktop;
-  const isPortrait = !isDesktop && !isLandscape;
-
-  const containerClasses = `bg-black/10 rounded-lg h-full w-full ${isDesktop ? "p-4" : isLandscape ? "p-4" : "p-1"}`;
-
-  const headingClasses = `text-xl ${isLandscape ? "text-xs mb-4" : isPortrait ? "text-sm" : ""}`;
 
   return (
-    <div className={containerClasses}>
-      <div className="h-5/6 pt-5 mobile-portrait:h-full">
-        <h4 className={headingClasses}>Players</h4>
-        <div className="grid grid-rows-2 grid-cols-2">
+    <div className={`bg-black/10 rounded-lg flex flex-col ${className}`} {...props}>
+      <h4 className="font-bold p-4 h-[10%]">Players</h4>
+      <div className="h-[80%] px-4">
+        <div className="grid grid-rows-2 grid-cols-2 gap-1">
           {[0, 1, 2, 3].map((index) => (
-            <div className="justify-self-center self-center">
+            <div key={index} className="flex items-center justify-center">
               <PlayerBox player={players[index]} />
             </div>
           ))}
         </div>
       </div>
-      {!isPortrait && (
-        <div className="h-1/6">
-          <RoomButtonPanel room={room} />
-        </div>
-      )}
+      <div className="h-[10%] px-2 mb-5">
+        <RoomButtonPanel room={room} />
+      </div>
     </div>
   );
 };

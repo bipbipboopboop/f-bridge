@@ -31,7 +31,7 @@ const ChatboxInput = () => {
   };
 
   return (
-    <form onSubmit={onSendMessage} className="flex items-center">
+    <form onSubmit={onSendMessage} className="flex items-center h-full">
       <input
         type="text"
         value={inputMessage}
