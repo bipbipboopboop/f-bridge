@@ -10,6 +10,8 @@ import MatchAvatar from "./components/MatchAvatar";
 import PlayerHand from "./components/PlayerHand";
 import OpponentHand from "./components/OpponentHand";
 import Chatbox from "../../../components/chat/Chatbox";
+import Button from "../../../components/buttons/Button";
+import TrickMonitor from "../stages/taking-tricks/components/TrickMonitor";
 
 const MatchPeripheral: React.FC = () => {
   const { isDesktop, isLandscape } = useScreenSize();
@@ -49,15 +51,25 @@ const MatchPeripheralWeb: React.FC = () => {
   );
 };
 
-const MatchPeripheralLandscape = () => {
+enum ModalType {
+  CHAT = "chat",
+  INFO = "info",
+}
+
+interface ModalState {
+  isOpen: boolean;
+  type: ModalType | null;
+}
+
+const MatchPeripheralLandscape: React.FC = () => {
   const { playerAccount } = useAuth();
   const { room } = useRoom();
   const { restrictedPlayer } = useRestrictedPlayerData();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalState, setModalState] = useState<ModalState>({ isOpen: false, type: null });
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const openModal = (type: ModalType) => setModalState({ isOpen: true, type });
+  const closeModal = () => setModalState({ isOpen: false, type: null });
 
   if (!playerAccount || !room || !restrictedPlayer) {
     return null;
@@ -78,23 +90,29 @@ const MatchPeripheralLandscape = () => {
       <OpponentHand direction="west" className="absolute top-[36%] left-[18%]" />
       <OpponentHand direction="north" className="absolute top-1 left-1/2 transform -translate-x-1/2" />
       <OpponentHand direction="east" className="absolute top-[36%] right-[18%]" />
-      <button
-        className="bg-black/20 hover:bg-[#006cb1] p-2 rounded-md absolute bottom-[5%] left-4"
-        onClick={openModal}
-        style={{ zIndex: 1 }}
-      >
-        Chat
-      </button>
+
+      <div className="absolute bottom-4 left-4">
+        <Button theme="green" size={1} onClick={() => openModal(ModalType.CHAT)} style={{ zIndex: 1 }}>
+          Chat
+        </Button>
+        <Button theme="yellow" size={1} onClick={() => openModal(ModalType.INFO)}>
+          Info
+        </Button>
+      </div>
 
       <Modal
-        isOpen={isModalOpen}
+        isOpen={modalState.isOpen}
         onRequestClose={closeModal}
-        contentLabel="Chat Modal"
+        contentLabel={`${modalState.type} Modal`}
         style={{ overlay: { zIndex: 1 } }}
-        className="bg-white rounded shadow p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 z-10"
+        className="bg-white rounded shadow p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/2 h-4/5 z-10"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50"
       >
-        <Chatbox />
+        {modalState.type === ModalType.CHAT ? (
+          <Chatbox className="h-full" />
+        ) : modalState.type === ModalType.INFO ? (
+          <TrickMonitor className="h-full" />
+        ) : null}
       </Modal>
     </div>
   );

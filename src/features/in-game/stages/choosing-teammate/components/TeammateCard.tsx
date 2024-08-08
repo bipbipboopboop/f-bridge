@@ -4,22 +4,22 @@ import { Suit, Rank } from "types/Card";
 interface TeammateCardProps extends React.HTMLAttributes<HTMLDivElement> {
   suit?: Suit | null;
   rank?: Rank | null;
-  className?: string;
-  style?: React.CSSProperties;
 }
 
-const TeammateCard: React.FC<TeammateCardProps> = ({ suit, rank, className, style, ...rest }) => {
-  const isRedSuit = suit === "♥" || suit === "♦";
+// Helper functions
+const isRedSuit = (suit?: Suit | null): boolean => suit === "♥" || suit === "♦";
+const getCardColor = (suit?: Suit | null): string => (isRedSuit(suit) ? "#FF525D" : "#222222");
 
-  // Determine the card's color based on its suit
-  const cardColor = isRedSuit ? "#FF525D" : "#222222";
+// Styles
+const baseCardStyle = "border-2 rounded-md select-none md:border-4 md:rounded-2xl";
+const cardSizeStyle = "w-[55px] h-[68px] p-2 md:w-[100px] md:h-[123px] md:p-3";
+const cardStyle = "bg-white border-black/5 text-black";
+
+const TeammateCard: React.FC<TeammateCardProps> = ({ suit, rank, className = "", style, ...rest }) => {
+  const cardColor = getCardColor(suit);
 
   return (
-    <div
-      className={`w-[100px] h-[123px] rounded-2xl border-4 p-3 select-none ${className} bg-white mobile-portrait:w-[20px] mobile-portrait:h-[25px] mobile-portrait:p-1 mobile-landscape:w-[50px] mobile-landscape:h-[61.5px] mobile-landscape:p-2 mobile-landscape:rounded-md mobile-landscape:border-2`}
-      style={style}
-      {...rest}
-    >
+    <div className={`${baseCardStyle} ${cardSizeStyle} ${cardStyle} ${className}`} style={style} {...rest}>
       <div className="flex flex-col h-full">
         <div className="flex flex-col">
           <div className="text-xl font-bold select-none mobile-landscape:text-xs" style={{ color: cardColor }}>

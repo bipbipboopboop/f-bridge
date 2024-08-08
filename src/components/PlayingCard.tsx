@@ -12,7 +12,7 @@ const getCardColor = (suit?: Suit): string => (isRedSuit(suit) ? "#FF525D" : "#2
 
 // Styles
 const baseCardStyle = "border-2 rounded-md select-none md:border-4 md:rounded-2xl";
-const cardSizeStyle = "w-[50px] h-[61.5px] p-2 md:w-[100px] md:h-[123px] md:p-3";
+const cardSizeStyle = "w-[55px] h-[68px] p-2 md:w-[100px] md:h-[123px] md:p-3";
 const flipDownStyle = "bg-sky-300 border-stone-600";
 const flipUpStyle = "bg-white border-black/5 text-black";
 
