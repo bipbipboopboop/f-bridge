@@ -1,14 +1,15 @@
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { useSignInWithGoogle } from "react-firebase-hooks/auth";
-
 import { FC, HTMLAttributes, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
+import EditNameModal from "./EditNameModal";
 
 const Navbar: FC<HTMLAttributes<HTMLDivElement>> = ({ className, ...props }) => {
   const { playerAccount, user } = useAuth();
   const [signInWithGoogle] = useSignInWithGoogle(auth);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isEditNameModalOpen, setIsEditNameModalOpen] = useState(false);
 
   const handleSignInWithGoogle = () => {
     signInWithGoogle();
@@ -23,7 +24,8 @@ const Navbar: FC<HTMLAttributes<HTMLDivElement>> = ({ className, ...props }) => 
   };
 
   const handleChangeName = () => {
-    console.log("Change Name");
+    setIsEditNameModalOpen(true);
+    setIsDropdownOpen(false);
   };
 
   return (
@@ -35,21 +37,30 @@ const Navbar: FC<HTMLAttributes<HTMLDivElement>> = ({ className, ...props }) => 
             <DownButton />
           </button>
           <div className={`absolute right-0 mt-2 py-2 bg-white rounded-md shadow-lg ${isDropdownOpen ? "" : "hidden"}`}>
-            <div className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Edit Name</div>
+            <div onClick={handleChangeName} className="block px-4 py-2 text-gray-800 hover:bg-gray-100 cursor-pointer">
+              Edit Name
+            </div>
             {user?.isAnonymous && (
-              <div onClick={handleSignInWithGoogle} className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+              <div
+                onClick={handleSignInWithGoogle}
+                className="block px-4 py-2 text-gray-800 hover:bg-gray-100 cursor-pointer"
+              >
                 Login
               </div>
             )}
-
             {!user?.isAnonymous && (
-              <div onClick={handleSignOut} className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+              <div onClick={handleSignOut} className="block px-4 py-2 text-gray-800 hover:bg-gray-100 cursor-pointer">
                 Logout
               </div>
             )}
           </div>
         </div>
       </div>
+      <EditNameModal
+        isOpen={isEditNameModalOpen}
+        onRequestClose={() => setIsEditNameModalOpen(false)}
+        currentName={playerAccount?.displayName || ""}
+      />
     </nav>
   );
 };
