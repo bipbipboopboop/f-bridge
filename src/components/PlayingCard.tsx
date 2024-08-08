@@ -1,45 +1,46 @@
 import React from "react";
-import { Card } from "types/Card";
+import { Card, Suit } from "types/Card";
 
 interface PlayingCardProps extends React.HTMLAttributes<HTMLDivElement> {
   card?: Card;
   isFlipDown?: boolean;
-  className?: string;
-  style?: React.CSSProperties;
 }
 
+// Helper functions
+const isRedSuit = (suit?: Suit): boolean => suit === "♥" || suit === "♦";
+const getCardColor = (suit?: Suit): string => (isRedSuit(suit) ? "#FF525D" : "#222222");
+
+// Styles
+const baseCardStyle = "border-2 rounded-md select-none md:border-4 md:rounded-2xl";
+const cardSizeStyle = "w-[50px] h-[61.5px] p-2 md:w-[100px] md:h-[123px] md:p-3";
+const flipDownStyle = "bg-sky-300 border-stone-600";
+const flipUpStyle = "bg-white border-black/5 text-black";
+
 const PlayingCard: React.FC<PlayingCardProps> = ({ card, isFlipDown = false, className = "", style, ...rest }) => {
-  const isRedSuit = card?.suit === "♥" || card?.suit === "♦";
+  const cardStyle = isFlipDown ? flipDownStyle : flipUpStyle;
+  const cardColor = getCardColor(card?.suit);
 
-  // Dynamically setting the background color and border color based on isFlipDown
-  const dynamicClass = isFlipDown ? "bg-sky-300 border-stone-600" : "bg-white border-black/5 text-black";
-
-  // Determine the card's color based on its suit
-  const cardColor = isRedSuit ? "#FF525D" : "#222222";
+  if (isFlipDown) {
+    return <div className={`${baseCardStyle} ${cardSizeStyle} ${cardStyle} ${className}`} style={style} {...rest} />;
+  }
 
   return (
-    <div
-      className={`w-[100px] h-[123px] rounded-2xl border-4 p-3 select-none ${dynamicClass} ${className} mobile-portrait:w-[20px] mobile-portrait:h-[25px] mobile-portrait:p-1 mobile-landscape:w-[50px] mobile-landscape:h-[61.5px] mobile-landscape:p-2 mobile-landscape:rounded-md mobile-landscape:border-2`}
-      style={style}
-      {...rest}
-    >
-      {!isFlipDown && (
-        <div className="flex flex-col h-full">
-          <div className="flex flex-col">
-            <div className="text-xl font-bold select-none mobile-landscape:text-xs" style={{ color: cardColor }}>
-              {card?.rank}
-            </div>
-            <div className="relative bottom-2 text-xl mb-2 select-none" style={{ color: cardColor }}>
-              {card?.suit}
-            </div>
+    <div className={`${baseCardStyle} ${cardSizeStyle} ${cardStyle} ${className}`} style={style} {...rest}>
+      <div className="flex flex-col h-full">
+        <div className="flex flex-col">
+          <div className="text-xl font-bold select-none mobile-landscape:text-xs" style={{ color: cardColor }}>
+            {card?.rank}
           </div>
-          <div className="flex-grow flex items-center justify-center relative bottom-6">
-            <div className="text-6xl select-none mobile-landscape:text-xl" style={{ color: cardColor }}>
-              {card?.suit}
-            </div>
+          <div className="relative bottom-2 text-xl mb-2 select-none" style={{ color: cardColor }}>
+            {card?.suit}
           </div>
         </div>
-      )}
+        <div className="flex-grow flex items-center justify-center relative bottom-6">
+          <div className="text-6xl select-none mobile-landscape:text-xl" style={{ color: cardColor }}>
+            {card?.suit}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

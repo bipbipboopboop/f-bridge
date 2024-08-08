@@ -4,12 +4,11 @@ import { useScreenSize } from "../../hooks/useScreenSize";
 
 import GameSidebar from "./common/GameSidebar";
 import MatchCenter from "./common/MatchCenter";
-import PortraitLayout from "./common/PortraitLayout";
 
 import MatchPeripheral from "./match-peripheral/MatchPeripheral";
 
 const InGameRoom = () => {
-  const { isDesktop, isLandscape, isPortrait } = useScreenSize();
+  const { isDesktop, isLandscape } = useScreenSize();
   const { playerAccount } = useAuth();
 
   if (!playerAccount || !playerAccount?.roomID) {
@@ -41,9 +40,7 @@ const InGameRoom = () => {
       </RestrictedPlayerProvider>
     );
   }
-  if (isPortrait) {
-    return <PortraitLayout />;
-  }
+
   return null;
 };
 

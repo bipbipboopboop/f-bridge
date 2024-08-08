@@ -1,5 +1,6 @@
 import React, { createContext } from "react";
 import { useMediaQuery } from "react-responsive";
+import { useScreenSize } from "../hooks/useScreenSize";
 
 interface OrientationContextProps {}
 
@@ -10,7 +11,7 @@ interface OrientationProviderProps {
 }
 
 export const OrientationProvider: React.FC<OrientationProviderProps> = ({ children }) => {
-  const isPortrait = useMediaQuery({ orientation: "portrait" });
+  const { isPortrait } = useScreenSize();
   if (isPortrait) return <PortraitHint />;
   return <OrientationContext.Provider value={{}}>{children}</OrientationContext.Provider>;
 };

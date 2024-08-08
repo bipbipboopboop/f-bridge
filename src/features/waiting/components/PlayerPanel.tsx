@@ -15,7 +15,7 @@ const PlayerPanel = ({ room, className, ...props }: PlayerPanelProps) => {
 
       <div className="h-[80%] w-full px-4 grid grid-rows-2 grid-cols-2">
         {[0, 1, 2, 3].map((index) => (
-          <div key={index} className="h-full flex items-center justify-center">
+          <div key={index} className="flex items-center justify-center">
             <PlayerBox player={players[index]} />
           </div>
         ))}

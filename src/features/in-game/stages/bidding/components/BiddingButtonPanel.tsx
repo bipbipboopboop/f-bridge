@@ -94,8 +94,7 @@ const BiddingButtonPanel = () => {
         {[1, 2, 3, 4, 5, 6].map((level) => (
           <button
             key={level}
-            className={`w-[34px] h-[34px] rounded-[5px] text-base overflow-hidden border-none 
-            mobile-landscape:text-2xs mobile-landscape:h-[18px] mobile-landscape:w-[18px]
+            className={`h-[22px] w-[22px] md:w-[34px] md:h-[34px] text-xs md:text-base rounded-[4px] border-none
              ${selectedNumber === level ? "bg-black/20 text-white" : ""} ${
               !isNumberSelectable(level as BidLevel) ? "text-gray-400 cursor-not-allowed" : ""
             }`}
@@ -107,19 +106,18 @@ const BiddingButtonPanel = () => {
         ))}
       </div>
       {selectedNumber && (
-        <div className="bg-black/5 border border-[#62626226] rounded-md grid grid-cols-6 justify-items-center py-1 px-5 mt-2.5">
+        <div className="bg-black/5 border border-[#62626226] rounded-md grid grid-cols-6 justify-items-center py-1 px-5 mt-1 md:mt-6">
           {["♣", "♦", "♥", "♠", "NT"].map((suit) => {
             const isRedSuit = suit === "♥" || suit === "♦";
             const isNT = suit === "NT";
             const suitSelectable = isSuitSelectable(suit as BidSuit);
 
             const buttonClassName = `
-      w-[34px] h-[34px] text-2xl overflow-hidden border-none
-      mobile-landscape:text-2xs mobile-landscape:h-[18px] mobile-landscape:w-[18px]
-      ${selectedSuit === suit ? "bg-black/25 rounded" : ""}
-      ${suitSelectable ? "" : "text-gray-400 cursor-not-allowed opacity-50"}
-      ${isRedSuit ? "text-[#FF525D]" : "text-[#222222]"}
-    `;
+            h-[22px] w-[22px] md:w-[34px] md:h-[34px] rounded-[5px] border-none
+            ${selectedSuit === suit ? "bg-black/25 rounded" : ""}
+            ${suitSelectable ? "" : "text-gray-400 cursor-not-allowed opacity-50"}
+            ${isRedSuit ? "text-[#FF525D]" : "text-[#222222]"}
+          `;
 
             return (
               <button
@@ -131,8 +129,8 @@ const BiddingButtonPanel = () => {
                 <div
                   className={`flex justify-center relative ${
                     isNT
-                      ? "text-sm top-1 text-yellow-300 mobile-landscape:text-2xs mobile-landscape:top-0.5"
-                      : "text-4xl bottom-1 mobile-landscape:text-sm mobile-landscape:bottom-0.5"
+                      ? "text-2xs top-0.5 md:text-sm md:top-1 text-yellow-300"
+                      : "text-2xl bottom-2 md:text-4xl md:bottom-2"
                   }`}
                 >
                   {suit}
