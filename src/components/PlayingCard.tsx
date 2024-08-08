@@ -28,7 +28,7 @@ const PlayingCard: React.FC<PlayingCardProps> = ({ card, isFlipDown = false, cla
     <div className={`${baseCardStyle} ${cardSizeStyle} ${cardStyle} ${className}`} style={style} {...rest}>
       <div className="flex flex-col h-full">
         <div className="flex flex-col">
-          <div className="text-xl font-bold select-none mobile-landscape:text-xs" style={{ color: cardColor }}>
+          <div className="text-xs md:text-xl font-bold select-none" style={{ color: cardColor }}>
             {card?.rank}
           </div>
           <div className="relative bottom-2 text-xl mb-2 select-none" style={{ color: cardColor }}>
