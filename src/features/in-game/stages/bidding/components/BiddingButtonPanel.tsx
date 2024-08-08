@@ -70,11 +70,11 @@ const BiddingButtonPanel = () => {
 
   return (
     <div>
-      <div className="flex mb-2.5 space-x-2">
+      <div className="flex mb-2.5 w-full justify-between">
         <Button
           size={1}
           theme="orange"
-          className="py-1.5 px-3.5 text-white text-xs mobile-landscape:h-6 mobile-landscape:text-3xs"
+          className="py-2 px-3.5 text-white h-8 md:h-10 text-3xs md:text-xs"
           onClick={handlePassClick}
         >
           Pass
@@ -83,7 +83,7 @@ const BiddingButtonPanel = () => {
           <Button
             size={1}
             theme="yellow"
-            className="py-1.5 px-3.5 text-xs mobile-landscape:h-6 mobile-landscape:text-3xs"
+            className="py-2 px-3.5 text-white h-8 md:h-10 text-3xs md:text-xs"
             onClick={handleConfirmClick}
           >
             Confirm

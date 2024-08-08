@@ -79,7 +79,7 @@ const MatchAvatarLandscape: React.FC<MatchAvatarProps> = ({ position, className 
 
   return (
     <div
-      className={`select-none w-[15%] bg-[#FCFBF8] text-[#515151] px-3 py-1 rounded-[40px] text-xs flex items-center shadow-xl h-12 ${
+      className={`select-none w-[20%] bg-[#FCFBF8] text-[#515151] px-3 py-1 rounded-[40px] text-2xs flex items-center shadow-xl h-12 ${
         isCurrentTurn ? "border-4 border-teal-400 animate-pulse" : ""
       } ${className}`}
       style={{ zIndex: 100 }}
