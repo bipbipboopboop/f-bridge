@@ -101,7 +101,7 @@ const BiddingButtonPanel = () => {
             onClick={() => handleNumberClick(level as BidLevel)}
             disabled={!isNumberSelectable(level as BidLevel)}
           >
-            <div className="flex justify-center relative top-1 mobile-landscape:top-0">{level}</div>
+            <div className="flex justify-center relative top-0 md:top-1">{level}</div>
           </button>
         ))}
       </div>

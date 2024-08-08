@@ -77,7 +77,7 @@ const PlayerHand = () => {
   return (
     <>
       <div className="absolute bottom-1 md:bottom-4 left-1/2 transform -translate-x-1/2">
-        <div className="flex justify-center -space-x-12 mobile-landscape:-space-x-6">
+        <div className="flex justify-center -space-x-6 md:-space-x-12">
           {sortCards(restrictedPlayer?.cards || []).map((card, index) => (
             <PlayingCard
               key={index}
