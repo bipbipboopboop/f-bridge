@@ -1,7 +1,7 @@
 import * as admin from "firebase-admin";
 admin.initializeApp();
 
-import { createAccount, renameUser } from "./PlayerAPI";
+import { createAccount, renameUser, changeAvatar } from "./PlayerAPI";
 
 import { createGameRoom, joinGameRoom, leaveGameRoom, startGame, toggleReady } from "./RoomAPI";
 
@@ -17,6 +17,7 @@ export {
 
   createAccount,
   renameUser,
+  changeAvatar,
 
   /**
    * GAME ROOM API
