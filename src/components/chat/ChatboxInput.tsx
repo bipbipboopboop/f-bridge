@@ -1,9 +1,8 @@
-// ChatboxInput.tsx
 import { ChangeEvent, FormEvent, memo, useState } from "react";
 import { useParams } from "react-router-dom";
 import Button from "../buttons/Button";
-import { CollectionReference, Timestamp, addDoc, collection } from "firebase/firestore";
-import { firestore } from "../../firebase";
+import { ref, push, serverTimestamp } from "firebase/database";
+import { database } from "../../firebase";
 import { Message } from "types/Message";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -11,7 +10,6 @@ const ChatboxInput = () => {
   const { roomID } = useParams();
   const { playerAccount } = useAuth();
   const [inputMessage, setInputMessage] = useState<string>("");
-  const messagesCollection = collection(firestore, `gameRooms/${roomID}/messages`) as CollectionReference<Message>;
 
   if (!roomID || !playerAccount) return null;
 
@@ -21,12 +19,14 @@ const ChatboxInput = () => {
 
   const onSendMessage = async (e: FormEvent) => {
     e.preventDefault();
-    await addDoc(messagesCollection, {
-      createdAt: Timestamp.now(),
+    const messagesRef = ref(database, `gameRooms/${roomID}/messages`);
+    await push(messagesRef, {
+      createdAt: serverTimestamp(),
       playerName: playerAccount.displayName,
       uid: playerAccount.id,
       text: inputMessage,
-    });
+      type: "chat",
+    } as Message);
     setInputMessage("");
   };
 
@@ -36,7 +36,7 @@ const ChatboxInput = () => {
         type="text"
         value={inputMessage}
         onChange={onChangeInput}
-        className="w-[80%] mr-[2%] h-full rounded border border-gray-300 text-gray-700 text-2xs md:text-sm"
+        className="w-[80%] mr-[2%] py-2 md:py-3 rounded border border-gray-300 text-gray-700 text-2xs md:text-sm"
       />
       <Button theme="green" size={1} type="submit" disabled={!inputMessage}>
         Send
