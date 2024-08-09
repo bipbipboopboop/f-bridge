@@ -20,13 +20,14 @@ const ChatboxInput = () => {
   const onSendMessage = async (e: FormEvent) => {
     e.preventDefault();
     const messagesRef = ref(database, `gameRooms/${roomID}/messages`);
-    await push(messagesRef, {
-      createdAt: serverTimestamp(),
+    const message: Message = {
+      createdAt: serverTimestamp() as any as number,
       playerName: playerAccount.displayName,
       uid: playerAccount.id,
       text: inputMessage,
       type: "chat",
-    } as Message);
+    };
+    await push(messagesRef, message);
     setInputMessage("");
   };
 
