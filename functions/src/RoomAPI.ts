@@ -381,48 +381,57 @@ export const invitePlayer = functions.region("asia-east2").https.onCall(async (i
  * - not-found: Player is not in the room.
  * - internal: Failed to kick the player.
  */
-export const kickPlayer = functions.region("asia-east2").https.onCall(async (playerID: string, context) => {
-  if (!context.auth) {
-    throw UnauthenticatedError;
-  }
+export const kickPlayer = functions
+  .region("asia-east2")
+  .https.onCall(async (data: { playerID: string; roomID: string }, context) => {
+    if (!context.auth) {
+      throw UnauthenticatedError;
+    }
 
-  const hostID = context.auth.uid;
-  const hostAccount = await admin.firestore().collection("accounts").doc(hostID).get();
-  const hostAccountData = hostAccount.data() as RestrictedAccountInfo;
+    const { playerID, roomID } = data;
+    const hostID = context.auth.uid;
 
-  if (!hostAccountData.roomID) {
-    throw new functions.https.HttpsError("failed-precondition", "Host is not in a game room.");
-  }
+    // Get the game room document
+    const gameRoomRef = admin.firestore().collection("gameRooms").doc(roomID) as DocumentReference<GameRoom>;
+    const gameRoomSnapshot = await gameRoomRef.get();
 
-  const gameRoomRef = admin.firestore().collection("gameRooms").doc(hostAccountData.roomID);
-  const gameRoomSnapshot = await gameRoomRef.get();
-  const gameRoomData = gameRoomSnapshot.data() as GameRoom;
+    if (!gameRoomSnapshot.exists) {
+      throw new functions.https.HttpsError("not-found", "Game room not found.");
+    }
 
-  if (gameRoomData.hostID !== hostID) {
-    throw new functions.https.HttpsError("permission-denied", "Player is not the host.");
-  }
+    const gameRoomData = gameRoomSnapshot.data() as GameRoom;
+    console.log({ gameRoomData });
 
-  if (playerID === hostID) {
-    throw new functions.https.HttpsError("invalid-argument", "Cannot kick the host.");
-  }
+    // Check if the caller is the host
+    if (gameRoomData.hostID !== hostID) {
+      throw new functions.https.HttpsError("permission-denied", "Only the host can kick players.");
+    }
 
-  const publicPlayersRef = gameRoomRef.collection("publicPlayers");
-  const playerDoc = await publicPlayersRef.doc(playerID).get();
+    // Check if the player to be kicked exists in the room
+    const playerIndex = gameRoomData.players.findIndex((player) => player.id === playerID);
+    if (playerIndex === -1) {
+      throw new functions.https.HttpsError("not-found", "Player is not in the room.");
+    }
 
-  if (!playerDoc.exists) {
-    throw new functions.https.HttpsError("not-found", "Player is not in the room.");
-  }
+    // Cannot kick the host
+    if (playerID === hostID) {
+      throw new functions.https.HttpsError("invalid-argument", "Cannot kick the host.");
+    }
 
-  await Promise.all([
-    gameRoomRef.update({
-      playerCount: admin.firestore.FieldValue.increment(-1),
-    }),
-    publicPlayersRef.doc(playerID).delete(),
-    admin.firestore().collection("accounts").doc(playerID).update({ roomID: null }),
-  ]);
+    // Remove the player from the game room
+    const updatedPlayers = gameRoomData.players.filter((player) => player.id !== playerID);
 
-  return { success: true };
-});
+    // Update the game room document
+    await gameRoomRef.update({
+      players: updatedPlayers,
+      playerCount: updatedPlayers.length,
+    });
+
+    // Update the kicked player's account
+    await admin.firestore().collection("accounts").doc(playerID).update({ roomID: null });
+
+    return { success: true };
+  });
 
 /**
  * Start the game
