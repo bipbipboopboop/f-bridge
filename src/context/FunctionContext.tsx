@@ -21,11 +21,11 @@ interface FunctionContextProps {
   signOut: ReturnType<typeof useSignOut>[0];
   renameUser: (newName: string) => Promise<HttpsCallableResult<void> | undefined>;
   changeAvatar: (newAvatar: string) => Promise<HttpsCallableResult<void> | undefined>;
-
   joinGameRoom: (data?: string | undefined) => Promise<HttpsCallableResult<void> | undefined>;
   createGameRoom: () => Promise<HttpsCallableResult<GameRoom> | undefined>;
   leaveGameRoom: (data: string) => Promise<HttpsCallableResult<void> | undefined>;
   toggleReady: (roomId: string) => Promise<HttpsCallableResult<void> | undefined>;
+  kickPlayer: (data: { playerID: string; roomID: string }) => Promise<HttpsCallableResult<void> | undefined>;
   startGame: () => Promise<HttpsCallableResult<void> | undefined>;
   placeBid: (bid: Bid) => Promise<HttpsCallableResult<void> | undefined>;
   chooseTeammate: (card: Card) => Promise<HttpsCallableResult<void> | undefined>;
@@ -44,6 +44,7 @@ export const FunctionContext = createContext<FunctionContextProps>({
   createGameRoom: () => Promise.resolve(undefined),
   leaveGameRoom: () => Promise.resolve(undefined),
   toggleReady: () => Promise.resolve(undefined),
+  kickPlayer: () => Promise.resolve(undefined),
   startGame: () => Promise.resolve(undefined),
   placeBid: () => Promise.resolve(undefined),
   chooseTeammate: () => Promise.resolve(undefined),
@@ -60,13 +61,14 @@ export const FunctionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [joinGameRoom, l6, e6] = useHttpsCallable<string, void>(functions, "joinGameRoom");
   const [leaveGameRoom, l7, e7] = useHttpsCallable<string, void>(functions, "leaveGameRoom");
   const [toggleReady, l8, e8] = useHttpsCallable<string, void>(functions, "toggleReady");
-  const [startGame, l9, e9] = useHttpsCallable<void, void>(functions, "startGame");
-  const [placeBid, l10, e10] = useHttpsCallable<Bid, void>(functions, "placeBid");
-  const [chooseTeammate, l11, e11] = useHttpsCallable<Card, void>(functions, "chooseTeammate");
-  const [playCard, l12, e12] = useHttpsCallable<Card, void>(functions, "playCard");
+  const [kickPlayer, l9, e9] = useHttpsCallable<{ playerID: string; roomID: string }, void>(functions, "kickPlayer");
+  const [startGame, l10, e10] = useHttpsCallable<void, void>(functions, "startGame");
+  const [placeBid, l11, e11] = useHttpsCallable<Bid, void>(functions, "placeBid");
+  const [chooseTeammate, l12, e12] = useHttpsCallable<Card, void>(functions, "chooseTeammate");
+  const [playCard, l13, e13] = useHttpsCallable<Card, void>(functions, "playCard");
 
-  const isLoading = l0 || l1 || l2 || l3 || l5 || l6 || l7 || l8 || l9 || l10 || l11;
-  const error = e0 || e1 || e2 || e3 || e4 || e5 || e6 || e7 || e8 || e9 || e10 || e11 || e12;
+  const isLoading = l0 || l1 || l2 || l3 || l4 || l5 || l6 || l7 || l8 || l9 || l10 || l11 || l12;
+  const error = e0 || e1 || e2 || e3 || e4 || e5 || e6 || e7 || e8 || e9 || e10 || e11 || e12 || e13;
 
   const contextValue: FunctionContextProps = {
     isLoading,
@@ -80,6 +82,7 @@ export const FunctionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     createGameRoom,
     leaveGameRoom,
     toggleReady,
+    kickPlayer,
     startGame,
     placeBid,
     chooseTeammate,

@@ -3,7 +3,7 @@ admin.initializeApp();
 
 import { createAccount, renameUser, changeAvatar } from "./PlayerAPI";
 
-import { createGameRoom, joinGameRoom, leaveGameRoom, startGame, toggleReady } from "./RoomAPI";
+import { createGameRoom, joinGameRoom, leaveGameRoom, startGame, toggleReady, kickPlayer } from "./RoomAPI";
 
 import { placeBid, chooseTeammate } from "./BidAPI";
 import { playCard } from "./TrickTakingAPI";
@@ -27,6 +27,7 @@ export {
   leaveGameRoom,
   startGame,
   toggleReady,
+  kickPlayer,
 
   // /**
   //  * BID API
