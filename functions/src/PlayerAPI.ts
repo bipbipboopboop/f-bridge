@@ -120,3 +120,61 @@ export const renameUser = functions.region("asia-east2").https.onCall(async (new
     throw new functions.https.HttpsError("internal", "An error occurred while renaming the user.");
   }
 });
+
+export const changeAvatar = functions.region("asia-east2").https.onCall(async (newAvatarID: AvatarID, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError("unauthenticated", "You must be logged in to change your avatar.");
+  }
+
+  if (!AVATAR_IDS.includes(newAvatarID)) {
+    throw new functions.https.HttpsError("invalid-argument", "Invalid avatar ID.");
+  }
+
+  const uid = context.auth.uid;
+  const db = admin.firestore();
+
+  try {
+    // Get the user's account info
+    const accountRef = db.collection("accounts").doc(uid);
+    const accountDoc = await accountRef.get();
+
+    if (!accountDoc.exists) {
+      throw new functions.https.HttpsError("not-found", "User account not found.");
+    }
+
+    const accountData = accountDoc.data() as RestrictedAccountInfo;
+
+    // Check if the user is in a room
+    if (accountData.roomID) {
+      const roomRef = db.collection("gameRooms").doc(accountData.roomID);
+      const roomDoc = await roomRef.get();
+
+      if (roomDoc.exists) {
+        const roomData = roomDoc.data() as GameRoom;
+
+        // Check if the room status is not "Waiting"
+        if (roomData.status !== "Waiting") {
+          throw new functions.https.HttpsError(
+            "failed-precondition",
+            "You cannot change your avatar while you are in a game!"
+          );
+        }
+
+        // Update the user's avatar in the game room
+        const updatedPlayers = roomData.players.map((player) =>
+          player.id === uid ? { ...player, avatarID: newAvatarID } : player
+        );
+
+        await roomRef.update({ players: updatedPlayers });
+      }
+    }
+
+    // Update the user's avatar in their account
+    await accountRef.update({ avatarID: newAvatarID });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error changing avatar:", error);
+    throw new functions.https.HttpsError("internal", "An error occurred while changing the avatar.");
+  }
+});

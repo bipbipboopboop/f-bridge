@@ -25,9 +25,8 @@ const Lobby = () => {
           <RoomList />
         </div>
         <div className="w-2/5">
-          <div className="h-2/3 w-full flex flex-col justify-center">
-            <LobbyAvatar className="h-full" />
-          </div>
+          <LobbyAvatar className="h-2/3 w-full" />
+
           <div className="h-1/3 flex flex-col-reverse">
             <LobbyButtons />
           </div>
