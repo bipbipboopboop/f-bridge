@@ -10,6 +10,7 @@ import { PublicBiddingPhase, RestrictedPlayerData } from "types/GameState";
 
 import { UnauthenticatedError } from "./error/error";
 import { shuffleCards } from "./utils/shuffle_cards";
+import { getMessagePlayerRef } from "./utils/database_utils";
 
 /**
  * Create a new game room
@@ -79,6 +80,10 @@ export const createGameRoom = functions.region("asia-east2").https.onCall(async 
   await gameRoomRef.set(gameRoomData);
   await playerAccountRef.update({ roomID });
 
+  // Add player to the message player list in the real time database for security rule
+  const messagePlayerRef = getMessagePlayerRef(roomID, context.auth.uid);
+  messagePlayerRef.set(playerAccountData);
+
   return { roomID };
 });
 
@@ -146,13 +151,17 @@ export const joinGameRoom = functions.region("asia-east2").https.onCall(async (r
     currentCardOnTable: null,
   };
 
-  console.log(gameRoomData, gameRoomSnapshot.exists);
+  // console.log(gameRoomData, gameRoomSnapshot.exists);
 
   await gameRoomRef.update({
     playerCount: gameRoomData.playerCount + 1,
     players: gameRoomData.players.concat(publicPlayerData),
   });
   await playerAccountRef.update({ roomID });
+
+  // Add player to the message player list in the real time database for security rule
+  const messagePlayerRef = getMessagePlayerRef(roomID, context.auth.uid);
+  messagePlayerRef.set(playerAccountData);
 
   return { success: true };
 });
@@ -212,6 +221,10 @@ export const leaveGameRoom = functions.region("asia-east2").https.onCall(async (
         roomID: null,
       }),
     ]);
+
+    // Remove player from the message player list in the real time database for security rule
+    const messagePlayerRef = getMessagePlayerRef(roomID, context.auth.uid);
+    messagePlayerRef.remove();
     return;
   }
 
@@ -244,6 +257,10 @@ export const leaveGameRoom = functions.region("asia-east2").https.onCall(async (
   await playerAccountRef.update({
     roomID: null,
   });
+
+  // Remove player from the message player list in the real time database for security rule
+  const messagePlayerRef = getMessagePlayerRef(roomID, context.auth.uid);
+  messagePlayerRef.remove();
 });
 
 /**

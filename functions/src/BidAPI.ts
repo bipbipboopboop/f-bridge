@@ -1,6 +1,6 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import { CollectionReference, DocumentReference, Timestamp } from "firebase-admin/firestore";
+import { DocumentReference, Timestamp } from "firebase-admin/firestore";
 import { produce } from "immer";
 
 import { RestrictedAccountInfo } from "types/Account";
@@ -21,6 +21,8 @@ import { UnauthenticatedError } from "./error/error";
 import { Announcement } from "types/Annoucement";
 import { Message } from "types/Message";
 import { findLastIndex } from "lodash";
+import { getMessagesRef } from "./utils/database_utils";
+import { serverTimestamp } from "firebase/database";
 
 export const placeBid = functions.region("asia-east2").https.onCall(async (bid: Bid, context) => {
   if (!context.auth) {
@@ -257,13 +259,19 @@ export const chooseTeammate = functions.region("asia-east2").https.onCall(async 
   });
 
   // Add the teammate chosen message to the messages collection
-  const messagesRef = gameRoomRef.collection("messages") as CollectionReference<Message>;
-  await messagesRef.add({
-    createdAt: Timestamp.now(),
-    playerName: "system",
+  const messagesRef = getMessagesRef(gameRoom.roomID);
+  const message: Message = {
+    uid: "",
+    playerName: "",
     text: `${currentPlayer.displayName} has chosen ${card.rank} ${card.suit} as their teammate.`,
-    uid: "system",
-  });
+    createdAt: serverTimestamp() as any as number,
+
+    type: "teammate chosen",
+    title: "Teammate Chosen",
+    content: { bidWinner: currentPlayer, chosenCard: card },
+  };
+
+  await messagesRef.push(message);
 });
 
 function isBidValid(bid: Bid, highestBid: Bid | null): boolean {

@@ -5,9 +5,9 @@ export interface Message {
   uid: string;
   playerName: string;
   text: string;
-  createdAt: Timestamp;
+  createdAt: Timestamp | number;
 
-  type?: "chat" | "system";
+  type: "chat" | "system" | "teammate chosen" | "playing trick";
   title?: string; // Only for system messages
   content?: unknown; // Only for system messages
 }

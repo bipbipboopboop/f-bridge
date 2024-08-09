@@ -1,6 +1,6 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import { CollectionReference, DocumentReference, Timestamp } from "firebase-admin/firestore";
+import { DocumentReference, Timestamp } from "firebase-admin/firestore";
 import { produce } from "immer";
 
 import { RestrictedAccountInfo } from "types/Account";
@@ -12,6 +12,8 @@ import { PrivateTrickTakingPhase, PublicEndedPhase, RestrictedPlayerData } from 
 import { Message } from "types/Message";
 import { UnauthenticatedError } from "./error/error";
 import { PublicPlayer } from "types/Player";
+import { getMessagesRef } from "./utils/database_utils";
+import { serverTimestamp } from "firebase/database";
 
 export const playCard = functions.region("asia-east2").https.onCall(async (card: Card, context) => {
   // 0. Check if the user is authenticated
@@ -116,13 +118,18 @@ export const playCard = functions.region("asia-east2").https.onCall(async (card:
 
   await restrictedPlayerRef.update(updatedRestrictedPlayer);
 
-  const messagesRef = gameRoomRef.collection("messages") as CollectionReference<Message>;
-  await messagesRef.add({
-    createdAt: Timestamp.now(),
-    playerName: "system",
-    text: `${currentPlayer.displayName} played ${card.rank} of ${card.suit}`,
-    uid: "system",
-  });
+  const messagesRef = getMessagesRef(gameRoom.roomID);
+  const message: Message = {
+    uid: "",
+    playerName: "",
+    text: `${currentPlayer.displayName} has played ${card.rank} ${card.suit}.`,
+    createdAt: serverTimestamp() as any as number,
+
+    type: "playing trick",
+    title: "Trick",
+    content: { player: currentPlayer, chosenCard: card },
+  };
+  await messagesRef.push(message);
 
   // 7. Check if the trick is over, if it is, find the winner, reset the trick and make the next lead player the trick winner
   const isTrickOver = updatedPlayers.every((player) => player.currentCardOnTable);

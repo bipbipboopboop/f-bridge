@@ -105,11 +105,11 @@ const MatchPeripheralLandscape: React.FC = () => {
         onRequestClose={closeModal}
         contentLabel={`${modalState.type} Modal`}
         style={{ overlay: { zIndex: 1 } }}
-        className="bg-white rounded shadow p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/2 h-4/5 z-10"
+        className="bg-teal-300 rounded shadow p-1 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/2 h-[90%] z-50"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50"
       >
         {modalState.type === ModalType.CHAT ? (
-          <Chatbox className="h-full" />
+          <Chatbox className="h-full z-50" />
         ) : modalState.type === ModalType.INFO ? (
           <TrickMonitor className="h-full" />
         ) : null}
