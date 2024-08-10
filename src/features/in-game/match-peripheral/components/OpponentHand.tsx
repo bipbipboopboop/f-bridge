@@ -3,6 +3,7 @@ import { useMediaQuery } from "react-responsive";
 import { useRoom } from "../../../../context/RoomContext";
 import { useAuth } from "../../../../hooks/useAuth";
 import PlayingCard from "../../../../components/PlayingCard";
+import { useScreenSize } from "../../../../hooks/useScreenSize";
 
 interface OpponentHandProps {
   direction: "west" | "north" | "east";
@@ -12,7 +13,7 @@ interface OpponentHandProps {
 const OpponentHand: React.FC<OpponentHandProps> = ({ direction, className }) => {
   const { playerAccount } = useAuth();
   const { room } = useRoom();
-  const isDesktop = useMediaQuery({ minWidth: 930, orientation: "landscape" });
+  const { isDesktop } = useScreenSize();
 
   if (!playerAccount || !room) {
     return null;
