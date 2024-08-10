@@ -19,7 +19,9 @@ const ChatMessage = ({ message }: { message: Message }) => {
   };
 
   const isYou = playerAccount?.id === message.uid;
-  const chatAuthor = `${isYou ? "You" : player?.displayName} ${player?.position ? `[P${player?.position}]` : ""}: `;
+  const chatAuthor = `${isYou ? "You" : player?.displayName} ${
+    player?.position !== undefined ? `[P${player?.position}]` : ""
+  }: `;
 
   if (message.type === "system") {
     return (
@@ -32,7 +34,7 @@ const ChatMessage = ({ message }: { message: Message }) => {
   if (message.type === "teammate chosen") {
     const { bidWinner, chosenCard } = message.content as { bidWinner: PublicPlayer; chosenCard: Card };
     return (
-      <div className="bg-lime-300 md:bg-black/20 mb-1 rounded p-2 break-words text-3xs md:text-xs flex flex-col items-center">
+      <div className="bg-lime-300 md:bg-black/20 mt-1 rounded p-2 break-words text-3xs md:text-xs flex flex-col items-center">
         <span>
           {bidWinner.displayName}[P{bidWinner.position}] has chosen
         </span>
@@ -45,7 +47,7 @@ const ChatMessage = ({ message }: { message: Message }) => {
   if (message.type === "playing trick") {
     const { player, chosenCard } = message.content as { player: PublicPlayer; chosenCard: Card };
     return (
-      <div className="bg-gray-800 bg-opacity-30 mb-1 rounded p-2 break-words text-3xs md:text-xs flex flex-col items-center">
+      <div className="bg-gray-800 bg-opacity-30 mt-1 rounded p-2 break-words text-3xs md:text-xs flex flex-col items-center">
         <span>
           {player.displayName}[P{player.position}] has played
         </span>
@@ -55,7 +57,7 @@ const ChatMessage = ({ message }: { message: Message }) => {
   }
 
   return (
-    <div className="mb-1 rounded p-1 md:py-3 break-words hover:bg-black/5 text-2xs md:text-xs">
+    <div className="mt-1 rounded p-1 md:py-3 break-words hover:bg-black/5 text-2xs md:text-xs">
       <span className={textColorLookup[player?.position!]}>{chatAuthor}</span>
       <span>{message.text}</span>
     </div>

@@ -27,7 +27,7 @@ const MatchAvatar: React.FC<MatchAvatarProps> = ({ position, className }) => {
   const isCurrentTurn = player.position === phase?.currentPlayerIndex;
   const isSouthPlayer = player.id === playerAccount.id;
 
-  const baseStyles = "select-none bg-[#FCFBF8] text-[#515151] rounded-[40px] flex items-center shadow-xl";
+  const baseStyles = "select-none bg-[#FCFBF8] text-[#515151] rounded-[40px] flex items-center shadow-xl z-20";
   const sizeStyles = isDesktop ? "w-[20%] px-5 py-2 text-sm h-18" : "w-[20%] px-3 py-1 text-2xs h-12";
   const turnStyles = isCurrentTurn ? "border-4 border-teal-400 animate-pulse" : "";
 
