@@ -18,6 +18,7 @@ const ChatboxInput = () => {
   };
 
   const onSendMessage = async (e: FormEvent) => {
+    console.log("trigger message");
     e.preventDefault();
     const messagesRef = ref(database, `gameRooms/${roomID}/messages`);
     const message: Message = {
