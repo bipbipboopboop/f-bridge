@@ -27,7 +27,8 @@ const ChatboxInput = () => {
       text: inputMessage,
       type: "chat",
     };
-    await push(messagesRef, message);
+    const result = await push(messagesRef, message);
+    console.log({ result });
     setInputMessage("");
   };
 
