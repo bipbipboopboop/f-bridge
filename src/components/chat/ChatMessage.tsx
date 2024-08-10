@@ -55,7 +55,7 @@ const ChatMessage = ({ message }: { message: Message }) => {
   }
 
   return (
-    <div className="mb-1 rounded p-1 md:py-3 break-words hover:bg-black/5 text-3xs md:text-xs">
+    <div className="mb-1 rounded p-1 md:py-3 break-words hover:bg-black/5 text-2xs md:text-xs">
       <span className={textColorLookup[player?.position!]}>{chatAuthor}</span>
       <span>{message.text}</span>
     </div>
