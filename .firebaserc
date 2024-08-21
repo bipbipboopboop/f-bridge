@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "f-bridge-development"
-  }
+    "default": "f-bridge-development",
+    "deploy": "f-bridge-deploy"
+  },
+  "targets": {},
+  "etags": {}
 }
